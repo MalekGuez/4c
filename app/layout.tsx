@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./styles/globals.css";
 import Nav from "./components/Nav";
 import { AuthProvider } from "./contexts/AuthContext";
+import { SITE_CONFIG } from "./config/site";
 
 const inter = Inter({
   weight: ["400", "500", "600"],
@@ -13,8 +14,38 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "4Chaos",
-  description: "-",
+  title: {
+    default: SITE_CONFIG.title,
+    template: `%s | ${SITE_CONFIG.name}`,
+  },
+  description: SITE_CONFIG.description,
+  keywords: SITE_CONFIG.keywords,
+  authors: SITE_CONFIG.authors,
+  creator: SITE_CONFIG.creator,
+  openGraph: {
+    type: SITE_CONFIG.openGraph.type,
+    locale: SITE_CONFIG.openGraph.locale,
+    url: SITE_CONFIG.url,
+    title: SITE_CONFIG.title,
+    description: SITE_CONFIG.description,
+    siteName: SITE_CONFIG.openGraph.siteName,
+    images: [
+      {
+        url: SITE_CONFIG.openGraph.image.url,
+        width: SITE_CONFIG.openGraph.image.width,
+        height: SITE_CONFIG.openGraph.image.height,
+        alt: SITE_CONFIG.openGraph.image.alt,
+      },
+    ],
+  },
+  twitter: {
+    card: SITE_CONFIG.twitter.card,
+    creator: SITE_CONFIG.twitter.creator,
+    title: SITE_CONFIG.title,
+    description: SITE_CONFIG.description,
+    images: [SITE_CONFIG.twitter.image],
+  },
+  robots: SITE_CONFIG.robots,
 };
 
 export default function RootLayout({children,}: Readonly<{ children: React.ReactNode}>) {
