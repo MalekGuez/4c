@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,6 +11,11 @@ import styles from './changePassword.module.css';
 export default function ChangePasswordPage() {
   const { isAuthenticated } = useAuthContext();
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -20,10 +25,15 @@ export default function ChangePasswordPage() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
+  // Redirect if not authenticated (only on client side)
+  if (isMounted && !isAuthenticated) {
     router.push('/login');
     return null;
+  }
+
+  // Show loading while mounting
+  if (!isMounted) {
+    return <div>Loading...</div>;
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

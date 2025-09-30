@@ -88,10 +88,12 @@ export default function Nav() {
                   <a 
                     href="#" 
                     className={styles.dropdownLink}
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.preventDefault();
                       logout();
-                      window.location.href = "/";
+                      if (typeof window !== "undefined") {
+                        window.location.href = "/";
+                      }
                     }}
                   >
                     Logout
