@@ -17,8 +17,8 @@ export const SITE_CONFIG = {
     "aion online",
     "gameforge",
     "metin2",
-  ],
-  authors: [{ name: "4Chaos Team" }],
+  ] as string[],
+  authors: [{ name: "4Chaos Team" }] as { name: string }[],
   creator: "4Chaos Team",
   openGraph: {
     type: "website",
@@ -47,4 +47,4 @@ export const SITE_CONFIG = {
       "max-snippet": -1,
     },
   },
-} as const;
+};

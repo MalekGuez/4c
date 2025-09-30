@@ -14,6 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_CONFIG.url),
   title: {
     default: SITE_CONFIG.title,
     template: `%s | ${SITE_CONFIG.name}`,
@@ -23,8 +24,8 @@ export const metadata: Metadata = {
   authors: SITE_CONFIG.authors,
   creator: SITE_CONFIG.creator,
   openGraph: {
-    type: SITE_CONFIG.openGraph.type,
-    locale: SITE_CONFIG.openGraph.locale,
+    type: "website" as const,
+    locale: "en_US",
     url: SITE_CONFIG.url,
     title: SITE_CONFIG.title,
     description: SITE_CONFIG.description,
@@ -39,13 +40,23 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    card: SITE_CONFIG.twitter.card,
+    card: "summary_large_image" as const,
     creator: SITE_CONFIG.twitter.creator,
     title: SITE_CONFIG.title,
     description: SITE_CONFIG.description,
     images: [SITE_CONFIG.twitter.image],
   },
-  robots: SITE_CONFIG.robots,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large" as const,
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({children,}: Readonly<{ children: React.ReactNode}>) {
