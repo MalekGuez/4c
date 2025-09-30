@@ -1,0 +1,154 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid #BDBDBD;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  z-index: 100000;
+  margin: 0;
+  transform: translateZ(0);
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h3 {
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.content {
+  margin-bottom: 30px;
+}
+
+.content p {
+  color: #BDBDBD;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.content strong {
+  color: #790801;
+  font-weight: 600;
+}
+
+.totalPrice {
+  color: #790801 !important;
+  font-weight: 700 !important;
+}
+
+.errorMessage {
+  color: #ff4444;
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid #ff4444;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.warningText {
+  color: #ffa500;
+  font-size: 13px;  
+  font-style: italic;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.cancelButton {
+  background: transparent;
+  border: 1px solid #BDBDBD;
+  color: #BDBDBD;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.cancelButton:hover {
+  background: #BDBDBD;
+  color: #000;
+}
+
+.confirmButton {
+  background: url("/images/btn-bg.png") no-repeat center center;
+  background-size: cover;
+  border: 1px solid #790801;
+  color: white;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.confirmButton:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(121, 8, 1, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal {
+    padding: 20px;
+    margin: 20px;
+  }
+  
+  .header h3 {
+    font-size: 20px;
+  }
+  
+  .content p {
+    font-size: 14px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .cancelButton,
+  .confirmButton {
+    width: 100%;
+    min-width: auto;
+  }
+}

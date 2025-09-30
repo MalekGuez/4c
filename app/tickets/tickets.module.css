@@ -1,0 +1,666 @@
+/* Page Container */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100svh;
+  position: relative;
+  padding: 100px 200px 200px 200px;
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 32px;
+  border: 1px solid #BDBDBD;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.headerBar {
+  width: 100%;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0 40px 0;
+  gap: 40px;
+}
+
+.titleImage {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.barImage {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  width: 100%;
+}
+
+/* Login Required */
+.loginRequired {
+  text-align: center;
+  color: #BDBDBD;
+  padding: 40px 20px;
+}
+
+.loginRequired p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.loginLink {
+  display: inline-block;
+  background: #790801;
+  color: white;
+  padding: 15px 30px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.loginLink:hover {
+  background: #a00a02;
+}
+
+/* Error Message */
+.errorMessage {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid #F44336;
+  color: #F44336;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeError {
+  background: none;
+  border: none;
+  color: #F44336;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeError:hover {
+  background: rgba(244, 67, 54, 0.1);
+  border-radius: 50%;
+}
+
+/* Actions */
+.actions {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.createButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  color: white;
+  border: 2px solid #790801;
+  padding: 10px 20px;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.createButton:hover {
+  background: linear-gradient(135deg, #a00a02, #790801);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Create Form */
+.createForm {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #BDBDBD;
+  padding: 30px;
+  border-radius: 0;
+  margin-bottom: 30px;
+}
+
+.createForm h3 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  color: #BDBDBD;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  color: #BDBDBD;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 5px rgba(121, 8, 1, 0.3);
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.formActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  color: white;
+  border: 2px solid #790801;
+  padding: 12px 24px;
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.submitButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a00a02, #790801);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  background: transparent;
+  color: #BDBDBD;
+  border: 2px solid #BDBDBD;
+  padding: 12px 24px;
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background: #BDBDBD;
+  color: #000;
+}
+
+/* Tickets Container */
+.ticketsContainer {
+  margin-bottom: 30px;
+}
+
+.ticketsContainer h3 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+/* Loading */
+.loadingContainer {
+  text-align: center;
+  padding: 40px;
+  color: #BDBDBD;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(189, 189, 189, 0.3);
+  border-top: 4px solid #BDBDBD;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+.loadingText {
+  font-size: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* No Tickets */
+.noTickets {
+  text-align: center;
+  color: #BDBDBD;
+  padding: 40px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.noTickets p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* Tickets List */
+.ticketsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ticketItem {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ticketItem:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: #790801;
+}
+
+
+.ticketHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.ticketHeaderLeft {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ticketCategoryHeader {
+  margin-bottom: 8px;
+}
+
+.ticketTitle {
+  color: #BDBDBD;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ticketMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.ticketStatus {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.ticketCategory {
+  font-size: 12px;
+  color: #BDBDBD;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* Ticket Details */
+.ticketDetails {
+  background: transparent;
+  border: none;
+  padding: 20px 0;
+  margin-top: 20px;
+}
+
+.ticketDetailsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #BDBDBD;
+}
+
+.ticketDetailsLeft {
+  flex: 1;
+}
+
+.ticketCategoryHeader {
+  margin-bottom: 8px;
+}
+
+.categoryLabel {
+  color: #790801;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ticketDetailsHeader h3 {
+  color: #BDBDBD;
+  font-size: 24px;
+  margin: 0;
+}
+
+.ticketDetailsRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.closeButton {
+  background: #F44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.closeButton:hover {
+  background: #d32f2f;
+}
+
+.ticketInfo {
+  margin-bottom: 25px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0;
+}
+
+.ticketInfo p {
+  color: #BDBDBD;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* Messages */
+.messagesContainer h4 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.messagesList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.messageItem {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.messageHeader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.messageUser {
+  color: #790801;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.messageDate {
+  color: #BDBDBD;
+  font-size: 12px;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.messageDate::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23BDBDBD' viewBox='0 0 24 24'%3E%3Cpath d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.7;
+}
+
+.messageContent {
+  color: #BDBDBD;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  flex: 1;
+  margin-bottom: 10px;
+}
+
+.messageDateContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+.noMessages {
+  color: #BDBDBD;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Add Message Form */
+.addMessageForm {
+  border-top: 1px solid #BDBDBD;
+  padding-top: 20px;
+}
+
+.addMessageForm .formGroup {
+  margin-bottom: 15px;
+}
+
+.addMessageButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  color: white;
+  border: 2px solid #790801;
+  padding: 10px 20px;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.addMessageButton:hover {
+  background: linear-gradient(135deg, #a00a02, #790801);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .contentWrapper {
+    margin: 0 60px;
+    padding: 40px;
+  }
+  
+  .pageContainer {
+    padding: 160px 60px 200px 60px;
+  }
+  
+  .titleImage {
+    width: 300px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .ticketHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .ticketMeta {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .ticketDetailsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .ticketDetailsActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 768px) {
+  .contentWrapper {
+    margin: 0 20px;
+    padding: 30px;
+  }
+  
+  .pageContainer {
+    padding: 160px 20px 200px 20px;
+  }
+  
+  .titleImage {
+    width: 250px;
+    height: 50px;
+  }
+  
+  .formActions {
+    flex-direction: column;
+  }
+  
+  .createButton,
+  .submitButton,
+  .cancelButton {
+    width: 100%;
+  }
+  
+  .ticketDetailsHeader h3 {
+    font-size: 20px;
+  }
+  
+  .messagesList {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentWrapper {
+    margin: 0 10px;
+    padding: 20px;
+  }
+  
+  .pageContainer {
+    padding: 160px 10px 200px 10px;
+  }
+  
+  .titleImage {
+    width: 200px;
+    height: 40px;
+  }
+  
+  .createForm,
+  .ticketDetails {
+    padding: 20px;
+  }
+  
+  .ticketItem {
+    padding: 15px;
+  }
+  
+  .ticketTitle {
+    font-size: 16px;
+  }
+}
+
+.messageLimitInfo {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  padding: 15px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.messageLimitInfo p {
+  color: #FFC107;
+  margin: 0;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.operatedBy {
+  margin: 0;
+  font-size: 12px;
+  color: #BDBDBD;
+  opacity: 0.8;
+}

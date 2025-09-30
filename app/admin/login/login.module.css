@@ -1,0 +1,142 @@
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  position: relative;
+}
+
+.headerBar {
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.titleImage {
+  width: 238px;
+  height: 61px;
+  object-fit: contain;
+}
+
+.bar {
+  width: 100%;
+  max-width: 800px;
+}
+
+.barImage {
+  width: 100%;
+  height: auto;
+}
+
+.contentWrapper {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 40px;
+  border-radius: 0;
+}
+
+.loginForm h2 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.formGroup {
+  margin-bottom: 25px;
+}
+
+.formGroup label {
+  display: block;
+  color: #BDBDBD;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  color: #BDBDBD;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 5px rgba(121, 8, 1, 0.3);
+}
+
+.formGroup input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loginButton {
+  width: 100%;
+  background: linear-gradient(135deg, #790801, #a00a02);
+  color: white;
+  border: 2px solid #790801;
+  padding: 15px 24px;
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.loginButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a00a02, #790801);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.loginButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid #F44336;
+  color: #F44336;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-radius: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 20px 15px;
+  }
+  
+  .contentWrapper {
+    padding: 30px 20px;
+  }
+  
+  .titleImage {
+    width: 200px;
+    height: 51px;
+  }
+  
+  .loginForm h2 {
+    font-size: 24px;
+  }
+}

@@ -1,95 +1,95 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useState, useMemo } from 'react';
+import Image from 'next/image';
+import Announcement from "./components/Announcement";
+import Pagination from "./components/Pagination";
+import styles from "./styles/page.module.css";
+
+// Optimized data structure - reduced mock data for better performance
+const mockAnnouncements = [
+  {
+    id: 1,
+    category: "NEWS",
+    title: "4Chaos is coming.",
+    description: "Prepare yourself for the next evolution of chaos! 4Chaos is launching soon with epic adventures, new features, and a world unlike anything you've seen before. Stay tuned and be ready to join us!",
+    image: "/images/news/4Chaos.png",
+    link: "/",
+    date: "30 Sept. 2025"
+  }
+];
 
 export default function Home() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const announcementsPerPage = 5;
+  
+  // Memoized pagination calculation for better performance
+  const { totalPages, currentAnnouncements } = useMemo(() => {
+    const totalPages = Math.ceil(mockAnnouncements.length / announcementsPerPage);
+    const startIndex = (currentPage - 1) * announcementsPerPage;
+    const endIndex = startIndex + announcementsPerPage;
+    const currentAnnouncements = mockAnnouncements.slice(startIndex, endIndex);
+    return { totalPages, currentAnnouncements };
+  }, [currentPage, announcementsPerPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of news section when page changes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+      <div className={styles.homeSection}>
+        
+        {/* News Bar */}
+        <div className={styles.newsBar}>
+          <Image
+            src="/images/titles/News.png"
+            alt="News"
+            width={169}
+            height={60}
+            className={styles.newsTitle}
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+          />
+          <div className={styles.bar}>
             <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/images/titles/Bar.png"
+              alt="Bar"
+              width={991}
+              height={8}
+              className={styles.barImage}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+          </div>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Black Rectangle with 90% opacity */}
+        <div className={styles.contentContainer}>
+          <div className={styles.announcementsGrid}>
+            {currentAnnouncements.map((announcement) => (
+              <Announcement
+                key={announcement.id}
+                category={announcement.category}
+                title={announcement.title}
+                description={announcement.description}
+                image={announcement.image}
+                link={announcement.link}
+                date={announcement.date}
+              />
+            ))}
+          </div>
+          
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,365 @@
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 200px 200px 200px;
+  position: relative;
+}
+
+.headerBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 60px 0 40px 0;
+}
+
+.titleImage {
+  width: 238px;
+  height: 61px;
+  object-fit: contain;
+}
+
+.bar {
+  flex: 1;
+  max-width: none;
+}
+
+.barImage {
+  width: 100%;
+  height: auto;
+}
+
+
+.contentWrapper {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 32px;
+}
+
+/* News Title in Cards */
+.newsTitle {
+  font-weight: 400;
+}
+
+.errorMessage {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid #F44336;
+  color: #F44336;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-radius: 0;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #BDBDBD;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(189, 189, 189, 0.3);
+  border-top: 4px solid #BDBDBD;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Actions */
+.actions {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.createButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  color: white;
+  border: 2px solid #790801;
+  padding: 12px 24px;
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.createButton:hover {
+  background: linear-gradient(135deg, #a00a02, #790801);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Create Form */
+.createForm {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 30px;
+  margin-bottom: 30px;
+  border-radius: 0;
+}
+
+.createForm h3 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  color: #BDBDBD;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  color: #BDBDBD;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 5px rgba(121, 8, 1, 0.3);
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.formActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  color: white;
+  border: 2px solid #790801;
+  padding: 12px 24px;
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.submitButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a00a02, #790801);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  background: transparent;
+  color: #BDBDBD;
+  border: 2px solid #BDBDBD;
+  padding: 12px 24px;
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background: #BDBDBD;
+  color: #000;
+}
+
+/* News List */
+.newsList h3 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.noNews {
+  text-align: center;
+  color: #BDBDBD;
+  padding: 60px 20px;
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.newsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.newsCard {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 20px;
+  border-radius: 0;
+  transition: all 0.3s ease;
+}
+
+.newsCard:hover {
+  border-color: #790801;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.newsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.newsTitle {
+  color: #BDBDBD;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  margin-right: 15px;
+}
+
+.newsActions {
+  display: flex;
+  gap: 8px;
+}
+
+.editButton {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.editButton:hover {
+  background: #1976D2;
+}
+
+.deleteButton {
+  background: #F44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deleteButton:hover {
+  background: #D32F2F;
+}
+
+.newsImage {
+  margin-bottom: 15px;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.newsImage img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.newsContent {
+  color: #BDBDBD;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+.newsFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.newsDate {
+  color: #BDBDBD;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 20px 15px;
+  }
+  
+  .titleImage {
+    width: 200px;
+    height: 51px;
+  }
+  
+  .newsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .newsHeader {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .newsTitle {
+    margin-right: 0;
+  }
+  
+  .formActions {
+    flex-direction: column;
+  }
+  
+  .submitButton,
+  .cancelButton {
+    width: 100%;
+  }
+}

@@ -1,0 +1,786 @@
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 200px 200px 200px;
+  position: relative;
+}
+
+.headerBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 60px 0 40px 0;
+}
+
+.titleImage {
+  width: 238px;
+  height: 61px;
+  object-fit: contain;
+}
+
+.bar {
+  flex: 1;
+  max-width: none;
+}
+
+.barImage {
+  width: 100%;
+  height: auto;
+}
+
+
+.contentWrapper {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 32px;
+}
+
+.errorMessage {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid #F44336;
+  color: #F44336;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-radius: 0;
+}
+
+.successMessage {
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid #4CAF50;
+  color: #4CAF50;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-radius: 0;
+  font-weight: 500;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #BDBDBD;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(189, 189, 189, 0.3);
+  border-top: 4px solid #BDBDBD;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Tickets List */
+.ticketsList h3 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Ticket Title in Details */
+.ticketInfoHeader h2 {
+  font-weight: 400;
+}
+
+/* Messages Title */
+.messagesContainer h3 {
+  font-weight: 400;
+}
+
+/* Ticket Title in List */
+.ticketTitle {
+  font-weight: 400;
+}
+
+/* Authority Level Colors */
+.ticketAuthority {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.5);
+  margin-top: 5px;
+}
+
+/* Authority Level 1 - COMA (Most Important) */
+.ticketAuthority.level-1 {
+  color: #FF0000; /* Red */
+}
+
+/* Authority Level 2 - GA */
+.ticketAuthority.level-2 {
+  color: #FF6B35; /* Orange-Red */
+}
+
+/* Authority Level 3 - SGM */
+.ticketAuthority.level-3 {
+  color: #FFD700; /* Gold */
+}
+
+/* Authority Level 4 - GM */
+.ticketAuthority.level-4 {
+  color: #32CD32; /* Lime Green */
+}
+
+/* Authority Level 5 - TGM */
+.ticketAuthority.level-5 {
+  color: #00BFFF; /* Deep Sky Blue */
+}
+
+.noTickets {
+  text-align: center;
+  color: #BDBDBD;
+  padding: 40px;
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.ticketsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.ticketCard {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0;
+}
+
+.ticketCard:hover {
+  border-color: #790801;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.ticketHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.ticketHeaderLeft {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ticketCategoryHeader {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.categoryLabel {
+  color: #790801;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ticketTitle {
+  color: #BDBDBD;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ticketMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.ticketStatus {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid currentColor;
+  border-radius: 0;
+}
+
+.ticketAuthority {
+  font-size: 11px;
+  font-weight: 500;
+  color: #BDBDBD;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.ticketDescription {
+  color: #BDBDBD;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  opacity: 0.8;
+}
+
+.ticketFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticketDate {
+  color: #BDBDBD;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Ticket Details */
+
+.ticketDetailsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #BDBDBD;
+}
+
+.backButton {
+  background: transparent;
+  color: #BDBDBD;
+  border: 1px solid #BDBDBD;
+  padding: 10px 20px;
+  border-radius: 0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background: #BDBDBD;
+  color: #000;
+}
+
+.ticketDetailsRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.operatedBy {
+  color: #BDBDBD;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.ticketInfo {
+  margin-bottom: 30px;
+}
+
+.ticketInfoHeader {
+  margin-bottom: 20px;
+}
+
+.ticketInfoHeader h2 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 24px;
+  margin: 10px 0;
+  text-transform: uppercase;
+}
+
+.ticketInfo .ticketDescription {
+  color: #BDBDBD;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Messages */
+.messagesContainer h3 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.messagesList {
+  margin-bottom: 30px;
+}
+
+.messageItem {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #BDBDBD;
+  margin-bottom: 15px;
+  padding: 20px 15px;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.messageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.messageUser {
+  color: #BDBDBD;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.messageContent {
+  color: #BDBDBD;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  flex: 1;
+}
+
+.messageDateContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+.messageDate {
+  color: #BDBDBD;
+  font-size: 12px;
+  opacity: 0.8;
+  position: relative;
+  padding-left: 20px;
+}
+
+.messageDate::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23BDBDBD'%3E%3Cpath d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.noMessages {
+  text-align: center;
+  color: #BDBDBD;
+  padding: 40px;
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+/* Escalation Section */
+.escalationSection {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #BDBDBD;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 0;
+}
+
+.escalationSection h4 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 18px;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+}
+
+.escalationForm {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.authoritySelect {
+  flex: 1;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  color: #BDBDBD;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+}
+
+.authoritySelect:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 5px rgba(121, 8, 1, 0.3);
+}
+
+.escalateButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  border: 2px solid #790801;
+  color: white;
+  padding: 15px 25px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(121, 8, 1, 0.3);
+  width: auto;
+  min-width: fit-content;
+  white-space: nowrap;
+}
+
+.escalateButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a00a02, #c52d3a);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(121, 8, 1, 0.4);
+}
+
+.escalateButton:disabled {
+  background: linear-gradient(135deg, #BDBDBD, #9E9E9E);
+  border: 2px solid #BDBDBD;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Add Message Form */
+.addMessageForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.messageTextarea {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  padding: 15px;
+  color: #BDBDBD;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.messageTextarea:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 5px rgba(121, 8, 1, 0.3);
+}
+
+.sendButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  border: 2px solid #790801;
+  color: white;
+  padding: 15px 25px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(121, 8, 1, 0.3);
+  width: auto;
+  min-width: fit-content;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+
+.sendButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a00a02, #c52d3a);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(121, 8, 1, 0.4);
+}
+
+.sendButton:disabled {
+  background: linear-gradient(135deg, #BDBDBD, #9E9E9E);
+  border: 2px solid #BDBDBD;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 20px 15px;
+  }
+  
+  .titleImage {
+    width: 200px;
+    height: 51px;
+  }
+  
+  .ticketsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ticketDetailsHeader {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .ticketDetailsRight {
+    align-items: flex-start;
+  }
+  
+  .messageItem {
+    padding: 15px 10px;
+  }
+  
+  .escalationForm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .escalateButton {
+    width: 100%;
+  }
+  
+  .ticketsHeader {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .headerRight {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .searchInput {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .filtersContainer {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+}
+
+/* Ticket ID Tag */
+.ticketIdTag {
+  background: #F44336;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 8px;
+  display: inline-block;
+  width: fit-content;
+  min-width: auto;
+  margin-bottom: 8px;
+}
+
+/* Back Button */
+.backButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  border: 2px solid #790801;
+  color: white;
+  padding: 15px 25px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(121, 8, 1, 0.3);
+  width: auto;
+  min-width: fit-content;
+  white-space: nowrap;
+}
+
+.backButton:hover {
+  background: linear-gradient(135deg, #a00a02, #c52d3a);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(121, 8, 1, 0.4);
+}
+
+/* Tickets Header */
+.ticketsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  gap: 20px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Filters */
+.filtersContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filterGroup label {
+  font-size: 12px;
+  color: #BDBDBD;
+  font-weight: 500;
+}
+
+.filterSelect {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #BDBDBD;
+  color: #FFFFFF;
+  padding: 16px 20px;
+  font-size: 16px;
+  min-width: 200px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23BDBDBD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 16px;
+  padding-right: 45px;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 0 3px rgba(121, 8, 1, 0.1);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.filterSelect:hover {
+  border-color: #790801;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.filterSelect option {
+  background: #000;
+  color: #BDBDBD;
+  padding: 12px 16px;
+  font-size: 16px;
+}
+
+.filterSelect option:hover {
+  background: #790801;
+  color: white;
+}
+
+.filterSelect option:checked {
+  background: #790801;
+  color: white;
+}
+
+/* Search Container */
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.searchLabel {
+  font-size: 12px;
+  color: #BDBDBD;
+  font-weight: 500;
+}
+
+.searchInput {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #BDBDBD;
+  color: #FFFFFF;
+  padding: 16px 20px;
+  font-size: 16px;
+  min-width: 250px;
+  transition: all 0.3s ease;
+  border-radius: 0;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 0 3px rgba(121, 8, 1, 0.1);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.searchInput:hover {
+  border-color: #790801;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.searchInput::placeholder {
+  color: rgba(189, 189, 189, 0.5);
+}
+
+/* Delete Message Button */
+.deleteMessageButton {
+  background: transparent;
+  border: none;
+  color: #F44336;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.deleteMessageButton:hover:not(:disabled) {
+  background: rgba(244, 67, 54, 0.1);
+  color: #D32F2F;
+}
+
+.deleteMessageButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loadingSpinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

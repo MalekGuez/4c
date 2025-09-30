@@ -1,0 +1,194 @@
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 200px 200px 200px;
+  position: relative;
+}
+
+.headerBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 60px 0 40px 0;
+}
+
+.titleImage {
+  width: 678px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.bar {
+  flex: 1;
+  max-width: none;
+}
+
+.barImage {
+  width: 100%;
+  height: auto;
+}
+
+.contentWrapper {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 32px;
+}
+
+.welcomeSection {
+  padding: 30px;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.welcomeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.welcomeSection h2 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 32px;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.welcomeSection p {
+  color: #BDBDBD;
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.logoutButton {
+  background: #F44336;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logoutButton:hover {
+  background: #d32f2f;
+}
+
+.adminGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.adminCard {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 30px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 250px;
+}
+
+.adminCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border-color: #790801;
+}
+
+
+.adminCard h3 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 24px;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.adminCard p {
+  color: #BDBDBD;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #BDBDBD;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(189, 189, 189, 0.3);
+  border-top: 4px solid #BDBDBD;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 20px 15px;
+  }
+  
+  .titleImage {
+    width: 400px;
+    height: 42px;
+  }
+  
+  .welcomeSection {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .adminGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .adminCard {
+    padding: 20px;
+    min-height: 200px;
+  }
+  
+  .adminCard h3 {
+    font-size: 18px;
+  }
+  
+  .adminCard p {
+    font-size: 13px;
+  }
+}
