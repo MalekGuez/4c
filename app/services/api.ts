@@ -149,11 +149,40 @@ export const tokenManager = {
   removeToken: (): void => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('authToken');
+      localStorage.removeItem('userData');
     }
   },
 
   isAuthenticated: (): boolean => {
     return !!tokenManager.getToken();
+  },
+
+  // Clear all auth-related data
+  clearAllAuthData: (): void => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userData');
+      localStorage.removeItem('adminToken');
+    }
+  }
+};
+
+// Global logout callback - will be set by the auth context
+let globalLogoutCallback: (() => void) | null = null;
+
+export const setGlobalLogoutCallback = (callback: () => void) => {
+  globalLogoutCallback = callback;
+};
+
+// Redirect to home page after logout - but only if not already on home/login/register
+const redirectToHome = () => {
+  if (typeof window !== 'undefined') {
+    const currentPath = window.location.pathname;
+    // Don't redirect if already on home, login, or register pages
+    if (currentPath !== '/' && currentPath !== '/login' && currentPath !== '/register') {
+      console.log('Redirecting to home page due to token expiry...');
+      window.location.href = '/';
+    }
   }
 };
 
@@ -172,7 +201,6 @@ export const apiRequest = async <T = any>(
     },
     ...options,
   };
-
 
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);

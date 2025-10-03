@@ -5,16 +5,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthContext } from '@/app/contexts/AuthContext';
 import { ticketService, managerService, Ticket, CreateTicketRequest } from '@/app/services/api';
+import AuthGuard from '../components/AuthGuard';
 import styles from './tickets.module.css';
 
 const TICKET_CATEGORIES = [
-  'General',
-  'Technical Support',
-  'Account Issues',
-  'Payment Issues',
-  'Game Bug Report',
-  'Ban Appeal',
-  'Other'
+  'Report',
+  'Technical Problem',
+  'Payment problem',
+  'Cash-Shop Problem',
+  'Account related problem',
+  'Item Recovery',
+  'Ban Complaint',
+  'GM complaint',
+  'Team Application',
+  'No specific subject'
 ];
 
 export default function TicketsPage() {
@@ -31,7 +35,7 @@ export default function TicketsPage() {
   const [createForm, setCreateForm] = useState<CreateTicketRequest>({
     title: '',
     description: '',
-    category: 'General'
+    category: 'Report'
   });
   const [creating, setCreating] = useState(false);
 
@@ -116,7 +120,7 @@ export default function TicketsPage() {
       const response = await ticketService.createTicket(createForm);
       
       if (response.success) {
-        setCreateForm({ title: '', description: '', category: 'General' });
+        setCreateForm({ title: '', description: '', category: 'Report' });
         setShowCreateForm(false);
         await loadTickets(); // Reload tickets
       } else {
@@ -220,45 +224,9 @@ export default function TicketsPage() {
     return hasStaffResponseAfterLastUserMessage;
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className={styles.pageContainer}>
-        {/* Header Bar - Outside the content wrapper */}
-        <div className={styles.headerBar}>
-          <Image
-            src="/images/titles/Tickets.png"
-            alt="Tickets"
-            width={238}
-            height={61}
-            className={styles.titleImage}
-          />
-          <div className={styles.bar}>
-            <Image
-              src="/images/titles/Bar.png"
-              alt="Bar"
-              width={500}
-              height={50}
-              className={styles.barImage}
-              priority
-              style={{ width: '100%', height: 'auto' }}
-            />
-          </div>
-        </div>
-
-        <div className={styles.contentWrapper}>
-          <div className={styles.loginRequired}>
-            <p>Please log in to access your tickets.</p>
-            <Link href="/login" className={styles.loginLink}>
-              Go to Login
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.pageContainer}>
+    <AuthGuard>
+      <div className={styles.pageContainer}>
       {/* Header Bar - Outside the content wrapper */}
       <div className={styles.headerBar}>
           <Image
@@ -503,5 +471,6 @@ export default function TicketsPage() {
         )}
       </div>
     </div>
+    </AuthGuard>
   );
 }

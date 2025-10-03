@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { createPortal } from 'react-dom';
 import { CashShopItem } from '../../data/cashShopData';
 import PurchaseModal from '../PurchaseModal';
+import SuccessModal from '../SuccessModal';
 import LazyImage from '../LazyImage';
 import styles from './itemCard.module.css';
 
@@ -18,6 +19,8 @@ interface ItemCardProps {
 export default function ItemCard({ item, onQuantityChange, onPurchaseSuccess, userMoonstones }: ItemCardProps) {
   const [quantity, setQuantity] = useState(1);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successData, setSuccessData] = useState<{item: CashShopItem, quantity: number, totalPrice: number} | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -40,6 +43,17 @@ export default function ItemCard({ item, onQuantityChange, onPurchaseSuccess, us
 
   const handleConfirmPurchase = () => {
     console.log(`Purchasing ${item.szName} x ${quantity} for ${totalPrice}ms`);
+  };
+
+  const handlePurchaseSuccess = (purchasedItem: CashShopItem, purchasedQuantity: number, purchasedTotalPrice: number) => {
+    setSuccessData({ item: purchasedItem, quantity: purchasedQuantity, totalPrice: purchasedTotalPrice });
+    setShowSuccessModal(true);
+    onPurchaseSuccess?.();
+  };
+
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
+    setSuccessData(null);
   };
 
   return (
@@ -104,16 +118,25 @@ export default function ItemCard({ item, onQuantityChange, onPurchaseSuccess, us
       </div>
 
           {mounted && createPortal(
-            <PurchaseModal
-              isOpen={showPurchaseModal}
-              onClose={() => setShowPurchaseModal(false)}
-              onConfirm={handleConfirmPurchase}
-              item={item}
-              quantity={quantity}
-              totalPrice={totalPrice}
-              onPurchaseSuccess={onPurchaseSuccess}
-              userMoonstones={userMoonstones}
-            />,
+            <>
+              <PurchaseModal
+                isOpen={showPurchaseModal}
+                onClose={() => setShowPurchaseModal(false)}
+                onConfirm={handleConfirmPurchase}
+                item={item}
+                quantity={quantity}
+                totalPrice={totalPrice}
+                onPurchaseSuccess={handlePurchaseSuccess}
+                userMoonstones={userMoonstones}
+              />
+              <SuccessModal
+                isOpen={showSuccessModal}
+                onClose={handleCloseSuccessModal}
+                item={successData?.item || null}
+                quantity={successData?.quantity || 0}
+                totalPrice={successData?.totalPrice || 0}
+              />
+            </>,
             document.body
           )}
     </div>

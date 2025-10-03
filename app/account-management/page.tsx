@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthContext } from '../contexts/AuthContext';
 import { apiRequest, API_ENDPOINTS, MoonstonesResponse } from '../services/api';
+import AuthGuard from '../components/AuthGuard';
 import styles from './accountManagement.module.css';
 
 export default function AccountManagementPage() {
@@ -83,21 +84,9 @@ export default function AccountManagementPage() {
     );
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className={styles.pageContainer}>
-        <div className={styles.errorContainer}>
-          <div className={styles.errorText}>Please log in to access account management.</div>
-          <Link href="/login" className={styles.loginLink}>
-            Go to Login
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.pageContainer}>
+    <AuthGuard>
+      <div className={styles.pageContainer}>
       {/* Account Management Bar */}
       <div className={styles.accountBar}>
         <Image
@@ -186,9 +175,9 @@ export default function AccountManagementPage() {
               <Link href="/change-password" className={styles.actionButton}>
                 Change Password
               </Link>
-              <button className={styles.actionButton}>
+              <Link href="/tickets" className={styles.actionButton}>
                 Support
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -210,5 +199,6 @@ export default function AccountManagementPage() {
         </div>
       </div>
     </div>
+    </AuthGuard>
   );
 }

@@ -44,7 +44,7 @@ export default function Announcement({
           height={300}
           className={styles.image}
           quality={95}
-          priority={false}
+          priority={image.includes('4Chaos.png')}
           unoptimized={false}
         />
       </div>

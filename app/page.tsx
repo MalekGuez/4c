@@ -60,6 +60,7 @@ export default function Home() {
               width={991}
               height={8}
               className={styles.barImage}
+              style={{ width: '100%', height: 'auto' }}
             />
           </div>
         </div>

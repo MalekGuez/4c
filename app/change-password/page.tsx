@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthContext } from '../contexts/AuthContext';
 import { apiRequest, API_ENDPOINTS } from '../services/api';
+import AuthGuard from '../components/AuthGuard';
 import styles from './changePassword.module.css';
 
 export default function ChangePasswordPage() {
@@ -102,7 +103,8 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <AuthGuard>
+      <div className={styles.pageContainer}>
       <div className={styles.headerBar}>
         <Image
           src="/images/titles/Change-Password.png"
@@ -201,5 +203,6 @@ export default function ChangePasswordPage() {
         </form>
       </div>
     </div>
+    </AuthGuard>
   );
 }

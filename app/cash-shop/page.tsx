@@ -6,7 +6,9 @@ import { CashShopCategory, CashShopItem, cashShopData } from '../data/cashShopDa
 import { apiRequest, API_ENDPOINTS, MoonstonesResponse, tokenManager } from '../services/api';
 import ItemCard from '../components/ItemCard';
 import VirtualScroll from '../components/VirtualScroll';
+import AuthGuard from '../components/AuthGuard';
 import styles from './cashShop.module.css';
+
 
 export default function CashShopPage() {
   const [categories, setCategories] = useState<CashShopCategory[]>([]);
@@ -165,8 +167,9 @@ export default function CashShopPage() {
   }
 
   return (
-    <div className={styles.pageContainer}>
-      {/* Cash Shop Bar */}
+    <AuthGuard>
+      <div className={styles.pageContainer}>
+        {/* Cash Shop Bar */}
       <div className={styles.cashShopBar}>
         <Image
           src="/images/titles/Cash-Shop.png"
@@ -274,5 +277,6 @@ export default function CashShopPage() {
         </div>
       </div>
     </div>
+    </AuthGuard>
   );
 }

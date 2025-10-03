@@ -42,13 +42,18 @@ export default function ConfirmEmailPage() {
     <div className={styles.authPageContainer}>
       <div className={styles.authContentWrapper}>
         <div className={styles.authHeader}>
-          <Image
-            src="/images/titles/Email-Confirmation.png"
-            alt="Email Confirmation"
-            width={400}
-            height={80}
-            style={{ marginBottom: '20px' }}
-          />
+          <h1 style={{
+            fontFamily: 'TheBlowar, sans-serif',
+            fontSize: '48px',
+            fontWeight: '400',
+            color: '#BDBDBD',
+            margin: '0 0 20px 0',
+            textAlign: 'center',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            Email Confirmation
+          </h1>
         </div>
         
         <div className={styles.authForm}>
@@ -78,10 +83,15 @@ export default function ConfirmEmailPage() {
             <div style={{ 
               backgroundColor: 'transparent', 
               color: '#BDBDBD', 
-              padding: '40px', 
-              border: '1px solid #BDBDBD'
+              padding: '0'
             }}>
-              <h3 style={{ color: '#790801', fontSize: '24px', marginBottom: '20px' }}>
+              <h3 style={{ 
+                color: '#790801', 
+                fontSize: '24px', 
+                marginBottom: '20px',
+                fontFamily: 'TheBlowar, sans-serif',
+                fontWeight: '400'
+              }}>
                 Your email has been successfully confirmed!
               </h3>
               <p style={{ fontSize: '16px', marginBottom: '30px' }}>
@@ -107,11 +117,16 @@ export default function ConfirmEmailPage() {
             <div style={{ 
               backgroundColor: 'transparent', 
               color: '#BDBDBD', 
-              padding: '40px', 
-              textAlign: 'center',
-              border: '1px solid #BDBDBD'
+              padding: '0', 
+              textAlign: 'center'
             }}>
-              <h3 style={{ color: '#ff6b6b', fontSize: '24px', marginBottom: '20px' }}>
+              <h3 style={{ 
+                color: '#ff6b6b', 
+                fontSize: '24px', 
+                marginBottom: '20px',
+                fontFamily: 'TheBlowar, sans-serif',
+                fontWeight: '400'
+              }}>
                 ❌ Confirmation Failed
               </h3>
               <p style={{ fontSize: '16px', marginBottom: '30px' }}>

@@ -12,7 +12,7 @@ interface PurchaseModalProps {
   item: CashShopItem | null;
   quantity: number;
   totalPrice: number;
-  onPurchaseSuccess?: () => void;
+  onPurchaseSuccess?: (item: CashShopItem, quantity: number, totalPrice: number) => void;
   userMoonstones?: number;
 }
 
@@ -73,7 +73,7 @@ export default function PurchaseModal({
 
       if (response.success) {
         onConfirm();
-        onPurchaseSuccess?.();
+        onPurchaseSuccess?.(item, actualQuantity, actualTotalPrice);
         onClose();
       } else {
         setError(response.error || 'Purchase failed');

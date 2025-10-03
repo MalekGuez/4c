@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useAuthContext } from '../../contexts/AuthContext';
 import styles from '../../styles/auth.module.css';
 
@@ -25,7 +26,7 @@ export default function PageLoginForm({ onSwitchToRegister }: PageLoginFormProps
     const result = await login(formData);
     if (result.success) {
       console.log('Login successful!');
-      router.push('/');
+      // Don't redirect here - let the LoginPage handle it to avoid double redirects
     } else {
       console.log('Login failed:', result.error);
     }
@@ -86,9 +87,9 @@ export default function PageLoginForm({ onSwitchToRegister }: PageLoginFormProps
               placeholder="Enter your password"
             />
             <div className={styles.forgotPasswordLink}>
-              <button type="button" className={styles.authSwitchButton}>
+              <Link href="/forgot-password" className={styles.authSwitchButton}>
                 Forgot your password?
-              </button>
+              </Link>
             </div>
           </div>
           

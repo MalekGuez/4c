@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { UserService, User, LoginCredentials, RegisterCredentials, UpdateUserData } from '../services';
+import { setGlobalLogoutCallback } from '../services/api';
 
 interface AuthState {
   user: User | null;
@@ -40,7 +41,18 @@ export const useAuth = () => {
     };
   });
 
-  // No useEffect needed - initialization happens in useState
+  // Set up the global logout callback on mount
+  useEffect(() => {
+    setGlobalLogoutCallback(() => {
+      setAuthState({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: 'Session expired. Please log in again.',
+      });
+      localStorage.removeItem('userData');
+    });
+  }, []);
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
