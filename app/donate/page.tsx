@@ -1,0 +1,270 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useAuth } from "../hooks/useAuth";
+import { useRouter } from "next/navigation";
+import styles from "./donate.module.css";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
+interface DonationTier {
+  price: number;
+  moonstones: number;
+  label: string;
+}
+
+const donationTiers: DonationTier[] = [
+  { price: 5, moonstones: 90, label: "5€ - 90 Moonstones" },
+  { price: 10, moonstones: 210, label: "10€ - 210 Moonstones" },
+  { price: 25, moonstones: 650, label: "25€ - 650 Moonstones" },
+  { price: 50, moonstones: 1600, label: "50€ - 1600 Moonstones" },
+  { price: 100, moonstones: 3600, label: "100€ - 3600 Moonstones" },
+];
+
+export default function DonatePage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const [selectedTier, setSelectedTier] = useState<DonationTier>(donationTiers[0]);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [paymentId, setPaymentId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.loading}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  const handleTierChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const tier = donationTiers.find(t => t.price === parseInt(e.target.value));
+    if (tier) {
+      setSelectedTier(tier);
+    }
+  };
+
+  const createPaymentRecord = async (orderId: string) => {
+    try {
+      const response = await fetch("http://localhost:8080/api/create-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          amount: selectedTier.price,
+          orderId: orderId,
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || "Failed to create payment record");
+      }
+
+      setPaymentId(data.paymentId);
+      return data;
+    } catch (error) {
+      console.error("Error creating payment record:", error);
+      throw error;
+    }
+  };
+
+  const updateMoonstones = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/update-ms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          userId: user.userId,
+          moonstones: selectedTier.moonstones,
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || "Failed to update moonstones");
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error updating moonstones:", error);
+      throw error;
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.donateBox}>
+        <h1 className={styles.title}>Support 4Chaos</h1>
+        <p className={styles.subtitle}>
+          Help us keep the servers running and get Moonstones in return!
+        </p>
+
+        <div className={styles.tierSelector}>
+          <label htmlFor="donation-tier" className={styles.label}>
+            Select Amount:
+          </label>
+          <select
+            id="donation-tier"
+            value={selectedTier.price}
+            onChange={handleTierChange}
+            className={styles.dropdown}
+            disabled={processing}
+          >
+            {donationTiers.map((tier) => (
+              <option key={tier.price} value={tier.price}>
+                {tier.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.selectedInfo}>
+          <div className={styles.infoRow}>
+            <span className={styles.infoLabel}>Amount:</span>
+            <span className={styles.infoValue}>{selectedTier.price}€</span>
+          </div>
+          <div className={styles.infoRow}>
+            <span className={styles.infoLabel}>You will receive:</span>
+            <span className={styles.infoValue}>
+              {selectedTier.moonstones} Moonstones
+            </span>
+          </div>
+        </div>
+
+        <div className={styles.paypalContainer}>
+          <PayPalScriptProvider
+            options={{
+              clientId: "AcI12cHhnbqPfV0UxJrEWK_YkgSaUHV4Yzu5PhsgmwFawhifb-pDk6oQxLB6j5cTqCfzwcdkPtfZ9h8J",
+              currency: "EUR",
+              intent: "capture",
+            }}
+          >
+            <PayPalButtons
+              disabled={processing}
+              style={{
+                layout: "vertical",
+                color: "gold",
+                shape: "rect",
+                label: "paypal",
+              }}
+              createOrder={async (data, actions) => {
+                setProcessing(true);
+                try {
+                  const order = await actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: {
+                          currency_code: "EUR",
+                          value: selectedTier.price.toString(),
+                        },
+                        description: `${selectedTier.moonstones} Moonstones for 4Chaos`,
+                      },
+                    ],
+                    intent: "CAPTURE",
+                  });
+
+                  // Create payment record in our database
+                  await createPaymentRecord(order);
+                  
+                  return order;
+                } catch (error) {
+                  console.error("Error creating order:", error);
+                  setProcessing(false);
+                  throw error;
+                }
+              }}
+              onApprove={async (data, actions) => {
+                try {
+                  if (!actions.order) {
+                    throw new Error("Order actions not available");
+                  }
+
+                  const details = await actions.order.capture();
+                  console.log("Payment completed:", details);
+
+                  // Update moonstones in database
+                  await updateMoonstones();
+
+                  setProcessing(false);
+                  setShowSuccessModal(true);
+                } catch (error) {
+                  console.error("Error capturing payment:", error);
+                  setProcessing(false);
+                  alert("There was an error processing your payment. Please contact support.");
+                }
+              }}
+              onCancel={() => {
+                setProcessing(false);
+                console.log("Payment cancelled by user");
+              }}
+              onError={(err) => {
+                setProcessing(false);
+                console.error("PayPal error:", err);
+                alert("An error occurred with PayPal. Please try again.");
+              }}
+            />
+          </PayPalScriptProvider>
+        </div>
+
+        {processing && (
+          <div className={styles.processingOverlay}>
+            <div className={styles.processingText}>Processing payment...</div>
+          </div>
+        )}
+      </div>
+
+      {showSuccessModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowSuccessModal(false)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2 className={styles.modalTitle}>Payment Successful!</h2>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.successIcon}>✓</div>
+              <p className={styles.successMessage}>
+                Thank you for your support!
+              </p>
+              <p className={styles.moonstonesAwarded}>
+                {selectedTier.moonstones} Moonstones have been added to your account.
+              </p>
+            </div>
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.closeButton}
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  router.push("/cash-shop");
+                }}
+              >
+                Go to Cash Shop
+              </button>
+              <button
+                className={styles.closeButtonSecondary}
+                onClick={() => setShowSuccessModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

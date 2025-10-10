@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+'use client';
+
 import { Inter } from "next/font/google";
 import "./styles/globals.css";
 import Nav from "./components/Nav";
 import { AuthProvider } from "./contexts/AuthContext";
-import { SITE_CONFIG } from "./config/site";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({
   weight: ["400", "500", "600"],
@@ -13,57 +14,12 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_CONFIG.url),
-  title: {
-    default: SITE_CONFIG.title,
-    template: `%s | ${SITE_CONFIG.name}`,
-  },
-  description: SITE_CONFIG.description,
-  keywords: SITE_CONFIG.keywords,
-  authors: SITE_CONFIG.authors,
-  creator: SITE_CONFIG.creator,
-  openGraph: {
-    type: "website" as const,
-    locale: "en_US",
-    url: SITE_CONFIG.url,
-    title: SITE_CONFIG.title,
-    description: SITE_CONFIG.description,
-    siteName: SITE_CONFIG.openGraph.siteName,
-    images: [
-      {
-        url: SITE_CONFIG.openGraph.image.url,
-        width: SITE_CONFIG.openGraph.image.width,
-        height: SITE_CONFIG.openGraph.image.height,
-        alt: SITE_CONFIG.openGraph.image.alt,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image" as const,
-    creator: SITE_CONFIG.twitter.creator,
-    title: SITE_CONFIG.title,
-    description: SITE_CONFIG.description,
-    images: [SITE_CONFIG.twitter.image],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large" as const,
-      "max-snippet": -1,
-    },
-  },
-};
-
 export default function RootLayout({children,}: Readonly<{ children: React.ReactNode}>) {
+  const pathname = usePathname();
+  const isMaintenancePage = pathname === '/maintenance';
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        {/* Global background image - loaded once for all pages */}
         <div style={{
           position: 'fixed',
           inset: 0,
@@ -79,7 +35,7 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
         }} />
         
         <AuthProvider>
-          <Nav />
+          {!isMaintenancePage && <Nav />}
           {children}
         </AuthProvider>
       </body>

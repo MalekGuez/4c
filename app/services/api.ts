@@ -178,7 +178,6 @@ export const setGlobalLogoutCallback = (callback: () => void) => {
 const redirectToHome = () => {
   if (typeof window !== 'undefined') {
     const currentPath = window.location.pathname;
-    // Don't redirect if already on home, login, or register pages
     if (currentPath !== '/' && currentPath !== '/login' && currentPath !== '/register') {
       console.log('Redirecting to home page due to token expiry...');
       window.location.href = '/';
@@ -464,7 +463,6 @@ export const ticketService = {
   // Get all tickets for authenticated user
   getTickets: async (): Promise<TicketsResponse> => {
     const response = await apiRequest<any>(API_ENDPOINTS.TICKETS.LIST);
-    // Transform the response to match TicketsResponse interface
     if (response.success && response.data) {
       return {
         success: true,
@@ -478,7 +476,6 @@ export const ticketService = {
   // Get ticket by ID with messages
   getTicket: async (id: number): Promise<TicketResponse> => {
     const response = await apiRequest<any>(`${API_ENDPOINTS.TICKETS.GET}/${id}`);
-    // Transform the response to match TicketResponse interface
     if (response.success && response.data) {
       return {
         success: true,
@@ -495,7 +492,6 @@ export const ticketService = {
       method: 'POST',
       body: JSON.stringify(data),
     });
-    // Transform the response to match CreateTicketResponse interface
     if (response.success && response.data) {
       return {
         success: true,
@@ -513,7 +509,6 @@ export const ticketService = {
       method: 'POST',
       body: JSON.stringify(data),
     });
-    // Transform the response to match ApiResponse interface
     if (response.success && response.data) {
       return {
         success: true,
@@ -524,12 +519,10 @@ export const ticketService = {
     return response;
   },
 
-  // Close ticket
   closeTicket: async (ticketId: number): Promise<ApiResponse> => {
     const response = await apiRequest<any>(`${API_ENDPOINTS.TICKETS.CLOSE}/${ticketId}/close`, {
       method: 'PATCH',
     });
-    // Transform the response to match ApiResponse interface
     if (response.success && response.data) {
       return {
         success: true,
