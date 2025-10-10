@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../../styles/auth.module.css';
+import { API_CONFIG } from '../../config/api';
 
 export default function ConfirmEmailPage() {
   const params = useParams();
@@ -14,7 +15,7 @@ export default function ConfirmEmailPage() {
   useEffect(() => {
     const confirmEmail = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/confirm-email/${params.token}`, {
+        const response = await fetch(`${API_CONFIG.BASE_URL}/confirm-email/${params.token}`, {
           method: 'GET',
         });
 

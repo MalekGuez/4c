@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import styles from "./donate.module.css";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { API_CONFIG } from "../config/api";
 
 interface DonationTier {
   price: number;
@@ -21,7 +22,7 @@ const donationTiers: DonationTier[] = [
 ];
 
 export default function DonatePage() {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
   const [selectedTier, setSelectedTier] = useState<DonationTier>(donationTiers[0]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -29,12 +30,12 @@ export default function DonatePage() {
   const [paymentId, setPaymentId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!isLoading && !user) {
       router.push("/login");
     }
-  }, [user, loading, router]);
+  }, [user, isLoading, router]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className={styles.container}>
         <div className={styles.loading}>Loading...</div>
@@ -55,7 +56,7 @@ export default function DonatePage() {
 
   const createPaymentRecord = async (orderId: string) => {
     try {
-      const response = await fetch("http://localhost:8080/api/create-payment", {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/create-payment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,14 +84,14 @@ export default function DonatePage() {
 
   const updateMoonstones = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/update-ms", {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/update-ms`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
         body: JSON.stringify({
-          userId: user.userId,
+          userId: user.id,
           moonstones: selectedTier.moonstones,
         }),
       });
