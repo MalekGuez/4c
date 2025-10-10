@@ -5,8 +5,7 @@ import Announcement from "./components/Announcement";
 import Pagination from "./components/Pagination";
 import styles from "./styles/page.module.css";
 
-// Optimized data structure - reduced mock data for better performance
-const mockAnnouncements = [
+const announcements = [
   {
     id: 1,
     category: "NEWS",
@@ -22,26 +21,22 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const announcementsPerPage = 5;
   
-  // Memoized pagination calculation for better performance
   const { totalPages, currentAnnouncements } = useMemo(() => {
-    const totalPages = Math.ceil(mockAnnouncements.length / announcementsPerPage);
+    const totalPages = Math.ceil(announcements.length / announcementsPerPage);
     const startIndex = (currentPage - 1) * announcementsPerPage;
     const endIndex = startIndex + announcementsPerPage;
-    const currentAnnouncements = mockAnnouncements.slice(startIndex, endIndex);
+    const currentAnnouncements = announcements.slice(startIndex, endIndex);
     return { totalPages, currentAnnouncements };
   }, [currentPage, announcementsPerPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to top of news section when page changes
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className={styles.page}>
       <div className={styles.homeSection}>
-        
-        {/* News Bar */}
         <div className={styles.newsBar}>
           <Image
             src="/images/titles/News.png"
@@ -65,7 +60,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Black Rectangle with 90% opacity */}
         <div className={styles.contentContainer}>
           <div className={styles.announcementsGrid}>
             {currentAnnouncements.map((announcement) => (
@@ -81,7 +75,6 @@ export default function Home() {
             ))}
           </div>
           
-          {/* Pagination */}
           {totalPages > 1 && (
             <Pagination
               currentPage={currentPage}

@@ -26,7 +26,6 @@ export default function PageLoginForm({ onSwitchToRegister }: PageLoginFormProps
     const result = await login(formData);
     if (result.success) {
       console.log('Login successful!');
-      // Don't redirect here - let the LoginPage handle it to avoid double redirects
     } else {
       console.log('Login failed:', result.error);
     }

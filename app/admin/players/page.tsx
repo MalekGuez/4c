@@ -16,7 +16,6 @@ export default function AdminPlayersPage() {
   const [showSanctions, setShowSanctions] = useState(false);
 
   useEffect(() => {
-    // Check admin authentication
     const adminToken = localStorage.getItem('adminToken');
     if (!adminToken) {
       router.push('/admin/login');

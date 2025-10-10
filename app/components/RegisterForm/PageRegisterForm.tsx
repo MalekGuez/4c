@@ -56,10 +56,8 @@ export default function PageRegisterForm({ onSwitchToLogin }: PageRegisterFormPr
     });
     
     if (result.success) {
-      // Afficher un message de succès au lieu de rediriger
       setSuccessMessage('Account created! Please check your email to confirm your account.');
       setValidationErrors([]);
-      // Vider le formulaire
       setFormData({
         email: '',
         password: '',
@@ -74,7 +72,6 @@ export default function PageRegisterForm({ onSwitchToLogin }: PageRegisterFormPr
       [e.target.name]: e.target.value,
     }));
     
-    // Clear validation errors and success message when user starts typing
     if (validationErrors.length > 0) {
       setValidationErrors([]);
     }

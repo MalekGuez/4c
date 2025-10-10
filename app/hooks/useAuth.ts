@@ -13,7 +13,6 @@ interface AuthState {
 
 export const useAuth = () => {
   const [authState, setAuthState] = useState<AuthState>(() => {
-    // Initialize immediately with stored data if available
     if (typeof window !== 'undefined' && UserService.isAuthenticated()) {
       const storedUser = localStorage.getItem('userData');
       if (storedUser) {
@@ -26,7 +25,6 @@ export const useAuth = () => {
             error: null,
           };
         } catch (error) {
-          // If parsing fails, clear invalid data
           localStorage.removeItem('userData');
           UserService.clearAuth();
         }
@@ -41,7 +39,6 @@ export const useAuth = () => {
     };
   });
 
-  // Set up the global logout callback on mount
   useEffect(() => {
     setGlobalLogoutCallback(() => {
       setAuthState({
@@ -61,7 +58,6 @@ export const useAuth = () => {
       const response = await UserService.login(credentials);
       
       if (response.success && response.data) {
-        // Store user data in localStorage
         localStorage.setItem('userData', JSON.stringify(response.data.user));
         setAuthState({
           user: response.data.user,
@@ -96,7 +92,6 @@ export const useAuth = () => {
       const response = await UserService.register(credentials);
       
       if (response.success && response.data) {
-        // Store user data and set as authenticated - allow login after registration
         localStorage.setItem('userData', JSON.stringify(response.data.user));
         setAuthState({
           user: response.data.user,

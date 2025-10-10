@@ -21,7 +21,6 @@ export default function AdminNewsPage() {
   });
 
   useEffect(() => {
-    // Check admin authentication
     const adminToken = localStorage.getItem('adminToken');
     if (!adminToken) {
       router.push('/admin/login');

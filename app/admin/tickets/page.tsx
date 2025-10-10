@@ -25,7 +25,6 @@ export default function AdminTicketsPage() {
   const [deletingMessage, setDeletingMessage] = useState<number | null>(null);
 
   useEffect(() => {
-    // Check admin authentication
     const adminToken = localStorage.getItem('adminToken');
     const adminManager = localStorage.getItem('adminManager');
     
@@ -84,15 +83,11 @@ export default function AdminTicketsPage() {
       if (response.success && response.ticket) {
         setSelectedTicket(response.ticket);
         
-        // Load manager name if ticket is operated by someone
         if (response.ticket.operatedBy) {
           await loadManagerName(response.ticket.operatedBy);
         } else {
           setManagerName('');
         }
-
-        // Staff names are now loaded directly from the backend in the messages
-        // No need to make additional API calls
       } else {
         setError(response.error || 'Failed to load ticket details');
       }
@@ -148,14 +143,13 @@ export default function AdminTicketsPage() {
       if (response.success) {
         setSelectedAuthorityLevel(0);
         setSuccessMessage('Ticket escalated successfully!');
-        
-        // Reload tickets list to update statuses
+      
         await loadTickets();
         
         // Clear success message and redirect after 3 seconds
         setTimeout(() => {
           setSuccessMessage(null);
-          setSelectedTicket(null); // Go back to tickets list
+          setSelectedTicket(null);
         }, 3000);
       } else {
         setError(response.error || 'Failed to escalate ticket');
@@ -178,9 +172,7 @@ export default function AdminTicketsPage() {
       if (response.success) {
         setSuccessMessage('Message deleted successfully!');
         
-        // Reload ticket details to show updated messages
         await loadTicketDetails(selectedTicket.id);
-        // Reload tickets list to update statuses
         await loadTickets();
         
         // Clear success message after 3 seconds

@@ -12,7 +12,6 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if admin is logged in
     const adminToken = localStorage.getItem('adminToken');
     const adminManager = localStorage.getItem('adminManager');
 

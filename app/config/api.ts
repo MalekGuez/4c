@@ -4,13 +4,7 @@
  */
 
 const getApiBaseUrl = () => {
-  // In production (Vercel), use your VM server URL
-  if (process.env.NODE_ENV === 'production') {
-    return process.env.NEXT_PUBLIC_API_URL || 'https://api.4chaos.com/api';
-  }
-  
-  // In development, use localhost
-  return 'http://localhost:8080/api';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://api.4chaos.com/api';
 };
 
 export const API_CONFIG = {

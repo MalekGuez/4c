@@ -15,7 +15,6 @@ export default function Nav() {
     setIsClient(true);
   }, []);
 
-  // Use direct localStorage check for instant display
   const isLoggedIn = isClient && (isAuthenticated || (typeof window !== 'undefined' && localStorage.getItem('authToken')));
   const isAdminLoggedIn = isClient && (typeof window !== 'undefined' && localStorage.getItem('adminToken'));
 
@@ -51,10 +50,7 @@ export default function Nav() {
             
             <Link href="/" className={styles.navLink} prefetch={true}>
               News
-            </Link>          
-            {/* <Link href="/ranking" className={styles.navLink} prefetch={true}>
-              Ranking
-            </Link> */}
+            </Link>
             
             <Dropdown title="Game">
               <Link href="/download" className={styles.dropdownLink}>
