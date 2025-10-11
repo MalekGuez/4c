@@ -66,6 +66,9 @@ export default function DonatePage() {
       if (!token) {
         throw new Error('Access token required - Please log in again');
       }
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
 
       const response = await fetch(`${API_CONFIG.BASE_URL}/create-payment`, {
         method: "POST",
@@ -81,7 +84,14 @@ export default function DonatePage() {
           moonstones: selectedTier.moonstones,
           paypalDetails: paypalDetails,
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const data = await response.json();
       
@@ -91,7 +101,9 @@ export default function DonatePage() {
 
       return data;
     } catch (error) {
-      console.error("Error creating payment record:", error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Request timeout - Server took too long to respond');
+      }
       throw error;
     }
   };
@@ -102,6 +114,9 @@ export default function DonatePage() {
       if (!token) {
         throw new Error('Access token required');
       }
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
 
       const response = await fetch(`${API_CONFIG.BASE_URL}/update-ms`, {
         method: "POST",
@@ -114,7 +129,14 @@ export default function DonatePage() {
           userId: user.id,
           moonstones: selectedTier.moonstones,
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const data = await response.json();
       
@@ -124,7 +146,9 @@ export default function DonatePage() {
 
       return data;
     } catch (error) {
-      console.error("Error updating moonstones:", error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Request timeout - Server took too long to respond');
+      }
       throw error;
     }
   };
@@ -195,15 +219,21 @@ export default function DonatePage() {
                           currency_code: "EUR",
                           value: selectedTier.price.toString(),
                         },
-                        description: `${selectedTier.moonstones} Moonstones for 4Chaos`,
+                        description: `${selectedTier.moonstones} Moonstones - Virtual Currency`,
+                        custom_id: user.id.toString(),
                       },
                     ],
                     intent: "CAPTURE",
+                    application_context: {
+                      brand_name: "4Chaos",
+                      locale: "fr-FR",
+                      shipping_preference: "NO_SHIPPING",
+                      user_action: "PAY_NOW",
+                    },
                   });
                   
                   return order;
                 } catch (error) {
-                  console.error("Error creating order:", error);
                   setProcessing(false);
                   throw error;
                 }
@@ -215,29 +245,23 @@ export default function DonatePage() {
                   }
 
                   const details = await actions.order.capture();
-                  console.log("Payment completed:", details);
 
-                  // Create payment record AFTER PayPal validation (with all details)
                   await createPaymentRecord(details.id || '', details);
-
-                  // Update moonstones in database
                   await updateMoonstones();
 
                   setProcessing(false);
                   setShowSuccessModal(true);
                 } catch (error) {
-                  console.error("Error capturing payment:", error);
                   setProcessing(false);
-                  alert("There was an error processing your payment. Please contact support.");
+                  const errorMessage = error instanceof Error ? error.message : "Unknown error";
+                  alert(`Payment captured but there was an error updating your account: ${errorMessage}\n\nPlease contact support with your transaction ID.`);
                 }
               }}
               onCancel={() => {
                 setProcessing(false);
-                console.log("Payment cancelled by user");
               }}
               onError={(err) => {
                 setProcessing(false);
-                console.error("PayPal error:", err);
                 alert("An error occurred with PayPal. Please try again.");
               }}
             />
