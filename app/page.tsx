@@ -7,7 +7,7 @@ import styles from "./styles/page.module.css";
 
 const announcements = [
   {
-    id: 1,
+    id: 2,
     category: "NEWS",
     title: "4Chaos is coming.",
     description: "Prepare yourself for the next evolution of chaos! 4Chaos is launching soon with epic adventures, new features, and a world unlike anything you've seen before. Stay tuned and be ready to join us!",
@@ -16,7 +16,7 @@ const announcements = [
     date: "30 Sept. 2025"
   },
   {
-    id: 2,
+    id: 1,
     category: "NEWS",
     title: "WELCOME TO 4CHAOS!",
     description: "Our doors are now open! Join us in the chaos and experience the new pvp era - Reborn.",
