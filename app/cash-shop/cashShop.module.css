@@ -210,17 +210,18 @@
 }
 
 /* Responsive grid for virtual scroll */
-@media (max-width: 1200px) {
+@media (max-width: 1550px) {
   .virtualScrollContainer > div > div {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr) !important;
     gap: 16px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 910px) {
   .virtualScrollContainer > div > div {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px;
+    justify-items: stretch;
   }
 }
 
@@ -255,6 +256,13 @@
   justify-items: center;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+@media (max-width: 910px) {
+  .itemsGrid {
+    justify-items: stretch;
+    padding: 0;
+  }
 }
 
 .noItems {
@@ -297,47 +305,65 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1400px) {
+@media (max-width: 1550px) {
   .contentWrapper {
     margin: 0 60px;
     padding: 40px;
   }
   
   .pageContainer {
-    padding: 160px 60px 200px 60px;
+    padding: 100px 60px 200px 60px;
+  }
+  
+  .cashShopBar {
+    padding: 40px 0 30px 0;
+    gap: 30px;
   }
   
   .cashShopTitle {
-    width: 200px;
-    height: 50px;
+    width: 250px;
+    height: auto;
   }
-}
-
-@media (max-width: 1200px) {
+  
+  .barImage {
+    width: 600px;
+    height: auto;
+  }
+  
   .itemsGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr) !important;
     gap: 16px;
     max-width: 900px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 910px) {
   .contentWrapper {
     margin: 0 20px;
     padding: 30px;
   }
   
   .pageContainer {
-    padding: 160px 20px 200px 20px;
+    padding: 100px 20px 200px 20px;
+  }
+  
+  .cashShopBar {
+    padding: 30px 0 20px 0;
+    gap: 20px;
   }
   
   .cashShopTitle {
-    width: 150px;
-    height: 40px;
+    width: 200px;
+    height: auto;
+  }
+  
+  .barImage {
+    width: 100%;
+    height: auto;
   }
   
   .itemsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px;
     max-width: 600px;
   }
@@ -389,7 +415,9 @@
     margin: 0 10px;
     padding: 20px;
   }
-  
+  .cashShopBar {
+    padding-top: 0;
+  }
   .pageContainer {
     padding: 160px 10px 200px 10px;
   }

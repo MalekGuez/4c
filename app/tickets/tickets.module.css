@@ -539,6 +539,32 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1550px) {
+  .contentWrapper {
+    margin: 0 60px;
+    padding: 40px;
+  }
+  
+  .pageContainer {
+    padding: 100px 60px 200px 60px;
+  }
+  
+  .headerBar {
+    padding: 40px 0 30px 0;
+    gap: 30px;
+  }
+  
+  .titleImage {
+    width: 300px;
+    height: auto;
+  }
+  
+  .barImage {
+    width: 600px;
+    height: auto;
+  }
+}
+
 @media (max-width: 1400px) {
   .contentWrapper {
     margin: 0 60px;
@@ -546,12 +572,12 @@
   }
   
   .pageContainer {
-    padding: 160px 60px 200px 60px;
+    padding: 100px 60px 200px 60px;
   }
   
   .titleImage {
     width: 300px;
-    height: 60px;
+    height: auto;
   }
 }
 
@@ -580,6 +606,32 @@
   }
 }
 
+@media (max-width: 910px) {
+  .contentWrapper {
+    margin: 0 20px;
+    padding: 30px;
+  }
+  
+  .pageContainer {
+    padding: 100px 20px 200px 20px;
+  }
+  
+  .headerBar {
+    padding: 30px 0 20px 0;
+    gap: 20px;
+  }
+  
+  .titleImage {
+    width: 200px;
+    height: auto;
+  }
+  
+  .barImage {
+    width: 100%;
+    height: auto;
+  }
+}
+
 @media (max-width: 768px) {
   .contentWrapper {
     margin: 0 20px;
@@ -587,12 +639,12 @@
   }
   
   .pageContainer {
-    padding: 160px 20px 200px 20px;
+    padding: 100px 20px 200px 20px;
   }
   
   .titleImage {
     width: 250px;
-    height: 50px;
+    height: auto;
   }
   
   .formActions {

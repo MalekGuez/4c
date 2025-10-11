@@ -1,34 +1,61 @@
 .container {
-  min-height: 100vh;
-  padding: 4rem 2rem;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  place-items: center;
+  width: 100%;
+  min-height: 100svh;
+  position: relative;
+  padding: 160px 200px 200px 200px;
+}
+
+.donateBar {
+  width: 100%;
+  position: relative;
+  z-index: 3;
+  display: flex;
   align-items: center;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 20, 40, 0.95) 100%);
+  justify-content: center;
+  padding: 60px 0 40px 0;
+  gap: 40px;
+}
+
+.donateTitle {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.barImage {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  width: 100%;
 }
 
 .donateBox {
-  background: rgba(0, 0, 0, 0.8);
-  border: 2px solid rgba(255, 215, 0, 0.3);
-  border-radius: 16px;
-  padding: 3rem;
+  position: relative;
+  z-index: 3;
+  background: black;
+  padding: 48px 32px 32px 32px;
+  border: 1px solid #BDBDBD;
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 8px 32px rgba(255, 215, 0, 0.15);
-  position: relative;
 }
 
 .title {
-  font-family: 'TheBlowar-Regular', sans-serif;
-  font-size: 3rem;
-  color: #ffd700;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 2.5rem;
+  color: #790801;
   text-align: center;
   margin-bottom: 1rem;
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .subtitle {
-  color: rgba(255, 255, 255, 0.8);
+  color: #BDBDBD;
   text-align: center;
   font-size: 1.1rem;
   margin-bottom: 2.5rem;
@@ -40,7 +67,7 @@
 
 .label {
   display: block;
-  color: #ffd700;
+  color: #790801;
   font-size: 1.1rem;
   margin-bottom: 0.75rem;
   font-weight: 600;
@@ -50,24 +77,22 @@
   width: 100%;
   padding: 1rem;
   font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 215, 0, 0.3);
-  border-radius: 8px;
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #BDBDBD;
+  color: #BDBDBD;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: inherit;
 }
 
 .dropdown:hover:not(:disabled) {
-  border-color: rgba(255, 215, 0, 0.6);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: #790801;
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .dropdown:focus {
   outline: none;
-  border-color: #ffd700;
-  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+  border-color: #790801;
 }
 
 .dropdown:disabled {
@@ -76,15 +101,14 @@
 }
 
 .dropdown option {
-  background: #1a1a2e;
-  color: #ffffff;
+  background: #000;
+  color: #BDBDBD;
   padding: 0.5rem;
 }
 
 .selectedInfo {
-  background: rgba(255, 215, 0, 0.05);
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  border-radius: 12px;
+  background: rgba(121, 8, 1, 0.1);
+  border: 1px solid #790801;
   padding: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -97,16 +121,16 @@
 }
 
 .infoRow:not(:last-child) {
-  border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+  border-bottom: 1px solid rgba(121, 8, 1, 0.2);
 }
 
 .infoLabel {
-  color: rgba(255, 255, 255, 0.7);
+  color: #BDBDBD;
   font-size: 1rem;
 }
 
 .infoValue {
-  color: #ffd700;
+  color: #790801;
   font-size: 1.2rem;
   font-weight: 600;
 }
@@ -114,11 +138,36 @@
 .paypalContainer {
   margin-top: 2rem;
   min-height: 200px;
+  background: black !important;
+  border-radius: 8px;
+}
+
+/* Force all PayPal elements to black */
+.paypalContainer :global(*) {
+  background: black !important;
+  background-color: black !important;
+}
+
+.paypalContainer :global(.paypal-button-container),
+.paypalContainer :global(.paypal-autoresize-container),
+.paypalContainer :global(.paypal-button-layout-vertical),
+.paypalContainer :global(.paypal-button-shape-rect),
+.paypalContainer :global(.paypal-button-number-multiple),
+.paypalContainer :global(.paypal-button-env-sandbox),
+.paypalContainer :global([class*="paypal-button"]),
+.paypalContainer :global([class*="paypal"]) {
+  background: black !important;
+  background-color: black !important;
+}
+
+.paypalContainer :global(div) {
+  background: black !important;
+  background-color: black !important;
 }
 
 .loading {
   text-align: center;
-  color: #ffd700;
+  color: #790801;
   font-size: 1.5rem;
   padding: 2rem;
 }
@@ -133,12 +182,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 16px;
   z-index: 10;
 }
 
 .processingText {
-  color: #ffd700;
+  color: #790801;
   font-size: 1.5rem;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -177,13 +225,12 @@
 }
 
 .modal {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.98) 100%);
-  border: 2px solid #ffd700;
-  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid #790801;
   padding: 0;
   max-width: 500px;
   width: 90%;
-  box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 50px rgba(121, 8, 1, 0.3);
   animation: slideUp 0.3s ease;
   overflow: hidden;
 }
@@ -200,18 +247,20 @@
 }
 
 .modalHeader {
-  background: rgba(255, 215, 0, 0.1);
+  background: rgba(121, 8, 1, 0.1);
   padding: 2rem;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+  border-bottom: 1px solid #790801;
 }
 
 .modalTitle {
-  font-family: 'TheBlowar-Regular', sans-serif;
+  font-family: 'TheBlowar', sans-serif;
   font-size: 2rem;
-  color: #ffd700;
+  font-weight: 500;
+  color: #790801;
   text-align: center;
   margin: 0;
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 20px rgba(121, 8, 1, 0.5);
+  text-transform: uppercase;
 }
 
 .modalBody {
@@ -222,13 +271,13 @@
 .successIcon {
   width: 80px;
   height: 80px;
-  background: #ffd700;
+  background: #790801;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 3rem;
-  color: #000;
+  color: #fff;
   margin: 0 auto 1.5rem;
   animation: scaleIn 0.5s ease;
 }
@@ -243,22 +292,22 @@
 }
 
 .successMessage {
-  color: #ffffff;
+  color: #BDBDBD;
   font-size: 1.2rem;
   margin-bottom: 1rem;
 }
 
 .moonstonesAwarded {
-  color: #ffd700;
-  font-size: 1.5rem;
-  font-weight: 600;
+  color: #BDBDBD;
+  font-size: 1.2rem;
+  font-weight: 400;
   margin: 0;
 }
 
 .modalFooter {
   padding: 1.5rem 2rem;
   background: rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(255, 215, 0, 0.2);
+  border-top: 1px solid #790801;
   display: flex;
   gap: 1rem;
   justify-content: center;
@@ -266,51 +315,64 @@
 
 .closeButton {
   padding: 0.875rem 2rem;
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  background: #790801;
   border: none;
-  border-radius: 8px;
-  color: #000;
+  color: #fff;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  text-transform: uppercase;
 }
 
 .closeButton:hover {
+  background: #a00a02;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
 }
 
 .closeButtonSecondary {
   padding: 0.875rem 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  color: #ffffff;
+  background: transparent;
+  border: 1px solid #BDBDBD;
+  color: #BDBDBD;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-transform: uppercase;
 }
 
 .closeButtonSecondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(189, 189, 189, 0.1);
+  border-color: #fff;
+  color: #fff;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1550px) {
   .container {
-    padding: 2rem 1rem;
+    padding: 100px 60px 200px 60px;
+  }
+
+  .donateBar {
+    padding: 40px 0 30px 0;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 910px) {
+  .container {
+    padding: 100px 20px 200px 20px;
+  }
+
+  .donateBar {
+    flex-direction: column;
+    padding: 30px 0 20px 0;
+    gap: 20px;
   }
 
   .donateBox {
-    padding: 2rem 1.5rem;
-  }
-
-  .title {
-    font-size: 2.2rem;
+    padding: 20px;
   }
 
   .subtitle {

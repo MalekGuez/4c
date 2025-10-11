@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { CashShopCategory, CashShopItem, cashShopData } from '../data/cashShopData';
+import { CashShopCategory, CashShopItem, cashShopCategories, cashShopItems } from '../data/cashShopData';
 import { apiRequest, API_ENDPOINTS, MoonstonesResponse, tokenManager } from '../services/api';
 import ItemCard from '../components/ItemCard';
 import VirtualScroll from '../components/VirtualScroll';
@@ -27,29 +27,19 @@ export default function CashShopPage() {
       setIsLoading(true);
       setError(null);
 
-      // Load categories from local data
-      if (cashShopData.categories.success && cashShopData.categories.items) {
-        // Sort categories by wOrder
-        const sortedCategories = cashShopData.categories.items.sort((a, b) => a.wOrder - b.wOrder);
-        setCategories(sortedCategories);
-      }
+      // Sort categories by wOrder
+      const sortedCategories = [...cashShopCategories].sort((a: CashShopCategory, b: CashShopCategory) => a.wOrder - b.wOrder);
+      setCategories(sortedCategories);
 
-      // Load items from local data
-      if (cashShopData.items.success && cashShopData.items.items) {
-        // Sort items by bCategory ASC, then by wOrder
-        const sortedItems = cashShopData.items.items.sort((a, b) => {
-          if (a.bCategory !== b.bCategory) {
-            return a.bCategory - b.bCategory;
-          }
-          return a.wOrder - b.wOrder;
-        });
-        setItems(sortedItems);
-        setFilteredItems(sortedItems);
-      }
-
-      if (!cashShopData.categories.success || !cashShopData.items.success) {
-        setError('Failed to load cash shop data');
-      }
+      // Sort items by bCategory ASC, then by wOrder
+      const sortedItems = [...cashShopItems].sort((a: CashShopItem, b: CashShopItem) => {
+        if (a.bCategory !== b.bCategory) {
+          return a.bCategory - b.bCategory;
+        }
+        return a.wOrder - b.wOrder;
+      });
+      setItems(sortedItems);
+      setFilteredItems(sortedItems);
     } catch (err) {
       setError('Error loading cash shop data');
       console.error('Error loading cash shop data:', err);

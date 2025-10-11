@@ -59,9 +59,12 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 1550px) {
+  .page {
+    padding: 100px 60px 200px 60px;
+  }
+  
   .contentContainer {
-    margin: 0 60px;
     padding: 30px;
   }
   
@@ -72,36 +75,37 @@
   
   .newsTitle {
     width: 150px;
-    height: 45px;
+    height: auto;
   }
   
   .barImage {
     width: 600px;
-    height: 30px;
+    height: auto;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 910px) {
+  .page {
+    padding: 100px 20px 200px 20px;
+  }
+  
   .contentContainer {
-    margin: 0 20px;
     padding: 20px;
   }
   
   .newsBar {
-    flex-direction: column;
     padding: 30px 0 20px 0;
     gap: 20px;
   }
   
   .newsTitle {
-    width: 120px;
-    height: 36px;
+    width: 150px;
+    height: auto;
   }
   
   .barImage {
     width: 100%;
-    max-width: 400px;
-    height: 24px;
+    height: auto;
   }
   
   .announcementsGrid {
@@ -112,7 +116,6 @@
 
 @media (max-width: 480px) {
   .contentContainer {
-    margin: 0 10px;
     padding: 15px;
   }
   

@@ -21,14 +21,19 @@ export function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   
+  const connectSrc = process.env.NODE_ENV === 'production'
+    ? "'self' https://api.4chaos.com https://www.paypal.com https://www.sandbox.paypal.com"
+    : "'self' http://37.187.48.183:8080 https://api.4chaos.com https://www.paypal.com https://www.sandbox.paypal.com";
+  
   response.headers.set(
     'Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline'; " +
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.paypal.com https://www.paypalobjects.com; " +
     "style-src 'self' 'unsafe-inline'; " +
-    "img-src 'self' data: blob:; " +
+    "img-src 'self' data: blob: https://www.paypalobjects.com; " +
     "font-src 'self'; " +
-    "connect-src 'self'; " +
+    `connect-src ${connectSrc}; ` +
+    "frame-src https://www.paypal.com https://www.sandbox.paypal.com; " +
     "frame-ancestors 'none';"
   );
 
@@ -37,29 +42,6 @@ export function middleware(request: NextRequest) {
       'Strict-Transport-Security',
       'max-age=31536000; includeSubDomains; preload'
     );
-  }
-
-  const protectedRoutes = ['/admin', '/account-management', '/tickets', '/cash-shop'];
-  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
-  
-  if (isProtectedRoute) {
-    const authToken = request.cookies.get('authToken');
-    
-    if (!authToken) {
-      if (pathname.startsWith('/admin')) {
-        return NextResponse.redirect(new URL('/admin/login', request.url));
-      } else {
-        return NextResponse.redirect(new URL('/login', request.url));
-      }
-    }
-  }
-
-  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
-    const adminToken = request.cookies.get('adminToken');
-    
-    if (!adminToken) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
-    }
   }
 
   return response;

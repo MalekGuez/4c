@@ -10,6 +10,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 export default function Nav() {
   const { isAuthenticated, logout } = useAuthContext();
   const [isClient, setIsClient] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -31,9 +32,19 @@ export default function Nav() {
           />
         </Link>
 
+        <button 
+          className={styles.hamburger} 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className={mobileMenuOpen ? styles.hamburgerOpen : ''}></span>
+          <span className={mobileMenuOpen ? styles.hamburgerOpen : ''}></span>
+          <span className={mobileMenuOpen ? styles.hamburgerOpen : ''}></span>
+        </button>
+
         {isClient && (
           <Suspense fallback={<div>Loading...</div>}>
-            <div className={styles.navLinks}>
+            <div className={`${styles.navLinks} ${mobileMenuOpen ? styles.navLinksOpen : ''}`}>
             {isAdminLoggedIn && (
               <Link href="/admin/dashboard" className={styles.adminStatus}>
                 <div className={styles.adminIndicator}></div>

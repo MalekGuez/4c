@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useAuth } from "../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import styles from "./donate.module.css";
@@ -19,6 +20,7 @@ const donationTiers: DonationTier[] = [
   { price: 25, moonstones: 650, label: "25€ - 650 Moonstones" },
   { price: 50, moonstones: 1600, label: "50€ - 1600 Moonstones" },
   { price: 100, moonstones: 3600, label: "100€ - 3600 Moonstones" },
+  { price: 250, moonstones: 10220, label: "250€ - 10220 Moonstones" },
 ];
 
 export default function DonatePage() {
@@ -27,15 +29,19 @@ export default function DonatePage() {
   const [selectedTier, setSelectedTier] = useState<DonationTier>(donationTiers[0]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [paymentId, setPaymentId] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !isLoading && !user) {
       router.push("/login");
     }
-  }, [user, isLoading, router]);
+  }, [user, isLoading, router, mounted]);
 
-  if (isLoading) {
+  if (!mounted || isLoading) {
     return (
       <div className={styles.container}>
         <div className={styles.loading}>Loading...</div>
@@ -54,17 +60,26 @@ export default function DonatePage() {
     }
   };
 
-  const createPaymentRecord = async (orderId: string) => {
+  const createPaymentRecord = async (paypalOrderId: string, paypalDetails: any) => {
     try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        throw new Error('Access token required - Please log in again');
+      }
+
       const response = await fetch(`${API_CONFIG.BASE_URL}/create-payment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         credentials: "include",
         body: JSON.stringify({
           amount: selectedTier.price,
-          orderId: orderId,
+          orderId: paypalOrderId,
+          paypalOrderId: paypalOrderId,
+          moonstones: selectedTier.moonstones,
+          paypalDetails: paypalDetails,
         }),
       });
 
@@ -74,7 +89,6 @@ export default function DonatePage() {
         throw new Error(data.error || "Failed to create payment record");
       }
 
-      setPaymentId(data.paymentId);
       return data;
     } catch (error) {
       console.error("Error creating payment record:", error);
@@ -84,10 +98,16 @@ export default function DonatePage() {
 
   const updateMoonstones = async () => {
     try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        throw new Error('Access token required');
+      }
+
       const response = await fetch(`${API_CONFIG.BASE_URL}/update-ms`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         credentials: "include",
         body: JSON.stringify({
@@ -112,7 +132,7 @@ export default function DonatePage() {
   return (
     <div className={styles.container}>
       <div className={styles.donateBox}>
-        <h1 className={styles.title}>Support 4Chaos</h1>
+        <h1 className={styles.title}>Donate</h1>
         <p className={styles.subtitle}>
           Help us keep the servers running and get Moonstones in return!
         </p>
@@ -158,13 +178,13 @@ export default function DonatePage() {
             }}
           >
             <PayPalButtons
-              disabled={processing}
-              style={{
-                layout: "vertical",
-                color: "gold",
-                shape: "rect",
-                label: "paypal",
-              }}
+                disabled={processing}
+                style={{
+                  layout: "vertical",
+                  color: "gold",
+                  shape: "rect",
+                  label: "paypal",
+                }}
               createOrder={async (data, actions) => {
                 setProcessing(true);
                 try {
@@ -180,9 +200,6 @@ export default function DonatePage() {
                     ],
                     intent: "CAPTURE",
                   });
-
-                  // Create payment record in our database
-                  await createPaymentRecord(order);
                   
                   return order;
                 } catch (error) {
@@ -199,6 +216,9 @@ export default function DonatePage() {
 
                   const details = await actions.order.capture();
                   console.log("Payment completed:", details);
+
+                  // Create payment record AFTER PayPal validation (with all details)
+                  await createPaymentRecord(details.id || '', details);
 
                   // Update moonstones in database
                   await updateMoonstones();
@@ -235,13 +255,9 @@ export default function DonatePage() {
         <div className={styles.modalOverlay} onClick={() => setShowSuccessModal(false)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>Payment Successful!</h2>
+              <h2 className={styles.modalTitle}>Thanks for your support!</h2>
             </div>
             <div className={styles.modalBody}>
-              <div className={styles.successIcon}>✓</div>
-              <p className={styles.successMessage}>
-                Thank you for your support!
-              </p>
               <p className={styles.moonstonesAwarded}>
                 {selectedTier.moonstones} Moonstones have been added to your account.
               </p>

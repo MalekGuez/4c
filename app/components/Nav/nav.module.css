@@ -237,3 +237,129 @@
 .arrowUp {
   transform: rotate(180deg);
 }
+
+/* Hamburger Menu */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1001;
+}
+
+.hamburger span {
+  width: 30px;
+  height: 3px;
+  background: #BDBDBD;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.hamburger span.hamburgerOpen:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+  background: #790801;
+}
+
+.hamburger span.hamburgerOpen:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger span.hamburgerOpen:nth-child(3) {
+  transform: rotate(-45deg) translate(4px, -4px);
+  background: #790801;
+}
+
+/* Responsive Design */
+@media (max-width: 1550px) {
+  .nav {
+    padding: 0 60px;
+  }
+}
+
+@media (max-width: 910px) {
+  .nav {
+    padding: 0 20px;
+  }
+  
+  .hamburger {
+    display: flex;
+  }
+  
+  .navLinks {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.98);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 0;
+    height: auto;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .navLinksOpen {
+    max-height: calc(100vh - 100px);
+    opacity: 1;
+    overflow-y: auto;
+  }
+  
+  .navLink,
+  .dropdownLink {
+    width: 100%;
+    padding: 15px 0;
+    height: auto;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+    display: block;
+  }
+  
+  .dropdownLink:last-child {
+    border-top: none;
+  }
+  
+  .userStatus {
+    display: none;
+  }
+  
+  .adminStatus {
+    width: 100%;
+    padding: 15px 0;
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .navBtn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  
+  .dropdown {
+    width: 100%;
+  }
+  
+  .dropdownButton {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .dropdownContent {
+    position: static;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding-left: 20px;
+  }
+}

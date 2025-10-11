@@ -4,7 +4,10 @@
  */
 
 const getApiBaseUrl = () => {
-  return process.env.NEXT_PUBLIC_API_URL || 'https://api.4chaos.com/api';
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.NEXT_PUBLIC_API_URL || 'https://api.4chaos.com/api';
+  }
+  return process.env.NEXT_PUBLIC_API_URL || 'http://37.187.48.183:8080/api';
 };
 
 export const API_CONFIG = {
