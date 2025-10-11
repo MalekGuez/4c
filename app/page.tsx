@@ -14,6 +14,15 @@ const announcements = [
     image: "/images/news/4Chaos.png",
     link: "/",
     date: "30 Sept. 2025"
+  },
+  {
+    id: 2,
+    category: "NEWS",
+    title: "WELCOME TO 4CHAOS!",
+    description: "Our doors are now open! Join us in the chaos and experience the new pvp era - Reborn.",
+    image: "/images/news/4Chaos.png",
+    link: "/",
+    date: "11 Oct. 2025"
   }
 ];
 
