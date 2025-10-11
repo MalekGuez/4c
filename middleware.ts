@@ -1,12 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Fonction pour obtenir l'IP du client
+function getClientIp(request: NextRequest): string | null {
+  // En production, l'IP peut être dans différents headers selon le proxy/CDN utilisé
+  const forwarded = request.headers.get('x-forwarded-for');
+  const realIp = request.headers.get('x-real-ip');
+  const cfConnectingIp = request.headers.get('cf-connecting-ip'); // Cloudflare
+  
+  if (forwarded) {
+    // x-forwarded-for peut contenir plusieurs IPs, on prend la première
+    return forwarded.split(',')[0].trim();
+  }
+  
+  if (cfConnectingIp) {
+    return cfConnectingIp;
+  }
+  
+  if (realIp) {
+    return realIp;
+  }
+  
+  // Fallback (ne fonctionne pas toujours en production)
+  return request.ip || null;
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
   const isMaintenancePage = pathname === '/maintenance';
   
-  if (isMaintenanceMode && !isMaintenancePage) {
+  // Vérifier si l'IP du client est autorisée pendant la maintenance
+  const allowedIp = process.env.MAINTENANCE_ALLOWED_IP;
+  const clientIp = getClientIp(request);
+  const isAllowedIp = allowedIp && clientIp === allowedIp;
+  
+  // Si le mode maintenance est actif ET que l'IP n'est pas autorisée
+  if (isMaintenanceMode && !isMaintenancePage && !isAllowedIp) {
     return NextResponse.redirect(new URL('/maintenance', request.url));
   }
   

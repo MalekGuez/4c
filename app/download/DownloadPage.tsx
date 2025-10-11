@@ -5,9 +5,9 @@ import styles from './download.module.css';
 export default function DownloadPage() {
   const handleDownload = (platform: string) => {
     if (platform === 'drive') {
-      window.open('https://drive.google.com/your-game-file', '_blank');
+      window.open('https://drive.google.com/file/d/1_HxZwDYgaQYM8ZLQxTmT78Rp12V_0YuY/view?usp=drive_link', '_blank');
     } else if (platform === 'mega') {
-      window.open('https://mega.nz/your-game-file', '_blank');
+      window.open('https://mega.nz/file/tqoF3YDL#58_2t0gVO65wqOqKVdrQikPJ6h_r-jzOYm91jMuEOWw', '_blank');
     }
   };
 
