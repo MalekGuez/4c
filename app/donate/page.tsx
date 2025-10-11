@@ -172,7 +172,7 @@ export default function DonatePage() {
         <div className={styles.paypalContainer}>
           <PayPalScriptProvider
             options={{
-              clientId: "AcI12cHhnbqPfV0UxJrEWK_YkgSaUHV4Yzu5PhsgmwFawhifb-pDk6oQxLB6j5cTqCfzwcdkPtfZ9h8J",
+              clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
               currency: "EUR",
               intent: "capture",
             }}

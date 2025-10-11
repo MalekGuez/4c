@@ -5,10 +5,9 @@ function getClientIp(request: NextRequest): string | null {
   // En production, l'IP peut être dans différents headers selon le proxy/CDN utilisé
   const forwarded = request.headers.get('x-forwarded-for');
   const realIp = request.headers.get('x-real-ip');
-  const cfConnectingIp = request.headers.get('cf-connecting-ip'); // Cloudflare
+  const cfConnectingIp = request.headers.get('cf-connecting-ip');
   
   if (forwarded) {
-    // x-forwarded-for peut contenir plusieurs IPs, on prend la première
     return forwarded.split(',')[0].trim();
   }
   
@@ -19,9 +18,8 @@ function getClientIp(request: NextRequest): string | null {
   if (realIp) {
     return realIp;
   }
-  
-  // Fallback (ne fonctionne pas toujours en production)
-  return request.ip || null;
+
+  return null;
 }
 
 export function middleware(request: NextRequest) {
