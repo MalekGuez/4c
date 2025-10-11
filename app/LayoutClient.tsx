@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Nav from "./components/Nav";
+import TokenValidator from "./components/TokenValidator";
 import { AuthProvider } from "./contexts/AuthContext";
 
 export default function LayoutClient({
@@ -31,6 +32,7 @@ export default function LayoutClient({
       />
 
       <AuthProvider>
+        <TokenValidator />
         {!isMaintenancePage && <Nav />}
         {children}
       </AuthProvider>

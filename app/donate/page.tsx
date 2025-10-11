@@ -15,7 +15,6 @@ interface DonationTier {
 }
 
 const donationTiers: DonationTier[] = [
-  { price: 1, moonstones: 10, label: "1€ - 10 Moonstones (TEST)" },
   { price: 5, moonstones: 90, label: "5€ - 90 Moonstones" },
   { price: 10, moonstones: 210, label: "10€ - 210 Moonstones" },
   { price: 25, moonstones: 650, label: "25€ - 650 Moonstones" },

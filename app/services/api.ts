@@ -205,6 +205,22 @@ export const apiRequest = async <T = any>(
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
     const data = await response.json();
 
+    // Handle 401 Unauthorized - token expired or invalid
+    if (response.status === 401) {
+      console.log('⚠️ Token expired or invalid - logging out');
+      tokenManager.clearAllAuthData();
+      if (globalLogoutCallback) {
+        globalLogoutCallback();
+      }
+      redirectToHome();
+      
+      return {
+        success: false,
+        error: 'Session expired. Please log in again.',
+        data: data
+      };
+    }
+
     if (!response.ok) {
       return {
         success: false,
