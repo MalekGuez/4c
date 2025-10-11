@@ -15,6 +15,7 @@ interface DonationTier {
 }
 
 const donationTiers: DonationTier[] = [
+  { price: 1, moonstones: 10, label: "1€ - 10 Moonstones (TEST)" },
   { price: 5, moonstones: 90, label: "5€ - 90 Moonstones" },
   { price: 10, moonstones: 210, label: "10€ - 210 Moonstones" },
   { price: 25, moonstones: 650, label: "25€ - 650 Moonstones" },
@@ -212,6 +213,26 @@ export default function DonatePage() {
               createOrder={async (data, actions) => {
                 setProcessing(true);
                 try {
+                  // Verify user is still authenticated before allowing payment
+                  const token = localStorage.getItem('authToken');
+                  
+                  const verifyResponse = await fetch(`${API_CONFIG.BASE_URL}/verify`, {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      ...(token && { 'Authorization': `Bearer ${token}` })
+                    },
+                    credentials: 'include' // Use cookies (production)
+                  });
+
+                  if (!verifyResponse.ok) {
+                    setProcessing(false);
+                    alert('Your session has expired. Please log in again before making a payment.');
+                    router.push('/login');
+                    throw new Error('Authentication expired');
+                  }
+
+                  // Create PayPal order
                   const order = await actions.order.create({
                     purchase_units: [
                       {
@@ -239,14 +260,20 @@ export default function DonatePage() {
                 }
               }}
               onApprove={async (data, actions) => {
+                let paymentRecorded = false;
+                let paypalOrderId = '';
+                
                 try {
                   if (!actions.order) {
                     throw new Error("Order actions not available");
                   }
 
                   const details = await actions.order.capture();
+                  paypalOrderId = details.id || '';
 
-                  await createPaymentRecord(details.id || '', details);
+                  await createPaymentRecord(paypalOrderId, details);
+                  paymentRecorded = true;
+
                   await updateMoonstones();
 
                   setProcessing(false);
@@ -254,7 +281,19 @@ export default function DonatePage() {
                 } catch (error) {
                   setProcessing(false);
                   const errorMessage = error instanceof Error ? error.message : "Unknown error";
-                  alert(`Payment captured but there was an error updating your account: ${errorMessage}\n\nPlease contact support with your transaction ID.`);
+                  
+                  if (paymentRecorded) {
+                    alert(
+                      `Payment was successfully received, but there was an error crediting your Moonstones.\n\n` +
+                      `Your payment has been recorded (Transaction ID: ${paypalOrderId}).\n\n` +
+                      `Please contact support and they will credit your Moonstones manually.`
+                    );
+                  } else {
+                    alert(
+                      `Payment error: ${errorMessage}\n\n` +
+                      `If you were charged, please contact support with your PayPal transaction details.`
+                    );
+                  }
                 }
               }}
               onCancel={() => {

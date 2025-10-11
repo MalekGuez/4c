@@ -24,6 +24,16 @@ export default function ConfirmEmailPage() {
         if (data.success) {
           setStatus('success');
           setMessage(data.message);
+          
+          // Force logout if user is logged in (to refresh verified status on next login)
+          const token = localStorage.getItem('authToken');
+          if (token) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+          }
+          
+          // Redirect to login immediately
+          window.location.href = '/login';
         } else {
           setStatus('error');
           setMessage(data.error || 'Email confirmation failed');
@@ -96,21 +106,19 @@ export default function ConfirmEmailPage() {
                 Your email has been successfully confirmed!
               </h3>
               <p style={{ fontSize: '16px', marginBottom: '30px' }}>
-                Welcome to 4Chaos! You can now log in to your account.
+                Redirecting to login page...
               </p>
-              <Link href="/login" style={{
-                display: 'inline-block',
-                backgroundColor: '#790801',
-                color: 'white',
-                padding: '15px 30px',
-                textDecoration: 'none',
-                borderRadius: '5px',
-                fontSize: '16px',
-                fontWeight: '600',
-                transition: 'background-color 0.3s ease'
-              }}>
-                Go to Login
-              </Link>
+              <div
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  border: '3px solid #333',
+                  borderTop: '3px solid #790801',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                  margin: '0 auto'
+                }}
+              />
             </div>
           )}
           

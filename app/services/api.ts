@@ -192,6 +192,7 @@ export const apiRequest = async <T = any>(
   const token = tokenManager.getToken();
   
   const config: RequestInit = {
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),

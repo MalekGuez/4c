@@ -1,10 +1,7 @@
-'use client';
-
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles/globals.css";
-import Nav from "./components/Nav";
-import { AuthProvider } from "./contexts/AuthContext";
-import { usePathname } from "next/navigation";
+import LayoutClient from "./LayoutClient";
 
 const inter = Inter({
   weight: ["400", "500", "600"],
@@ -14,30 +11,51 @@ const inter = Inter({
   display: "swap",
 });
 
-export default function RootLayout({children,}: Readonly<{ children: React.ReactNode}>) {
-  const pathname = usePathname();
-  const isMaintenancePage = pathname === '/maintenance';
+export const metadata: Metadata = {
+  title: "4Chaos - The Era of PVP - Reborn",
+  description: "Join 4Chaos, the most intense PvP server. Battle, conquer, and dominate in epic player vs player combat.",
+  keywords: "4Chaos, PvP, gaming, multiplayer, online game, player vs player",
+  authors: [{ name: "4Chaos Team" }],
+  creator: "4Chaos",
+  publisher: "4Chaos",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://4chaos.com",
+    siteName: "4Chaos",
+    title: "4Chaos - The Era of PVP - Reborn",
+    description: "Join 4Chaos, the most intense PvP server.",
+    images: [
+      {
+        url: "/images/Logo.png",
+        width: 312,
+        height: 100,
+        alt: "4Chaos Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "4Chaos - The Era of PVP - Reborn",
+    description: "Join 4Chaos, the most intense PvP server.",
+    images: ["/images/Logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: -1,
-          background: 'url("/images/bg.png") no-repeat center center',
-          backgroundSize: 'cover',
-          filter: 'blur(4px)',
-          pointerEvents: 'none',
-          width: '100vw',
-          height: '100vh',
-          opacity: 1,
-          transition: 'filter 0.3s'
-        }} />
-        
-        <AuthProvider>
-          {!isMaintenancePage && <Nav />}
-          {children}
-        </AuthProvider>
+        <LayoutClient>{children}</LayoutClient>
       </body>
     </html>
   );
