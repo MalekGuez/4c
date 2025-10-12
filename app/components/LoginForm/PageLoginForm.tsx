@@ -62,7 +62,7 @@ export default function PageLoginForm({ onSwitchToRegister }: PageLoginFormProps
           <div className={styles.authInputGroup}>
             <label htmlFor="email">Email</label>
             <input
-              type="email"
+              type="text"
               id="email"
               name="email"
               value={formData.email}

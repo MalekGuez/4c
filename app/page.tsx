@@ -10,10 +10,19 @@ const announcements = [
     id: 2,
     category: "NEWS",
     title: "4Chaos is coming.",
-    description: "Prepare yourself for the next evolution of chaos! 4Chaos is launching soon with epic adventures, new features, and a world unlike anything you've seen before. Stay tuned and be ready to join us!",
+    description: "Prepare yourself for the next evolution of chaos! 4Chaos is launching soon with new features, reworked mechanics and a world unlike anything you've seen before. Stay tuned and be ready to join us!",
     image: "/images/news/4Chaos.png",
     link: "/",
     date: "30 Sept. 2025"
+  },
+  {
+    id: 3,
+    category: "NEWS",
+    title: "Welcome to 4Chaos.",
+    description: "Welcome to 4Chaos, the next evolution of chaos! Our gates are open, come join us in the chaos!",
+    image: "/images/news/4Chaos.png",
+    link: "/",
+    date: "11. Oct. 2025"
   },
 ];
 
@@ -22,10 +31,13 @@ export default function Home() {
   const announcementsPerPage = 5;
   
   const { totalPages, currentAnnouncements } = useMemo(() => {
-    const totalPages = Math.ceil(announcements.length / announcementsPerPage);
+    // Trier par ID décroissant (plus grand ID en premier)
+    const sortedAnnouncements = [...announcements].sort((a, b) => b.id - a.id);
+    
+    const totalPages = Math.ceil(sortedAnnouncements.length / announcementsPerPage);
     const startIndex = (currentPage - 1) * announcementsPerPage;
     const endIndex = startIndex + announcementsPerPage;
-    const currentAnnouncements = announcements.slice(startIndex, endIndex);
+    const currentAnnouncements = sortedAnnouncements.slice(startIndex, endIndex);
     return { totalPages, currentAnnouncements };
   }, [currentPage, announcementsPerPage]);
 

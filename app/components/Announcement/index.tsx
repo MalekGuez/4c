@@ -27,9 +27,10 @@ export default function Announcement({
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.description}>{description}</p>
         <div className={styles.bottomRow}>
-          <span className={styles.readMoreBtn}>
+          {/* TODO: Implémenter plus tard */}
+          {/* <span className={styles.readMoreBtn}>
             Click to read more
-          </span>
+          </span> */}
           {date && (
             <span className={styles.date}>{date}</span>
           )}

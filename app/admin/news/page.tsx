@@ -36,7 +36,13 @@ export default function AdminNewsPage() {
       const response = await adminService.getNews();
       
       if (response.success && response.news) {
-        setNews(response.news);
+        // Sort news by date descending (most recent first)
+        const sortedNews = [...response.news].sort((a, b) => {
+          const dateA = new Date(a.date || a.createdAt || 0);
+          const dateB = new Date(b.date || b.createdAt || 0);
+          return dateB.getTime() - dateA.getTime();
+        });
+        setNews(sortedNews);
       } else {
         setError(response.error || 'Failed to load news');
       }
