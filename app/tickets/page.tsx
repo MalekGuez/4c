@@ -74,6 +74,9 @@ export default function TicketsPage() {
       const response = await ticketService.getTicket(ticketId);
       
       if (response.success && response.ticket) {
+        console.log('✅ Ticket loaded:', response.ticket);
+        console.log('📧 Messages:', response.ticket.messages);
+        
         setSelectedTicket(response.ticket);
         
         // Load manager name if operatedBy exists
@@ -202,26 +205,11 @@ export default function TicketsPage() {
   const canUserSendMessage = (ticket: any) => {
     if (!ticket || !ticket.messages) return false;
     
-    // Si pas de messages, on peut envoyer le premier
     if (ticket.messages.length === 0) return true;
-    
-    // Compter les messages de l'utilisateur actuel (non-staff)
-    const currentUserMessages = ticket.messages.filter((msg: any) => 
-      msg.userId === parseInt(user?.id || '0') && !msg.isStaff
-    );
-    
-    // Si l'utilisateur n'a jamais envoyé de message, il peut en envoyer un
-    if (currentUserMessages.length === 0) return true;
-    
-    // Trouver le dernier message de l'utilisateur
-    const lastUserMessage = currentUserMessages[currentUserMessages.length - 1];
-    
-    // Vérifier s'il y a eu une réponse du staff après le dernier message utilisateur
-    const hasStaffResponseAfterLastUserMessage = ticket.messages.some((msg: any) => 
-      msg.isStaff && new Date(msg.date) > new Date(lastUserMessage.date)
-    );
-    
-    return hasStaffResponseAfterLastUserMessage;
+    const lastMessage = ticket.messages[ticket.messages.length - 1];
+
+    // Convertir isStaff en booléen (SQL retourne 0/1, pas true/false)
+    return Boolean(lastMessage.isStaff) || lastMessage.isStaffMessage === 1;
   };
 
   return (
@@ -385,6 +373,9 @@ export default function TicketsPage() {
                         </span>
                       </div>
                     </div>
+                    <div className={styles.ticketFooter} style={{ marginTop: '8px', fontSize: '12px', color: '#999', textAlign: 'right' }}>
+                      <span>Last updated: {formatDate(ticket.updatedAt || ticket.createdAt || new Date().toISOString())}</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -423,7 +414,13 @@ export default function TicketsPage() {
                     <div key={message.id} className={styles.messageItem}>
                       <div className={styles.messageHeader}>
                         <span className={styles.messageUser}>
-                          {message.isStaff ? (managerName || 'Staff Member') : (message.userId === parseInt(user?.id || '0') ? 'You' : message.szUserID || `User ${message.userId}`)}
+                          {Boolean(message.isStaff) || message.isStaffMessage === 1
+                            ? (managerName || message.szUserID || 'Staff Member') 
+                            : (parseInt(String(message.userId)) === parseInt(user?.id || '0') 
+                                ? 'You' 
+                                : (message.szEmail || message.szUserID || 'Unknown User')
+                              )
+                          }
                         </span>
                       </div>
                       <div className={styles.messageContent}>
@@ -442,7 +439,7 @@ export default function TicketsPage() {
               )}
 
               {/* Add Message Form */}
-              {selectedTicket.status === 'opened' && canUserSendMessage(selectedTicket) && (
+              {selectedTicket.status !== 'closed' && canUserSendMessage(selectedTicket) && (
                 <form onSubmit={handleAddMessage} className={styles.addMessageForm}>
                   <div className={styles.formGroup}>
                     <label htmlFor="newMessage">Your answer:</label>
@@ -461,7 +458,7 @@ export default function TicketsPage() {
               )}
               
               {/* Message limit info */}
-              {selectedTicket.status === 'opened' && !canUserSendMessage(selectedTicket) && selectedTicket.messages && selectedTicket.messages.length > 0 && (
+              {selectedTicket.status !== 'closed' && !canUserSendMessage(selectedTicket) && selectedTicket.messages && selectedTicket.messages.length > 0 && (
                 <div className={styles.messageLimitInfo}>
                   <p>You can only send one message at a time. Please wait for a staff response before sending another message.</p>
                 </div>

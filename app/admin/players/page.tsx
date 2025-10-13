@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { adminService } from '@/app/services/api';
@@ -11,9 +11,12 @@ export default function AdminPlayersPage() {
   const [players, setPlayers] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
-  const [showSanctions, setShowSanctions] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const loadingMoreRef = useRef(false);
+  const offsetRef = useRef(0);
 
   useEffect(() => {
     const adminToken = localStorage.getItem('adminToken');
@@ -21,28 +24,53 @@ export default function AdminPlayersPage() {
       router.push('/admin/login');
       return;
     }
-
-    loadPlayers();
   }, [router]);
 
   useEffect(() => {
-    if (searchTerm) {
-      const timeoutId = setTimeout(() => {
-        loadPlayers(searchTerm);
-      }, 500);
-      return () => clearTimeout(timeoutId);
-    } else {
-      loadPlayers();
-    }
+    // Debounce search - reset and reload when search term changes
+    const timeoutId = setTimeout(() => {
+      setOffset(0);
+      offsetRef.current = 0;
+      setHasMore(true);
+      loadPlayers(searchTerm, 0);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
   }, [searchTerm]);
 
-  const loadPlayers = async (search?: string) => {
+  // Infinite scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (loadingMoreRef.current || !hasMore) return;
+      
+      const scrollTop = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = window.innerHeight;
+      
+      // Charger plus quand on arrive à 80% du bas
+      if (scrollTop + clientHeight >= scrollHeight * 0.8) {
+        loadMorePlayers();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore]);
+
+  const loadPlayers = async (search?: string, currentOffset = 0) => {
     try {
       setLoading(true);
-      const response = await adminService.getPlayers(search);
+      loadingMoreRef.current = false;
+      console.log(`🔄 Loading players: search="${search}", offset=${currentOffset}`);
+      const response = await adminService.getPlayers(search, currentOffset, 50);
       
       if (response.success && response.players) {
+        console.log(`✅ Loaded ${response.players.length} players, hasMore=${response.hasMore}`);
         setPlayers(response.players);
+        setHasMore(response.hasMore || false);
+        const newOffset = currentOffset + 50;
+        setOffset(newOffset);
+        offsetRef.current = newOffset;
       } else {
         setError(response.error || 'Failed to load players');
       }
@@ -53,17 +81,36 @@ export default function AdminPlayersPage() {
     }
   };
 
-  const handlePlayerClick = (player: any) => {
-    setSelectedPlayer(player);
-    setShowSanctions(true);
+  const loadMorePlayers = async () => {
+    if (loadingMore || !hasMore || loadingMoreRef.current) return;
+    
+    loadingMoreRef.current = true;
+    setLoadingMore(true);
+    
+    const currentOffset = offsetRef.current;
+    
+    try {
+      console.log(`🔄 Loading MORE players: search="${searchTerm}", offset=${currentOffset}`);
+      const response = await adminService.getPlayers(searchTerm || '', currentOffset, 50);
+      
+      if (response.success && response.players) {
+        console.log(`✅ Loaded ${response.players.length} more players`);
+        setPlayers(prev => [...prev, ...(response.players || [])]);
+        setHasMore(response.hasMore || false);
+        const newOffset = currentOffset + 50;
+        setOffset(newOffset);
+        offsetRef.current = newOffset;
+      }
+    } catch (err) {
+      console.error('Failed to load more players:', err);
+    } finally {
+      setLoadingMore(false);
+      loadingMoreRef.current = false;
+    }
   };
 
-  const handleSanction = (type: string) => {
-    if (!selectedPlayer) return;
-    
-    // TODO: Implement sanction API calls
-    console.log(`Applying ${type} to player ${selectedPlayer.szID}`);
-    alert(`${type} applied to ${selectedPlayer.szID}`);
+  const handlePlayerClick = (player: any) => {
+    router.push(`/admin/players/${player.dwCharID}`);
   };
 
   const formatDate = (dateString: string) => {
@@ -78,12 +125,15 @@ export default function AdminPlayersPage() {
     });
   };
 
-  const getStatusColor = (verified: number) => {
-    return verified === 1 ? '#4CAF50' : '#F44336';
-  };
-
-  const getStatusText = (verified: number) => {
-    return verified === 1 ? 'Verified' : 'Unverified';
+  const getClassIcon = (classId: number) => {
+    const classNames: { [key: number]: string } = {
+      0: 'Warrior',
+      1: 'Nightwalker',
+      2: 'Archer',
+      3: 'Magician',
+      4: 'Priest',
+    };
+    return classNames[classId] || 'Unknown';
   };
 
   if (loading) {
@@ -91,7 +141,7 @@ export default function AdminPlayersPage() {
       <div className={styles.pageContainer}>
         <div className={styles.loadingContainer}>
           <div className={styles.loadingSpinner}></div>
-          <p>Loading players...</p>
+          <p>Loading characters...</p>
         </div>
       </div>
     );
@@ -102,10 +152,10 @@ export default function AdminPlayersPage() {
       {/* Header Bar */}
       <div className={styles.headerBar}>
         <Image
-          src="/images/titles/Ranking.png"
-          alt="Player Management"
-          width={238}
-          height={61}
+          src="/images/titles/Sanction.png"
+          alt="Sanction Players"
+          width={320}
+          height={82}
           className={styles.titleImage}
         />
         <div className={styles.bar}>
@@ -133,14 +183,14 @@ export default function AdminPlayersPage() {
           <div className={styles.searchBox}>
             <input
               type="text"
-              placeholder="Search players by ID, name, or email..."
+              placeholder="Search characters by name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={styles.searchInput}
             />
           </div>
           <div className={styles.resultsCount}>
-            Found {players.length} players
+            Showing {players.length} character(s) {hasMore && '(scroll for more)'}
           </div>
         </div>
 
@@ -148,100 +198,80 @@ export default function AdminPlayersPage() {
         <div className={styles.playersList}>
           {players.length === 0 ? (
             <div className={styles.noPlayers}>
-              {searchTerm ? 'No players found matching your search.' : 'No players found.'}
+              {searchTerm ? 'No characters found matching your search.' : 'No characters found.'}
             </div>
           ) : (
             <div className={styles.playersGrid}>
               {players.map((player) => (
                 <div
-                  key={player.szID}
+                  key={player.dwCharID}
                   className={styles.playerCard}
                   onClick={() => handlePlayerClick(player)}
                 >
-                  <div className={styles.playerHeader}>
+                  <div className={styles.playerHeader} style={{ gap: '8px' }}>
+                    <Image 
+                      src={`/images/icons/classes/${player.bClass}.png`}
+                      alt={getClassIcon(player.bClass)}
+                      width={32}
+                      height={32}
+                      style={{ imageRendering: 'pixelated' }}
+                    />
                     <div className={styles.playerInfo}>
-                      <h4 className={styles.playerName}>{player.szName}</h4>
-                      <span className={styles.playerId}>ID: {player.szID}</span>
+                      <h4 className={styles.playerName}>
+                        {player.szName}
+                        {player.bDelete === 1 && (
+                          <span style={{ color: '#F44336', marginLeft: '8px', fontSize: '12px' }}>
+                            (Deleted)
+                          </span>
+                        )}
+                      </h4>
+                      <span className={styles.playerId}>Char ID: {player.dwCharID} | User ID: {player.dwUserID}</span>
                     </div>
                     <div className={styles.playerStatus}>
                       <span 
                         className={styles.statusBadge}
-                        style={{ color: getStatusColor(player.bVerified) }}
+                        style={{ color: player.bDelete === 1 ? '#F44336' : '#4CAF50' }}
                       >
-                        {getStatusText(player.bVerified)}
+                        {player.bDelete === 1 ? 'Deleted' : 'Active'}
                       </span>
                     </div>
                   </div>
                   
                   <div className={styles.playerDetails}>
                     <div className={styles.detailRow}>
-                      <span className={styles.detailLabel}>Level:</span>
-                      <span className={styles.detailValue}>{player.bLevel || 'N/A'}</span>
+                      <span className={styles.detailLabel}>Account:</span>
+                      <span className={styles.detailValue}>{player.accountName || 'N/A'}</span>
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Email:</span>
                       <span className={styles.detailValue}>{player.szEmail || 'N/A'}</span>
                     </div>
                     <div className={styles.detailRow}>
-                      <span className={styles.detailLabel}>Last Login:</span>
-                      <span className={styles.detailValue}>{formatDate(player.dtLastLogin)}</span>
+                      <span className={styles.detailLabel}>Last Logout:</span>
+                      <span className={styles.detailValue}>{formatDate(player.dLogoutDate)}</span>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
+          
+          {/* Loading more indicator */}
+          {loadingMore && (
+            <div className={styles.loadingMore} style={{ textAlign: 'center', padding: '20px' }}>
+              <div className={styles.loadingSpinner}></div>
+              <p>Loading more characters...</p>
+            </div>
+          )}
+          
+          {/* End of results */}
+          {!loading && !loadingMore && !hasMore && players.length > 0 && (
+            <div style={{ textAlign: 'center', padding: '20px', color: '#999' }}>
+              No more characters to load
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Sanctions Modal */}
-      {showSanctions && selectedPlayer && (
-        <div className={styles.modalOverlay} onClick={() => setShowSanctions(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h3>Player Sanctions</h3>
-              <button 
-                className={styles.closeButton}
-                onClick={() => setShowSanctions(false)}
-              >
-                ×
-              </button>
-            </div>
-            
-            <div className={styles.playerInfo}>
-              <h4>{selectedPlayer.szName}</h4>
-              <p>ID: {selectedPlayer.szID}</p>
-            </div>
-
-            <div className={styles.sanctionsGrid}>
-              <button 
-                className={styles.sanctionButton}
-                onClick={() => handleSanction('Mute')}
-              >
-                Mute Player
-              </button>
-              <button 
-                className={styles.sanctionButton}
-                onClick={() => handleSanction('Ban')}
-              >
-                Ban Player
-              </button>
-              <button 
-                className={styles.sanctionButton}
-                onClick={() => handleSanction('Kick')}
-              >
-                Kick Player
-              </button>
-              <button 
-                className={styles.sanctionButton}
-                onClick={() => handleSanction('Warn')}
-              >
-                Warning
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

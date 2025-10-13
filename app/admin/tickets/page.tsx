@@ -23,6 +23,7 @@ export default function AdminTicketsPage() {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchId, setSearchId] = useState<string>('');
   const [deletingMessage, setDeletingMessage] = useState<number | null>(null);
+  const [closingTicket, setClosingTicket] = useState(false);
 
   useEffect(() => {
     const adminToken = localStorage.getItem('adminToken');
@@ -186,6 +187,38 @@ export default function AdminTicketsPage() {
       setError('Failed to delete message');
     } finally {
       setDeletingMessage(null);
+    }
+  };
+
+  const handleCloseTicket = async () => {
+    if (!selectedTicket) return;
+
+    if (!confirm('Are you sure you want to close this ticket?')) {
+      return;
+    }
+
+    setClosingTicket(true);
+    setError(null);
+    try {
+      const response = await adminService.closeTicket(selectedTicket.id);
+      
+      if (response.success) {
+        setSuccessMessage('Ticket closed successfully!');
+        
+        await loadTickets();
+        
+        // Clear success message and go back to list after 2 seconds
+        setTimeout(() => {
+          setSuccessMessage(null);
+          setSelectedTicket(null);
+        }, 2000);
+      } else {
+        setError(response.error || 'Failed to close ticket');
+      }
+    } catch (err) {
+      setError('Failed to close ticket');
+    } finally {
+      setClosingTicket(false);
     }
   };
 
@@ -543,7 +576,7 @@ export default function AdminTicketsPage() {
                         <span className={styles.messageUser}>
                           {message.isStaff 
                             ? (message.szUserID || 'Staff Member')
-                            : message.szUserID || 'Unknown User'
+                            : (message.szEmail || message.szUserID || 'Unknown User')
                           }
                         </span>
                         {canDeleteMessage(message) && (
@@ -615,13 +648,30 @@ export default function AdminTicketsPage() {
                   placeholder="Type your response..."
                   className={styles.messageTextarea}
                 />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!newMessage.trim() || sendingMessage}
-                  className={styles.sendButton}
-                >
-                  {sendingMessage ? 'Sending...' : 'Send Response'}
-                </button>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+                  {selectedTicket.status !== 'closed' && (
+                    <button
+                      onClick={handleCloseTicket}
+                      disabled={closingTicket}
+                      className={styles.sendButton}
+                      style={{
+                        backgroundColor: '#F44336'
+                      }}
+                    >
+                      {closingTicket ? 'Closing...' : 'Close Ticket'}
+                    </button>
+                  )}
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!newMessage.trim() || sendingMessage}
+                    className={styles.sendButton}
+                    style={{
+                      marginLeft: 'auto'
+                    }}
+                  >
+                    {sendingMessage ? 'Sending...' : 'Send Response'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

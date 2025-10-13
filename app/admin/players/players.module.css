@@ -17,8 +17,8 @@
 }
 
 .titleImage {
-  width: 238px;
-  height: 61px;
+  width: 500px;
+  height: 82px;
   object-fit: contain;
 }
 
@@ -322,6 +322,68 @@
   transform: translateY(-2px);
 }
 
+/* Form Elements */
+.filterSelect {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  color: #BDBDBD;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 5px rgba(121, 8, 1, 0.3);
+}
+
+.sendButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  color: white;
+  border: 2px solid #790801;
+  padding: 12px 24px;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+}
+
+.sendButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a00a02, #790801);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.messageTextarea {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  border-radius: 0;
+  padding: 15px;
+  color: #BDBDBD;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.messageTextarea:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 5px rgba(121, 8, 1, 0.3);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .pageContainer {
@@ -329,8 +391,8 @@
   }
   
   .titleImage {
-    width: 200px;
-    height: 51px;
+    width: 300px;
+    height: 82px;
   }
   
   .searchSection {

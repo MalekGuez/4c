@@ -81,12 +81,13 @@ export interface Ticket {
   id: number;
   title: string;
   category: string;
-  status: 'opened' | 'closed';
+  status: 'opened' | 'closed' | 'pending';
   userId: number;
   operatedBy?: number;
   createdAt?: string;
-  description?: string; // Description comes from first user message
-  state?: number; // Authority level where ticket is handled (1-5)
+  updatedAt?: string;
+  description?: string;
+  state?: number;
   messages?: TicketMessage[];
 }
 
@@ -94,10 +95,12 @@ export interface TicketMessage {
   id: number;
   ticketId: number;
   message: string;
-  userId: number;
+  userId: number | string;
   date: string;
-  isStaff?: boolean;
+  isStaff?: boolean | number;
+  isStaffMessage?: number;
   szUserID?: string;
+  szEmail?: string;
 }
 
 export interface CreateTicketRequest {
@@ -320,6 +323,24 @@ const adminRequest = async <T>(endpoint: string, options: RequestInit = {}): Pro
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
     const data = await response.json();
 
+    // Handle 401 Unauthorized - admin token expired or invalid
+    if (response.status === 401 || response.status === 403) {
+      console.log('⚠️ Admin token expired or invalid - redirecting to admin login');
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminManager');
+      
+      // Redirect to admin login
+      if (typeof window !== 'undefined') {
+        window.location.href = '/admin/login';
+      }
+      
+      return {
+        success: false,
+        error: 'Admin session expired. Please log in again.',
+        data: data
+      };
+    }
+
     if (!response.ok) {
       return {
         success: false,
@@ -389,14 +410,21 @@ export const adminService = {
     };
   },
 
-  // Get players list
-  getPlayers: async (search?: string): Promise<{ success: boolean; players?: any[]; error?: string }> => {
-    const url = search ? `${API_ENDPOINTS.ADMIN.PLAYERS}?search=${encodeURIComponent(search)}` : API_ENDPOINTS.ADMIN.PLAYERS;
+  // Get players list with pagination
+  getPlayers: async (search?: string, offset = 0, limit = 50): Promise<{ success: boolean; players?: any[]; hasMore?: boolean; error?: string }> => {
+    const params = new URLSearchParams();
+    if (search) params.append('search', search);
+    params.append('offset', offset.toString());
+    params.append('limit', limit.toString());
+    
+    const url = `${API_ENDPOINTS.ADMIN.PLAYERS}?${params.toString()}`;
     const response = await adminRequest<any>(url);
+    
     if (response.success && response.data) {
       return {
         success: true,
-        players: response.data.players
+        players: response.data.players,
+        hasMore: response.data.hasMore
       };
     }
     return {
@@ -470,6 +498,59 @@ export const adminService = {
     return {
       success: false,
       error: response.error || 'Failed to delete message'
+    };
+  },
+
+  // Admin close ticket
+  closeTicket: async (ticketId: number): Promise<{ success: boolean; error?: string }> => {
+    const response = await adminRequest<any>(`/admin/tickets/${ticketId}/close`, {
+      method: 'PATCH'
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to close ticket'
+    };
+  },
+
+  // Admin get HWID sessions
+  getHWIDSessions: async (dwUserID: number): Promise<{ success: boolean; sessions?: any[]; error?: string }> => {
+    const response = await adminRequest<any>(`/admin/players/${dwUserID}/hwid-sessions`, {
+      method: 'GET'
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        sessions: response.data.sessions
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to retrieve HWID sessions'
+    };
+  },
+
+  // Admin ban player
+  banPlayer: async (dwUserID: number, banData: any): Promise<{ success: boolean; error?: string }> => {
+    const response = await adminRequest<any>(`/admin/players/${dwUserID}/ban`, {
+      method: 'POST',
+      body: JSON.stringify(banData)
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to ban player'
     };
   }
 };

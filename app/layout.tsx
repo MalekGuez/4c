@@ -12,6 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://4chaos.com'),
   title: "4Chaos - The Era of PVP - Reborn",
   description: "Join 4Chaos, the most intense PvP server. Battle, conquer, and dominate in epic player vs player combat.",
   keywords: "4Chaos, PvP, gaming, multiplayer, online game, player vs player",
