@@ -199,6 +199,8 @@ export default function DonatePage() {
               clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
               currency: "EUR",
               intent: "capture",
+              disableFunding: "bancontact,blik,eps,giropay,ideal,mercadopago,mybank,p24,sepa,sofort,venmo",
+              enableFunding: "card",
             }}
           >
             <PayPalButtons
@@ -208,11 +210,10 @@ export default function DonatePage() {
                   color: "gold",
                   shape: "rect",
                   label: "paypal",
+                  height: 55,
                 }}
               createOrder={async (data, actions) => {
-                setProcessing(true);
                 try {
-                  // Verify user is still authenticated before allowing payment
                   const token = localStorage.getItem('authToken');
                   
                   const verifyResponse = await fetch(`${API_CONFIG.BASE_URL}/verify`, {
@@ -225,7 +226,6 @@ export default function DonatePage() {
                   });
 
                   if (!verifyResponse.ok) {
-                    setProcessing(false);
                     alert('Your session has expired. Please log in again before making a payment.');
                     router.push('/login');
                     throw new Error('Authentication expired');
@@ -254,11 +254,11 @@ export default function DonatePage() {
                   
                   return order;
                 } catch (error) {
-                  setProcessing(false);
                   throw error;
                 }
               }}
               onApprove={async (data, actions) => {
+                setProcessing(true);
                 let paymentRecorded = false;
                 let paypalOrderId = '';
                 
@@ -305,12 +305,6 @@ export default function DonatePage() {
             />
           </PayPalScriptProvider>
         </div>
-
-        {processing && (
-          <div className={styles.processingOverlay}>
-            <div className={styles.processingText}>Processing payment...</div>
-          </div>
-        )}
       </div>
 
       {showSuccessModal && (

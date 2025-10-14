@@ -25,21 +25,21 @@ export const metadata: Metadata = {
     url: "https://4chaos.com",
     siteName: "4Chaos",
     title: "4Chaos - The Era of PVP - Reborn",
-    description: "Join 4Chaos, the most intense PvP server.",
+    description: "Join 4Chaos, the most intense PvP server. Battle, conquer, and dominate in epic player vs player combat.",
     images: [
       {
-        url: "/images/Logo.png",
-        width: 312,
-        height: 100,
-        alt: "4Chaos Logo",
+        url: "/images/4Chaos.png",
+        width: 1200,
+        height: 630,
+        alt: "4Chaos - The Era of PVP",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "4Chaos - The Era of PVP - Reborn",
-    description: "Join 4Chaos, the most intense PvP server.",
-    images: ["/images/Logo.png"],
+    description: "Join 4Chaos, the most intense PvP server. Battle, conquer, and dominate in epic player vs player combat.",
+    images: ["/images/4Chaos.png"],
   },
   robots: {
     index: true,

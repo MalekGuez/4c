@@ -308,13 +308,6 @@ export default function PlayerDetailPage() {
             </button>
             <button 
               className={styles.sendButton}
-              style={{ backgroundColor: '#FF9800' }}
-              disabled
-            >
-              🔇 Mute Player
-            </button>
-            <button 
-              className={styles.sendButton}
               style={{ backgroundColor: '#2196F3' }}
               disabled
             >
@@ -344,7 +337,6 @@ export default function PlayerDetailPage() {
                 className={styles.filterSelect}
               >
                 <option value={1}>Account Ban</option>
-                <option value={0}>Mute (Chat Ban)</option>
               </select>
             </div>
 

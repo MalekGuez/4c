@@ -26,6 +26,12 @@ export default function PageRegisterForm({ onSwitchToLogin }: PageRegisterFormPr
   const validateForm = () => {
     const errors: string[] = [];
     
+    // Validate email format (must be: text@text.text)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      errors.push('Please enter a valid email address (e.g., user@example.com)');
+    }
+    
     // Check if email contains special character (-)
     if (formData.email.includes('-')) {
       if (!formData.username || formData.username.trim().length === 0) {
@@ -136,7 +142,7 @@ export default function PageRegisterForm({ onSwitchToLogin }: PageRegisterFormPr
           <div className={styles.authInputGroup}>
             <label htmlFor="email">Email</label>
             <input
-              type="text"
+              type="email"
               id="email"
               name="email"
               value={formData.email}

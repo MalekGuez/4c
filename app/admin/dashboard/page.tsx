@@ -92,7 +92,7 @@ export default function AdminDashboardPage() {
 
           <Link href="/admin/players" className={styles.adminCard}>
             <h3>Players Management</h3>
-            <p>Search players, view profiles, apply sanctions, mutes, and bans.</p>
+            <p>Search players, view profiles, and apply sanctions (bans, kicks, warns).</p>
           </Link>
 
           <Link href="/admin/news" className={styles.adminCard}>
