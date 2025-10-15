@@ -7,7 +7,7 @@ import styles from "./styles/page.module.css";
 
 const announcements = [
   {
-    id: 2,
+    id: 1,
     category: "NEWS",
     title: "4Chaos is coming.",
     description: "Prepare yourself for the next evolution of chaos! 4Chaos is launching soon with new features, reworked mechanics and a world unlike anything you've seen before. Stay tuned and be ready to join us!",
@@ -16,13 +16,31 @@ const announcements = [
     date: "30 Sept. 2025"
   },
   {
-    id: 3,
+    id: 2,
     category: "NEWS",
     title: "Welcome to 4Chaos.",
     description: "Welcome to 4Chaos, the next evolution of chaos! Our gates are open, come join us in the chaos!",
     image: "/images/news/4Chaos.png",
     link: "/",
     date: "11. Oct. 2025"
+  },
+  {
+    id: 3,
+    category: "FEATURE",
+    title: "Introducing Our New Exclusive Class Switching System!",
+    description: "We're thrilled to unveil a brand-new Class Switching Mode System — a revolutionary feature that lets you master every class in the game and prove your true versatility as a player. Show your skill. Conquer every class. Become unstoppable.",
+    image: "/images/news/switch-class.png",
+    link: "/",
+    date: "13. Oct. 2025"
+  },
+  {
+    id: 4,
+    category: "FEATURE",
+    title: "Rapid Fire System",
+    description: "Experience lightning-fast combat with our new Rapid Fire System! Simply enable the checkbox next to your key skills and hold down the key to automatically spam the skill. Perfect your timing and make your combat experience smoother than ever.",
+    image: "/images/news/rapid-fire.png",
+    link: "/",
+    date: "15. Oct. 2025"
   },
 ];
 
