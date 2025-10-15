@@ -27,13 +27,16 @@ export default function DonatePage() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const [selectedTier, setSelectedTier] = useState<DonationTier>(donationTiers[0]);
+  const [lockedTier, setLockedTier] = useState<DonationTier | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [dropdownDisabled, setDropdownDisabled] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
 
   useEffect(() => {
     if (mounted && !isLoading && !user) {
@@ -60,7 +63,7 @@ export default function DonatePage() {
     }
   };
 
-  const createPaymentRecord = async (paypalOrderId: string, paypalDetails: any) => {
+  const createPaymentRecord = async (paypalOrderId: string, paypalDetails: any, lockedTier: DonationTier) => {
     try {
       const token = localStorage.getItem('authToken');
       if (!token) {
@@ -78,10 +81,10 @@ export default function DonatePage() {
         },
         credentials: "include",
         body: JSON.stringify({
-          amount: selectedTier.price,
+          amount: lockedTier.price,
           orderId: paypalOrderId,
           paypalOrderId: paypalOrderId,
-          moonstones: selectedTier.moonstones,
+          moonstones: lockedTier.moonstones,
           paypalDetails: paypalDetails,
         }),
         signal: controller.signal,
@@ -108,7 +111,7 @@ export default function DonatePage() {
     }
   };
 
-  const updateMoonstones = async () => {
+  const updateMoonstones = async (lockedTier: DonationTier) => {
     try {
       const token = localStorage.getItem('authToken');
       if (!token) {
@@ -127,7 +130,7 @@ export default function DonatePage() {
         credentials: "include",
         body: JSON.stringify({
           userId: user.id,
-          moonstones: selectedTier.moonstones,
+          moonstones: lockedTier.moonstones,
         }),
         signal: controller.signal,
       });
@@ -170,7 +173,7 @@ export default function DonatePage() {
             value={selectedTier.price}
             onChange={handleTierChange}
             className={styles.dropdown}
-            disabled={processing}
+            disabled={dropdownDisabled}
           >
             {donationTiers.map((tier) => (
               <option key={tier.price} value={tier.price}>
@@ -183,17 +186,17 @@ export default function DonatePage() {
         <div className={styles.selectedInfo}>
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>Amount:</span>
-            <span className={styles.infoValue}>{selectedTier.price}€</span>
+            <span className={styles.infoValue}>{(lockedTier || selectedTier).price}€</span>
           </div>
           <div className={styles.infoRow}>
             <span className={styles.infoLabel}>You will receive:</span>
             <span className={styles.infoValue}>
-              {selectedTier.moonstones} Moonstones
+              {(lockedTier || selectedTier).moonstones} Moonstones
             </span>
           </div>
         </div>
 
-        <div className={styles.paypalContainer}>
+        <div className={styles.paypalContainer} style={{ colorScheme: 'none' }}>
           <PayPalScriptProvider
             options={{
               clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
@@ -213,6 +216,8 @@ export default function DonatePage() {
                   height: 55,
                 }}
               createOrder={async (data, actions) => {
+                setDropdownDisabled(true);
+                setLockedTier(selectedTier);
                 try {
                   const token = localStorage.getItem('authToken');
                   
@@ -254,6 +259,8 @@ export default function DonatePage() {
                   
                   return order;
                 } catch (error) {
+                  setDropdownDisabled(false);
+                  setLockedTier(null);
                   throw error;
                 }
               }}
@@ -270,15 +277,23 @@ export default function DonatePage() {
                   const details = await actions.order.capture();
                   paypalOrderId = details.id || '';
 
-                  await createPaymentRecord(paypalOrderId, details);
+                  if (!lockedTier) {
+                    throw new Error("Payment tier not locked - possible tampering detected");
+                  }
+
+                  await createPaymentRecord(paypalOrderId, details, lockedTier);
                   paymentRecorded = true;
 
-                  await updateMoonstones();
+                  await updateMoonstones(lockedTier);
 
                   setProcessing(false);
+                  setDropdownDisabled(false);
+                  setLockedTier(null);
                   setShowSuccessModal(true);
                 } catch (error) {
                   setProcessing(false);
+                  setDropdownDisabled(false);
+                  setLockedTier(null);
                   const errorMessage = error instanceof Error ? error.message : "Unknown error";
                   
                   if (paymentRecorded) {
@@ -297,9 +312,13 @@ export default function DonatePage() {
               }}
               onCancel={() => {
                 setProcessing(false);
+                setDropdownDisabled(false);
+                setLockedTier(null);
               }}
               onError={(err) => {
                 setProcessing(false);
+                setDropdownDisabled(false);
+                setLockedTier(null);
                 alert("An error occurred with PayPal. Please try again.");
               }}
             />
@@ -315,7 +334,7 @@ export default function DonatePage() {
             </div>
             <div className={styles.modalBody}>
               <p className={styles.moonstonesAwarded}>
-                {selectedTier.moonstones} Moonstones have been added to your account.
+                {(lockedTier || selectedTier).moonstones} Moonstones have been added to your account.
               </p>
             </div>
             <div className={styles.modalFooter}>

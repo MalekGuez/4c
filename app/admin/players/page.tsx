@@ -15,12 +15,84 @@ export default function AdminPlayersPage() {
   const [error, setError] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [userGrade, setUserGrade] = useState<any>(null);
   const loadingMoreRef = useRef(false);
   const offsetRef = useRef(0);
 
+  // Grade definitions and permissions (bAuthority values: 5=TGM, 4=GM, 3=SGM, 2=GA, 1=COMA)
+  const GRADE_PERMISSIONS = {
+    5: { // TGM
+      name: 'TGM',
+      color: '#4CAF50',
+      canViewPlayers: false,
+      canBan: false,
+      maxBanDuration: 0,
+      canViewBanHistory: false,
+      canUnban: false
+    },
+    4: { // GM
+      name: 'GM',
+      color: '#FF9800',
+      canViewPlayers: true,
+      canBan: true,
+      maxBanDuration: 30 * 24, // 30 days in hours
+      canViewBanHistory: true,
+      canUnban: false
+    },
+    3: { // SGM
+      name: 'SGM',
+      color: '#F44336',
+      canViewPlayers: true,
+      canBan: true,
+      maxBanDuration: Infinity, // Permanent bans allowed
+      canViewBanHistory: true,
+      canUnban: true
+    },
+    2: { // GA
+      name: 'GA',
+      color: '#9C27B0',
+      canViewPlayers: true,
+      canBan: true,
+      maxBanDuration: Infinity,
+      canViewBanHistory: true,
+      canUnban: true
+    },
+    1: { // COMA
+      name: 'COMA',
+      color: '#FF0000',
+      canViewPlayers: true,
+      canBan: true,
+      maxBanDuration: Infinity,
+      canViewBanHistory: true,
+      canUnban: true
+    }
+  };
+
+  const getGradeInfo = () => {
+    if (!userGrade) return null;
+    return GRADE_PERMISSIONS[userGrade.bAuthority as keyof typeof GRADE_PERMISSIONS] || null;
+  };
+
   useEffect(() => {
     const adminToken = localStorage.getItem('adminToken');
-    if (!adminToken) {
+    const adminManager = localStorage.getItem('adminManager');
+    
+    if (!adminToken || !adminManager) {
+      router.push('/admin/login');
+      return;
+    }
+    
+    try {
+      const parsedAdminData = JSON.parse(adminManager);
+      setUserGrade(parsedAdminData);
+      
+      // Check if user has access to players
+      const gradeInfo = GRADE_PERMISSIONS[parsedAdminData.bAuthority as keyof typeof GRADE_PERMISSIONS];
+      if (!gradeInfo?.canViewPlayers) {
+        router.push('/admin/dashboard');
+        return;
+      }
+    } catch (e) {
       router.push('/admin/login');
       return;
     }
@@ -172,6 +244,34 @@ export default function AdminPlayersPage() {
       </div>
 
       <div className={styles.contentWrapper}>
+        {/* Grade Info */}
+        {userGrade && (
+          <div style={{ 
+            marginBottom: '20px', 
+            padding: '10px', 
+            backgroundColor: 'rgba(0,0,0,0.8)', 
+            borderRadius: '8px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div>
+              <span style={{ color: '#999', fontSize: '14px' }}>Logged in as:</span>
+              <span style={{ 
+                color: getGradeInfo()?.color || '#999', 
+                fontSize: '16px', 
+                fontWeight: 'bold', 
+                marginLeft: '8px' 
+              }}>
+                {getGradeInfo()?.name || 'Unknown'}
+              </span>
+            </div>
+            <div style={{ fontSize: '14px', color: '#999' }}>
+              Max ban duration: {getGradeInfo()?.maxBanDuration === Infinity ? 'Unlimited' : `${getGradeInfo()?.maxBanDuration}h`}
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className={styles.errorMessage}>
             {error}

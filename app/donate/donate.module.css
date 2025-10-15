@@ -37,7 +37,7 @@
 .donateBox {
   position: relative;
   z-index: 3;
-  background: black;
+  background: rgba(0, 0, 0, 0.8);
   padding: 48px 32px 32px 32px;
   border: 1px solid #BDBDBD;
   max-width: 600px;
@@ -138,31 +138,8 @@
 .paypalContainer {
   margin-top: 2rem;
   min-height: 200px;
-  background: black !important;
   border-radius: 8px;
-}
-
-/* Force all PayPal elements to black */
-.paypalContainer :global(*) {
-  background: black !important;
-  background-color: black !important;
-}
-
-.paypalContainer :global(.paypal-button-container),
-.paypalContainer :global(.paypal-autoresize-container),
-.paypalContainer :global(.paypal-button-layout-vertical),
-.paypalContainer :global(.paypal-button-shape-rect),
-.paypalContainer :global(.paypal-button-number-multiple),
-.paypalContainer :global(.paypal-button-env-sandbox),
-.paypalContainer :global([class*="paypal-button"]),
-.paypalContainer :global([class*="paypal"]) {
-  background: black !important;
-  background-color: black !important;
-}
-
-.paypalContainer :global(div) {
-  background: black !important;
-  background-color: black !important;
+  color-scheme: none;
 }
 
 .loading {

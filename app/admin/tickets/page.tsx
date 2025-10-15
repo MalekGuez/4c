@@ -25,6 +25,75 @@ export default function AdminTicketsPage() {
   const [deletingMessage, setDeletingMessage] = useState<number | null>(null);
   const [closingTicket, setClosingTicket] = useState(false);
 
+  // Grade definitions and permissions (bAuthority values: 5=TGM, 4=GM, 3=SGM, 2=GA, 1=COMA)
+  const GRADE_PERMISSIONS = {
+    5: { // TGM
+      name: 'TGM',
+      color: '#4CAF50',
+      canViewPlayers: false,
+      canBan: false,
+      maxBanDuration: 0,
+      canViewBanHistory: false,
+      canUnban: false,
+      canAccessTickets: true,
+      canEscalate: false,
+      canCloseTickets: false
+    },
+    4: { // GM
+      name: 'GM',
+      color: '#FF9800',
+      canViewPlayers: true,
+      canBan: true,
+      maxBanDuration: 30 * 24, // 30 days in hours
+      canViewBanHistory: true,
+      canUnban: false,
+      canAccessTickets: true,
+      canEscalate: false,
+      canCloseTickets: true
+    },
+    3: { // SGM
+      name: 'SGM',
+      color: '#F44336',
+      canViewPlayers: true,
+      canBan: true,
+      maxBanDuration: Infinity, // Permanent bans allowed
+      canViewBanHistory: true,
+      canUnban: true,
+      canAccessTickets: true,
+      canEscalate: true,
+      canCloseTickets: true
+    },
+    2: { // GA
+      name: 'GA',
+      color: '#9C27B0',
+      canViewPlayers: true,
+      canBan: true,
+      maxBanDuration: Infinity,
+      canViewBanHistory: true,
+      canUnban: true,
+      canAccessTickets: true,
+      canEscalate: true,
+      canCloseTickets: true
+    },
+    1: { // COMA
+      name: 'COMA',
+      color: '#FF0000',
+      canViewPlayers: true,
+      canBan: true,
+      maxBanDuration: Infinity,
+      canViewBanHistory: true,
+      canUnban: true,
+      canAccessTickets: true,
+      canEscalate: true,
+      canCloseTickets: true
+    }
+  };
+
+  const getGradeInfo = () => {
+    if (!manager) return null;
+    return GRADE_PERMISSIONS[manager.bAuthority as keyof typeof GRADE_PERMISSIONS] || null;
+  };
+
   useEffect(() => {
     const adminToken = localStorage.getItem('adminToken');
     const adminManager = localStorage.getItem('adminManager');
@@ -35,7 +104,15 @@ export default function AdminTicketsPage() {
     }
 
     try {
-      setManager(JSON.parse(adminManager));
+      const parsedManager = JSON.parse(adminManager);
+      setManager(parsedManager);
+      
+      // Check if user has access to tickets
+      const gradeInfo = GRADE_PERMISSIONS[parsedManager.bAuthority as keyof typeof GRADE_PERMISSIONS];
+      if (!gradeInfo?.canAccessTickets) {
+        router.push('/admin/dashboard');
+        return;
+      }
     } catch (error) {
       router.push('/admin/login');
       return;
@@ -413,6 +490,38 @@ export default function AdminTicketsPage() {
       </div>
 
       <div className={styles.contentWrapper}>
+        {/* Grade Info */}
+        {manager && (
+          <div style={{ 
+            marginBottom: '20px', 
+            padding: '10px', 
+            backgroundColor: 'rgba(0,0,0,0.8)', 
+            borderRadius: '8px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div>
+              <span style={{ color: '#999', fontSize: '14px' }}>Logged in as:</span>
+              <span style={{ 
+                color: getGradeInfo()?.color || '#999', 
+                fontSize: '16px', 
+                fontWeight: 'bold', 
+                marginLeft: '8px' 
+              }}>
+                {getGradeInfo()?.name || 'Unknown'}
+              </span>
+              <span style={{ color: '#999', fontSize: '14px', marginLeft: '8px' }}>
+                ({manager.szName})
+              </span>
+            </div>
+            <div style={{ fontSize: '14px', color: '#999' }}>
+              {getGradeInfo()?.canEscalate ? 'Can escalate tickets' : 'Cannot escalate tickets'}
+              {getGradeInfo()?.canCloseTickets ? ' • Can close tickets' : ' • Cannot close tickets'}
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className={styles.errorMessage}>
             {error}
@@ -649,7 +758,7 @@ export default function AdminTicketsPage() {
                   className={styles.messageTextarea}
                 />
                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
-                  {selectedTicket.status !== 'closed' && (
+                  {selectedTicket.status !== 'closed' && getGradeInfo()?.canCloseTickets && (
                     <button
                       onClick={handleCloseTicket}
                       disabled={closingTicket}
@@ -660,6 +769,17 @@ export default function AdminTicketsPage() {
                     >
                       {closingTicket ? 'Closing...' : 'Close Ticket'}
                     </button>
+                  )}
+                  {selectedTicket.status !== 'closed' && !getGradeInfo()?.canCloseTickets && (
+                    <div style={{ 
+                      padding: '10px', 
+                      backgroundColor: '#2a2a2a', 
+                      borderRadius: '4px',
+                      color: '#999',
+                      fontSize: '14px'
+                    }}>
+                      Your grade ({getGradeInfo()?.name}) cannot close tickets
+                    </div>
                   )}
                   <button
                     onClick={handleSendMessage}

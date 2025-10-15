@@ -552,6 +552,153 @@ export const adminService = {
       success: false,
       error: response.error || 'Failed to ban player'
     };
+  },
+
+  // Admin ban mode player (TBANBMTABLE)
+  banModePlayer: async (dwUserID: number, banDuration: number): Promise<{ success: boolean; error?: string; banEndDate?: string }> => {
+    const response = await adminRequest<any>('/admin/ban-mode', {
+      method: 'POST',
+      body: JSON.stringify({ dwUserID, banDuration })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        banEndDate: response.data.banEndDate
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to ban player from game mode'
+    };
+  },
+
+  // Admin ban trade player (TBANTRADETABLE)
+  banTradePlayer: async (dwUserID: number, banDuration: number, szReason: string): Promise<{ success: boolean; error?: string; banEndDate?: string }> => {
+    const response = await adminRequest<any>('/admin/ban-trade', {
+      method: 'POST',
+      body: JSON.stringify({ dwUserID, banDuration, szReason })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        banEndDate: response.data.banEndDate
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to ban player from trading'
+    };
+  },
+
+  // Admin get user ban status
+  getUserBanStatus: async (dwUserID: number): Promise<{ success: boolean; banStatus?: any; error?: string }> => {
+    const response = await adminRequest<any>(`/admin/user-ban-status/${dwUserID}`, {
+      method: 'GET'
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        banStatus: response.data.banStatus
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to get user ban status'
+    };
+  },
+
+  // Admin unban mode player
+  unbanModePlayer: async (dwUserID: number): Promise<{ success: boolean; error?: string }> => {
+    const response = await adminRequest<any>('/admin/unban-mode', {
+      method: 'POST',
+      body: JSON.stringify({ dwUserID })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to unban player from game mode'
+    };
+  },
+
+  // Admin unban trade player
+  unbanTradePlayer: async (dwUserID: number): Promise<{ success: boolean; error?: string }> => {
+    const response = await adminRequest<any>('/admin/unban-trade', {
+      method: 'POST',
+      body: JSON.stringify({ dwUserID })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to unban player from trading'
+    };
+  },
+
+  // Admin add warning
+  addWarning: async (dwUserID: number, szReason: string): Promise<{ success: boolean; error?: string; warningId?: string }> => {
+    const response = await adminRequest<any>('/admin/warnings', {
+      method: 'POST',
+      body: JSON.stringify({ dwUserID, szReason })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        warningId: response.data.warningId
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to issue warning'
+    };
+  },
+
+  // Admin get user warnings
+  getUserWarnings: async (dwUserID: number): Promise<{ success: boolean; warnings?: any[]; error?: string }> => {
+    const response = await adminRequest<any>(`/admin/warnings/${dwUserID}`, {
+      method: 'GET'
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        warnings: response.data.warnings
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to get user warnings'
+    };
+  },
+
+  // Admin delete warning
+  deleteWarning: async (warningId: string, dwUserID: number): Promise<{ success: boolean; error?: string }> => {
+    const response = await adminRequest<any>(`/admin/warnings/${warningId}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ dwUserID })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to delete warning'
+    };
   }
 };
 
