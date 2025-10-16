@@ -810,14 +810,18 @@ export default function PlayerDetailPage() {
               <span className={styles.detailLabel}>Class:</span>
               <span className={styles.detailValue}>{getClassIcon(player.bClass)}</span>
             </div>
-            <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>Account:</span>
-              <span className={styles.detailValue}>{player.accountName || 'N/A'}</span>
-            </div>
-            <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>Email:</span>
-              <span className={styles.detailValue}>{player.szEmail || 'N/A'}</span>
-            </div>
+            {userGrade && userGrade.bAuthority !== 4 && (
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Account:</span>
+                <span className={styles.detailValue}>{player.accountName || 'N/A'}</span>
+              </div>
+            )}
+            {userGrade && userGrade.bAuthority !== 4 && (
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Email:</span>
+                <span className={styles.detailValue}>{player.szEmail || 'N/A'}</span>
+              </div>
+            )}
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Last Logout:</span>
               <span className={styles.detailValue}>{formatDate(player.dLogoutDate)}</span>
