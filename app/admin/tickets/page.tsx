@@ -174,9 +174,21 @@ export default function AdminTicketsPage() {
     }
   };
 
+  const getMessageTemplate = () => {
+    const adminName = manager?.szName || 'Admin';
+    return `Hello,\n\n\n\nBest Regards,\n${adminName}`;
+  };
+
   const handleTicketClick = (ticket: any) => {
-    setNewMessage('');
+    setNewMessage(getMessageTemplate());
     loadTicketDetails(ticket.id);
+  };
+
+  const handleTextareaFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    // Positionner le curseur après "Hello,\n\n"
+    const template = getMessageTemplate();
+    const cursorPosition = template.indexOf('\n\n') + 2;
+    e.target.setSelectionRange(cursorPosition, cursorPosition);
   };
 
   const handleSendMessage = async () => {
@@ -754,6 +766,7 @@ export default function AdminTicketsPage() {
                 <textarea
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
+                  onFocus={handleTextareaFocus}
                   placeholder="Type your response..."
                   className={styles.messageTextarea}
                 />
