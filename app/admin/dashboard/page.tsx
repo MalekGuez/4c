@@ -90,15 +90,19 @@ export default function AdminDashboardPage() {
             <p>Manage player tickets, respond to inquiries, and handle support requests.</p>
           </Link>
 
-          <Link href="/admin/players" className={styles.adminCard}>
-            <h3>Players Management</h3>
-            <p>Search players, view profiles, and apply sanctions (bans, kicks, warns).</p>
-          </Link>
+          {manager && manager.bAuthority !== 5 && (
+            <Link href="/admin/players" className={styles.adminCard}>
+              <h3>Players Management</h3>
+              <p>Search players, view profiles, and apply sanctions (bans, kicks, warns).</p>
+            </Link>
+          )}
 
-          <Link href="/admin/news" className={styles.adminCard}>
-            <h3>News Management</h3>
-            <p>Create, edit, and delete news announcements and updates.</p>
-          </Link>
+          {manager && manager.bAuthority !== 5 && manager.bAuthority !== 4 && (
+            <Link href="/admin/news" className={styles.adminCard}>
+              <h3>News Management</h3>
+              <p>Create, edit, and delete news announcements and updates.</p>
+            </Link>
+          )}
         </div>
       </div>
     </div>
