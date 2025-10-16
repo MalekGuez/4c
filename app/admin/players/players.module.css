@@ -385,7 +385,7 @@
   font-size: 14px;
   font-family: 'Inter', sans-serif;
   resize: vertical;
-  min-height: 100px;
+  min-height: 140px;
 }
 
 .messageTextarea:focus {
