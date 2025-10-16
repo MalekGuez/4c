@@ -77,13 +77,14 @@ export default function PlayerDetailPage() {
   // Ban forms
   const [mainBanForm, setMainBanForm] = useState({
     bBlockType: 1,
-    dwDuration: 0,
+    dwDuration: 24,
     szComment: '',
     szProofs: '',
     isHwidBan: false
   });
   const [modeBanForm, setModeBanForm] = useState({
-    banDuration: 24
+    banDuration: 24,
+    szReason: ''
   });
   const [tradeBanForm, setTradeBanForm] = useState({
     banDuration: 24,
@@ -96,6 +97,9 @@ export default function PlayerDetailPage() {
   const [selectedHWID, setSelectedHWID] = useState<any>(null);
   const [loadingHWID, setLoadingHWID] = useState(false);
   const [showBanForm, setShowBanForm] = useState(false);
+  const [activeHistoryTab, setActiveHistoryTab] = useState<'overview' | 'account' | 'mode' | 'trade'>('overview');
+  const [banHistory, setBanHistory] = useState<any>({ mode: [], trade: [] });
+  const [loadingHistory, setLoadingHistory] = useState(false);
 
   useEffect(() => {
     const adminToken = localStorage.getItem('adminToken');
@@ -133,6 +137,7 @@ export default function PlayerDetailPage() {
       const gradePerms = GRADE_PERMISSIONS[userGrade.bAuthority as keyof typeof GRADE_PERMISSIONS];
       if (gradePerms?.canViewBanHistory) {
         loadBanStatus();
+        loadBanHistory();
         loadWarnings();
       }
     }
@@ -181,6 +186,33 @@ export default function PlayerDetailPage() {
       setError('Failed to load ban status');
     } finally {
       setLoadingBanStatus(false);
+    }
+  };
+
+  const loadBanHistory = async () => {
+    if (!player || !userGrade) return;
+    
+    const gradePerms = GRADE_PERMISSIONS[userGrade.bAuthority as keyof typeof GRADE_PERMISSIONS];
+    if (!gradePerms?.canViewBanHistory) return;
+    
+    setLoadingHistory(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/admin/ban-history/${player.dwUserID}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setBanHistory(data.history);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading ban history:', error);
+    } finally {
+      setLoadingHistory(false);
     }
   };
 
@@ -357,6 +389,11 @@ export default function PlayerDetailPage() {
       return;
     }
 
+    if (!modeBanForm.szReason.trim()) {
+      setError('Please provide a reason for the mode ban');
+      return;
+    }
+
     // Check ban duration limits
     if (modeBanForm.banDuration > gradePerms.maxBanDuration) {
       setError(`Your grade (${gradePerms.name}) can only ban for a maximum of ${gradePerms.maxBanDuration} hours`);
@@ -366,7 +403,7 @@ export default function PlayerDetailPage() {
     setBanning(true);
     
     try {
-      const response = await adminService.banModePlayer(player.dwUserID, modeBanForm.banDuration);
+      const response = await adminService.banModePlayer(player.dwUserID, modeBanForm.banDuration, modeBanForm.szReason);
       
       if (response.success) {
         setSuccessMessage(`Player ${player.szName} banned from game mode successfully!`);
@@ -449,6 +486,7 @@ export default function PlayerDetailPage() {
       if (response.success) {
         setSuccessMessage(`Player ${player.szName} unbanned from game mode successfully!`);
         loadBanStatus();
+        loadBanHistory();
       } else {
         setError(response.error || 'Failed to unban player from game mode');
       }
@@ -480,11 +518,42 @@ export default function PlayerDetailPage() {
       if (response.success) {
         setSuccessMessage(`Player ${player.szName} unbanned from trading successfully!`);
         loadBanStatus();
+        loadBanHistory();
       } else {
         setError(response.error || 'Failed to unban player from trading');
       }
     } catch (err) {
       setError('An error occurred while unbanning player from trading');
+    } finally {
+      setBanning(false);
+    }
+  };
+
+  const handleKickPlayer = async () => {
+    if (!player || !userGrade) return;
+    
+    const gradePerms = GRADE_PERMISSIONS[userGrade.bAuthority as keyof typeof GRADE_PERMISSIONS];
+    if (!gradePerms?.canBan) return; // Use canBan permission for kick
+    
+    setError(null);
+    setSuccessMessage(null);
+    
+    if (!confirm(`Are you sure you want to kick ${player.szName} from the game?`)) {
+      return;
+    }
+
+    setBanning(true);
+    
+    try {
+      const response = await adminService.kickPlayer(player.dwCharID);
+      
+      if (response.success) {
+        setSuccessMessage(`Player ${player.szName} kicked successfully!`);
+      } else {
+        setError(response.error || 'Failed to kick player');
+      }
+    } catch (err) {
+      setError('An error occurred while kicking player');
     } finally {
       setBanning(false);
     }
@@ -761,32 +830,25 @@ export default function PlayerDetailPage() {
             <h3 style={{ marginBottom: '20px' }}>Player Actions</h3>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <button 
+                onClick={() => { setShowBanForm(!showBanForm); setShowWarningForm(false); }}
+                className={styles.sendButton}
+                style={{ backgroundColor: showBanForm ? '#555' : '#F44336' }}
+              >
+                {showBanForm ? 'Cancel Ban' : 'BAN PLAYER'}
+              </button>
+              <button 
+                onClick={handleKickPlayer}
+                className={styles.sendButton}
+                disabled={banning}
+                style={{ backgroundColor: '#FF5722' }}
+              >
+                Kick Player
+              </button>
+              <button 
                 onClick={() => { setShowWarningForm(!showWarningForm); setShowBanForm(false); }}
                 className={styles.sendButton}
-                style={{ backgroundColor: showWarningForm ? '#555' : '#FFC107' }}
               >
-                {showWarningForm ? 'Cancel Warning' : '⚠️ Warn Player'}
-              </button>
-              <button 
-                onClick={() => { setBanType('main'); setShowBanForm(!showBanForm); setShowWarningForm(false); }}
-                className={styles.sendButton}
-                style={{ backgroundColor: showBanForm && banType === 'main' ? '#555' : '#F44336' }}
-              >
-                {showBanForm && banType === 'main' ? 'Cancel Main Ban' : '🔨 Main Ban'}
-              </button>
-              <button 
-                onClick={() => { setBanType('mode'); setShowBanForm(!showBanForm); setShowWarningForm(false); }}
-                className={styles.sendButton}
-                style={{ backgroundColor: showBanForm && banType === 'mode' ? '#555' : '#FF9800' }}
-              >
-                {showBanForm && banType === 'mode' ? 'Cancel Mode Ban' : '🎮 Mode Ban'}
-              </button>
-              <button 
-                onClick={() => { setBanType('trade'); setShowBanForm(!showBanForm); setShowWarningForm(false); }}
-                className={styles.sendButton}
-                style={{ backgroundColor: showBanForm && banType === 'trade' ? '#555' : '#2196F3' }}
-              >
-                {showBanForm && banType === 'trade' ? 'Cancel Trade Ban' : '💰 Trade Ban'}
+                {showWarningForm ? 'Cancel Warning' : 'Warn Player'}
               </button>
             </div>
           </div>
@@ -795,7 +857,7 @@ export default function PlayerDetailPage() {
         {/* Warning Form */}
         {showWarningForm && gradeInfo.canBan && (
           <div style={{ marginTop: '20px', padding: '20px', backgroundColor: 'rgba(0,0,0,0.8)' }}>
-            <h4 style={{ marginTop: 0 }}>Issue Warning to {player.szName}</h4>
+            <h4 style={{ marginTop: 0, fontWeight: 400, fontFamily: 'The Blowar', fontSize: '24px' }}>Issue Warning to {player.szName}</h4>
             
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', marginBottom: '8px' }}>Reason: *</label>
@@ -831,42 +893,42 @@ export default function PlayerDetailPage() {
 
         {/* Ban Forms */}
         {showBanForm && gradeInfo.canBan && (
-          <div style={{ marginTop: '20px', padding: '20px', backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: '8px' }}>
-            <h4 style={{ marginTop: 0 }}>
-              {banType === 'main' && 'Main Ban Player: '}
-              {banType === 'mode' && 'Mode Ban Player: '}
-              {banType === 'trade' && 'Trade Ban Player: '}
-              {player.szName}
+          <div style={{ marginTop: '20px', padding: '20px', backgroundColor: 'rgba(0,0,0,0.8)'}}>
+            <h4 style={{ marginTop: 0, fontWeight: 400, fontFamily: 'The Blowar', fontSize: '24px' }}>
+              Ban Player: {player.szName}
             </h4>
+            
+                <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', color: '#BDBDBD' }}>Ban Type:</label>
+                  <select 
+                value={banType}
+                onChange={(e) => setBanType(e.target.value as 'main' | 'mode' | 'trade')}
+                    className={styles.filterSelect}
+                  >
+                <option value="main">Account Ban</option>
+                <option value="mode">Mode Ban</option>
+                <option value="trade">Trade Ban</option>
+                  </select>
+                </div>
             
             {banType === 'main' && (
               <>
-                {/* Ban Type */}
-                <div style={{ marginBottom: '20px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px' }}>Ban Type:</label>
-                  <select 
-                    value={mainBanForm.bBlockType}
-                    onChange={(e) => setMainBanForm({...mainBanForm, bBlockType: parseInt(e.target.value)})}
-                    className={styles.filterSelect}
-                  >
-                    <option value={1}>Account Ban</option>
-                  </select>
-                </div>
 
                 {/* Duration */}
                 <div style={{ marginBottom: '20px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px' }}>Duration:</label>
-                  <select 
+                  <label style={{ display: 'block', marginBottom: '8px' }}>Duration (hours):</label>
+                  <input
+                    type="number"
                     value={mainBanForm.dwDuration}
-                    onChange={(e) => setMainBanForm({...mainBanForm, dwDuration: parseInt(e.target.value)})}
+                    onChange={(e) => setMainBanForm({...mainBanForm, dwDuration: parseInt(e.target.value) || 0})}
+                    placeholder="Enter hours (0 = permanent ban)"
                     className={styles.filterSelect}
-                  >
-                    <option value={0}>Permanent</option>
-                    <option value={1}>1 Hour</option>
-                    <option value={24}>1 Day</option>
-                    <option value={168}>7 Days</option>
-                    <option value={720}>30 Days</option>
-                  </select>
+                    min="0"
+                    style={{ width: '200px' }}
+                  />
+                  <p style={{ margin: '5px 0 0 0', fontSize: '12px', color: '#888' }}>
+                    Examples: 0 = permanent ban, 24 hours = 1 day, 168 hours = 7 days, 720 hours = 30 days, 2160 hours = 90 days
+                  </p>
                 </div>
 
                 {/* Reason */}
@@ -977,7 +1039,7 @@ export default function PlayerDetailPage() {
                     className={styles.sendButton}
                     style={{ backgroundColor: '#F44336' }}
                   >
-                    {banning ? 'Banning...' : 'Ban Player'}
+                    {banning ? 'Banning...' : 'Account Ban'}
                   </button>
                 </div>
               </>
@@ -1002,6 +1064,20 @@ export default function PlayerDetailPage() {
                   </small>
                 </div>
 
+                {/* Reason */}
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', marginBottom: '8px' }}>Reason: *</label>
+                  <input 
+                    type="text"
+                    value={modeBanForm.szReason}
+                    onChange={(e) => setModeBanForm({...modeBanForm, szReason: e.target.value})}
+                    placeholder="Enter reason for mode ban"
+                    required
+                    className={styles.filterSelect}
+                    style={{ cursor: 'text' }}
+                  />
+                </div>
+
                 {/* Submit Button */}
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button 
@@ -1013,7 +1089,7 @@ export default function PlayerDetailPage() {
                   </button>
                   <button 
                     onClick={handleModeBanPlayer}
-                    disabled={banning}
+                    disabled={banning || !modeBanForm.szReason.trim()}
                     className={styles.sendButton}
                     style={{ backgroundColor: '#FF9800' }}
                   >
@@ -1155,10 +1231,45 @@ export default function PlayerDetailPage() {
               </button>
             </div>
             
+            {/* History Tabs */}
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '2px solid #000' }}>
+              <button
+                onClick={() => setActiveHistoryTab('overview')}
+                className={styles.sendButton}
+                style={{ backgroundColor: activeHistoryTab === 'overview' ? '#4CAF50' : '#555' }}
+              >
+                Overview
+              </button>
+              <button
+                onClick={() => setActiveHistoryTab('account')}
+                className={styles.sendButton}
+                style={{ backgroundColor: activeHistoryTab === 'account' ? '#F44336' : '#555' }}
+              >
+                Account Ban
+              </button>
+              <button
+                onClick={() => setActiveHistoryTab('mode')}
+                className={styles.sendButton}
+                style={{ backgroundColor: activeHistoryTab === 'mode' ? '#FF9800' : '#555' }}
+              >
+                Mode Ban
+              </button>
+              <button
+                onClick={() => setActiveHistoryTab('trade')}
+                className={styles.sendButton}
+                style={{ backgroundColor: activeHistoryTab === 'trade' ? '#2196F3' : '#555' }}
+              >
+                Trade Ban
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            <div style={{ padding: '20px', backgroundColor: 'rgba(0,0,0,0.3)', minHeight: '200px' }}>
+              {activeHistoryTab === 'overview' && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
               {/* Account Ban Status */}
-              <div style={{ padding: '20px', backgroundColor: 'rgba(0,0,0,0.8)' }}>
-                <h4 style={{ color: '#F44336', marginTop: 0, marginBottom: '15px' }}>🔨 Account Ban</h4>
+                  <div style={{ padding: '20px', backgroundColor: 'rgba(0,0,0,0.4)' }}>
+                    <h4 style={{ color: '#F44336', marginTop: 0, marginBottom: '15px' }}>Account Ban</h4>
                 {banStatus?.main ? (
                   <div>
                     <p style={{ margin: '5px 0', color: '#F44336' }}><strong>Status:</strong> BANNED</p>
@@ -1173,51 +1284,153 @@ export default function PlayerDetailPage() {
               </div>
 
               {/* Mode Ban Status */}
-              <div style={{ padding: '20px', backgroundColor: 'rgba(0,0,0,0.8)' }}>
-                <h4 style={{ color: '#FF9800', marginTop: 0, marginBottom: '15px' }}>🎮 Mode Ban</h4>
+                  <div style={{ padding: '20px', backgroundColor: 'rgba(0,0,0,0.4)' }}>
+                    <h4 style={{ color: '#FF9800', marginTop: 0, marginBottom: '15px' }}>Mode Ban</h4>
                 {banStatus?.mode ? (
                   <div>
                     <p style={{ margin: '5px 0', color: '#F44336' }}><strong>Status:</strong> BANNED</p>
                     <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Until:</strong> {formatDate(banStatus.mode.dDate)}</p>
-                    {gradeInfo.canUnban && (
+                      </div>
+                    ) : (
+                      <p style={{ color: '#4CAF50', margin: 0 }}>Not banned from game mode</p>
+                    )}
+                  </div>
+
+                  {/* Trade Ban Status */}
+                  <div style={{ padding: '20px', backgroundColor: 'rgba(0,0,0,0.4)' }}>
+                    <h4 style={{ color: '#2196F3', marginTop: 0, marginBottom: '15px' }}>Trade Ban</h4>
+                    {banStatus?.trade ? (
+                      <div>
+                        <p style={{ margin: '5px 0', color: '#F44336' }}><strong>Status:</strong> BANNED</p>
+                        <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Until:</strong> {formatDate(banStatus.trade.dDate)}</p>
+                        <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Reason:</strong> {banStatus.trade.szReason}</p>
+                      </div>
+                    ) : (
+                      <p style={{ color: '#4CAF50', margin: 0 }}>Not banned from trading</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {activeHistoryTab === 'account' && (
+                <div>
+                  <h4 style={{ color: '#F44336', marginTop: 0, marginBottom: '20px' }}>Account Ban History</h4>
+                  {banStatus?.main ? (
+                    <div style={{ padding: '20px', backgroundColor: 'rgba(0,0,0,0.4)' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
+                        <div>
+                          <p style={{ margin: '5px 0', color: '#F44336' }}><strong>Status:</strong> BANNED</p>
+                          <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Type:</strong> {banStatus.main.bBlockType === 1 ? 'Account' : 'Other'}</p>
+                          <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Duration:</strong> {banStatus.main.bEternal ? 'Permanent' : `${banStatus.main.dwDuration} hours`}</p>
+                        </div>
+                        <div>
+                          <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Reason:</strong> {banStatus.main.szComment}</p>
+                          <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Admin:</strong> {banStatus.main.szGMID}</p>
+                          <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Date:</strong> {formatDate(banStatus.main.startTime)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <p style={{ color: '#4CAF50', fontSize: '18px', textAlign: 'center', padding: '40px' }}>No account ban history found</p>
+                  )}
+                </div>
+              )}
+
+              {activeHistoryTab === 'mode' && (
+                <div>
+                  <h4 style={{ color: '#FF9800', marginTop: 0, marginBottom: '20px' }}>Mode Ban History</h4>
+                  {loadingHistory ? (
+                    <p style={{ textAlign: 'center', padding: '40px' }}>Loading history...</p>
+                  ) : banHistory.mode.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                      {banHistory.mode.map((ban: any, index: number) => {
+                        // Check if this ban is currently active by comparing with banStatus
+                        const isActive = banStatus?.mode && 
+                          new Date(banStatus.mode.dDate) > new Date() && 
+                          ban.dwUserID === banStatus.mode.dwUserID;
+                        
+                        return (
+                          <div key={index} style={{ padding: '15px', backgroundColor: 'rgba(0,0,0,0.4)', border: isActive ? '1px solid #FF9800' : '1px solid #555' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
+                              <div>
+                                <p style={{ margin: '5px 0', color: isActive ? '#F44336' : '#888' }}>
+                                  <strong>Status:</strong> {isActive ? 'BANNED FROM GAME MODE' : 'HISTORICAL BAN'}
+                                </p>
+                                <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Duration:</strong> {ban.dwDuration} hours</p>
+                                <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Reason:</strong> {ban.szReason}</p>
+                              </div>
+                              <div>
+                                <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Banned by:</strong> {ban.szGMName || ban.szGMID}</p>
+                                <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Ban Date:</strong> {formatDate(ban.dBanDate)}</p>
+                                {isActive && gradeInfo.canUnban && (
                       <button 
                         onClick={handleUnbanMode}
                         className={styles.sendButton}
-                        style={{ backgroundColor: '#4CAF50', marginTop: '10px', padding: '6px 12px' }}
+                                    style={{ backgroundColor: '#4CAF50', marginTop: '10px' }}
                         disabled={banning}
                       >
                         Unban from Mode
                       </button>
                     )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
                 ) : (
-                  <p style={{ color: '#4CAF50', margin: 0 }}>Not banned from game mode</p>
+                    <p style={{ color: '#4CAF50', fontSize: '18px', textAlign: 'center', padding: '40px' }}>No mode ban history found</p>
                 )}
               </div>
+              )}
 
-              {/* Trade Ban Status */}
-              <div style={{ padding: '20px', backgroundColor: 'rgba(0,0,0,0.8)' }}>
-                <h4 style={{ color: '#2196F3', marginTop: 0, marginBottom: '15px' }}>💰 Trade Ban</h4>
-                {banStatus?.trade ? (
+              {activeHistoryTab === 'trade' && (
                   <div>
-                    <p style={{ margin: '5px 0', color: '#F44336' }}><strong>Status:</strong> BANNED</p>
-                    <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Until:</strong> {formatDate(banStatus.trade.dDate)}</p>
-                    <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Reason:</strong> {banStatus.trade.szReason}</p>
-                    {gradeInfo.canUnban && (
+                  <h4 style={{ color: '#2196F3', marginTop: 0, marginBottom: '20px' }}>Trade Ban History</h4>
+                  {loadingHistory ? (
+                    <p style={{ textAlign: 'center', padding: '40px' }}>Loading history...</p>
+                  ) : banHistory.trade.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                      {banHistory.trade.map((ban: any, index: number) => {
+                        // Check if this ban is currently active by comparing with banStatus
+                        const isActive = banStatus?.trade && 
+                          new Date(banStatus.trade.dDate) > new Date() && 
+                          ban.dwUserID === banStatus.trade.dwUserID;
+                        
+                        return (
+                          <div key={index} style={{ padding: '15px', backgroundColor: 'rgba(0,0,0,0.4)', border: isActive ? '1px solid #2196F3' : '1px solid #555' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
+                              <div>
+                                <p style={{ margin: '5px 0', color: isActive ? '#F44336' : '#888' }}>
+                                  <strong>Status:</strong> {isActive ? 'BANNED FROM TRADING' : 'HISTORICAL BAN'}
+                                </p>
+                                <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Duration:</strong> {ban.dwDuration} hours</p>
+                                <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Reason:</strong> {ban.szReason}</p>
+                              </div>
+                              <div>
+                                <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Banned by:</strong> {ban.szGMName || ban.szGMID}</p>
+                                <p style={{ margin: '5px 0', color: '#BDBDBD' }}><strong>Ban Date:</strong> {formatDate(ban.dBanDate)}</p>
+                                {isActive && gradeInfo.canUnban && (
                       <button 
                         onClick={handleUnbanTrade}
                         className={styles.sendButton}
-                        style={{ backgroundColor: '#4CAF50', marginTop: '10px', padding: '6px 12px' }}
+                                    style={{ backgroundColor: '#4CAF50', marginTop: '10px' }}
                         disabled={banning}
                       >
                         Unban from Trading
                       </button>
                     )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
                 ) : (
-                  <p style={{ color: '#4CAF50', margin: 0 }}>Not banned from trading</p>
+                    <p style={{ color: '#4CAF50', fontSize: '18px', textAlign: 'center', padding: '40px' }}>No trade ban history found</p>
                 )}
               </div>
+              )}
             </div>
           </div>
         )}

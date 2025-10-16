@@ -555,10 +555,10 @@ export const adminService = {
   },
 
   // Admin ban mode player (TBANBMTABLE)
-  banModePlayer: async (dwUserID: number, banDuration: number): Promise<{ success: boolean; error?: string; banEndDate?: string }> => {
+  banModePlayer: async (dwUserID: number, banDuration: number, szReason: string): Promise<{ success: boolean; error?: string; banEndDate?: string }> => {
     const response = await adminRequest<any>('/admin/ban-mode', {
       method: 'POST',
-      body: JSON.stringify({ dwUserID, banDuration })
+      body: JSON.stringify({ dwUserID, banDuration, szReason })
     });
     
     if (response.success && response.data) {
@@ -643,6 +643,24 @@ export const adminService = {
     return {
       success: false,
       error: response.error || 'Failed to unban player from trading'
+    };
+  },
+
+  // Admin kick player
+  kickPlayer: async (dwCharID: number): Promise<{ success: boolean; error?: string }> => {
+    const response = await adminRequest<any>('/admin/kick-player', {
+      method: 'POST',
+      body: JSON.stringify({ dwCharID })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to kick player'
     };
   },
 
