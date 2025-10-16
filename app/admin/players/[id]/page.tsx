@@ -568,7 +568,8 @@ export default function PlayerDetailPage() {
       isHwidBan: false
     });
     setModeBanForm({
-      banDuration: 24
+      banDuration: 24,
+      szReason: ''
     });
     setTradeBanForm({
       banDuration: 24,
