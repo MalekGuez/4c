@@ -72,7 +72,7 @@ export default function AdminTicketsPage() {
       canViewBanHistory: true,
       canUnban: true,
       canAccessTickets: true,
-      canEscalate: true,
+      canEscalate: false,
       canCloseTickets: true
     },
     1: { // COMA
