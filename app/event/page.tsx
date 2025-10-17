@@ -151,7 +151,7 @@ export default function EventPage() {
           </div>
         </div>
 
-        {ranking.length > 0 && (
+        {false && ranking.length > 0 && (
           <div className={styles.rankingSection}>
             <div className={styles.sectionHeader}>
               <h3 className={styles.sectionTitle}>Ranking</h3>
