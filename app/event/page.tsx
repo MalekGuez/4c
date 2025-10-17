@@ -197,7 +197,7 @@ export default function EventPage() {
                             width={32}
                             height={32}
                             style={{ 
-                              imageRendering: 'high-quality',
+                              imageRendering: 'auto',
                               filter: 'contrast(1.1) saturate(1.1)'
                             }}
                           />
