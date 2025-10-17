@@ -42,6 +42,15 @@ const announcements = [
     link: "/",
     date: "15. Oct. 2025"
   },
+  {
+    id: 5,
+    category: "EVENT",
+    title: "Domination Week-end - Event",
+    description: "Prepare yourselves for an all-out war! Throughout the entire weekend, Valorian and Derion will clash endlessly across Iberia. Every kill and assist counts toward your final ranking. Only the fiercest fighters will reach the top!<br><br>More information on Discord.",
+    image: "/images/news/domination-weekend.png",
+    link: "https://discord.gg/BsccMkY7",
+    date: "18. Oct. 2025"
+  },
 ];
 
 export default function Home() {

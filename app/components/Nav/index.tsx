@@ -7,6 +7,7 @@ import styles from './nav.module.css';
 import Dropdown from './Dropdown';
 import { useAuthContext } from '../../contexts/AuthContext';
 
+
 export default function Nav() {
   const { isAuthenticated, logout } = useAuthContext();
   const [isClient, setIsClient] = useState(false);
@@ -63,6 +64,13 @@ export default function Nav() {
               News
             </Link>
             
+            <div className={styles.eventLinkContainer}>
+              <span className={styles.newEventBadge}>NEW</span>
+              <Link href="/event" className={styles.navLink}>
+                Event
+              </Link>
+            </div>
+
             <Dropdown title="Game">
               <Link href="/download" className={styles.dropdownLink}>
                 Download

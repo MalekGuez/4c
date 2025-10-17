@@ -19,13 +19,13 @@ export default function Announcement({
   date
 }: AnnouncementProps) {
   return (
-    <a href={link} className={styles.announcement}>
+    <a href={link} className={styles.announcement} target="_blank" rel="noopener noreferrer">
       <div className={styles.content}>
         <div className={styles.category}>
           {category}
         </div>
         <h3 className={styles.title}>{title}</h3>
-        <p className={styles.description}>{description}</p>
+        <p className={styles.description} dangerouslySetInnerHTML={{ __html: description }}></p>
         <div className={styles.bottomRow}>
           {/* TODO: Implémenter plus tard */}
           {/* <span className={styles.readMoreBtn}>

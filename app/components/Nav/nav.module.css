@@ -46,6 +46,49 @@
   color: #FFFFFF;
 }
 
+/* Event Link with NEW Badge */
+.eventLinkContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.newEventBadge {
+  position: absolute;
+  top: 18px;
+  right: -20px;
+  background: linear-gradient(45deg, #790801, #9a0a02);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulseNewBadge 2s infinite;
+  box-shadow: 0 0 15px rgba(121, 8, 1, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 10;
+  white-space: nowrap;
+}
+
+@keyframes pulseNewBadge {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(121, 8, 1, 0.5);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(121, 8, 1, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(121, 8, 1, 0.5);
+  }
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -88,6 +131,7 @@
   font-weight: 600;
   text-transform: uppercase;
 }
+
 
 @keyframes pulse {
   0% {
@@ -276,6 +320,19 @@
 @media (max-width: 1550px) {
   .nav {
     padding: 0 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .newEventBadge {
+    position: relative;
+    top: auto;
+    right: auto;
+    display: inline-block;
+    margin-left: 8px;
+    margin-top: -2px;
+    font-size: 0.5rem;
+    padding: 1px 6px;
   }
 }
 
