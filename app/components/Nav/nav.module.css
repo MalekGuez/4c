@@ -55,11 +55,11 @@
   height: 100%;
 }
 
-.newEventBadge {
+.endedEventBadge {
   position: absolute;
   top: 18px;
   right: -20px;
-  background: linear-gradient(45deg, #790801, #9a0a02);
+  background: linear-gradient(45deg, #ff8c00, #ff6b35);
   color: white;
   padding: 3px 8px;
   border-radius: 12px;
@@ -67,27 +67,12 @@
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  animation: pulseNewBadge 2s infinite;
-  box-shadow: 0 0 15px rgba(121, 8, 1, 0.5);
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.3);
   z-index: 10;
   white-space: nowrap;
 }
 
-@keyframes pulseNewBadge {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 15px rgba(121, 8, 1, 0.5);
-  }
-  50% {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(121, 8, 1, 0.8);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 15px rgba(121, 8, 1, 0.5);
-  }
-}
 
 .logo {
   display: flex;
@@ -324,7 +309,7 @@
 }
 
 @media (max-width: 768px) {
-  .newEventBadge {
+  .endedEventBadge {
     position: relative;
     top: auto;
     right: auto;

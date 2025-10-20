@@ -30,6 +30,7 @@ export default function EventPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [isEventEnded, setIsEventEnded] = useState(true); // L'événement est terminé
 
   useEffect(() => {
     fetchEventRanking();

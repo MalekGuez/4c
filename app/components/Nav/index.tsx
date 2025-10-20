@@ -65,7 +65,7 @@ export default function Nav() {
             </Link>
             
             <div className={styles.eventLinkContainer}>
-              <span className={styles.newEventBadge}>NEW</span>
+              <span className={styles.endedEventBadge}>ENDED</span>
               <Link href="/event" className={styles.navLink}>
                 Event
               </Link>
