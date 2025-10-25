@@ -324,33 +324,50 @@ export default function PlayerDetailPage() {
   };
 
   const handleMainBanPlayer = async () => {
-    if (!player || !userGrade?.canBan) return;
+    if (!player || !userGrade) {
+      console.error('Missing player or userGrade:', { player, userGrade });
+      return;
+    }
+    
+    // Check permissions
+    const gradePerms = GRADE_PERMISSIONS[userGrade.bAuthority as keyof typeof GRADE_PERMISSIONS];
+    if (!gradePerms?.canBan) {
+      setError('You do not have permission to ban players');
+      return;
+    }
+    
+    setError(null);
+    setSuccessMessage(null);
     
     if (!mainBanForm.szComment.trim()) {
-      alert('Please provide a reason for the ban');
+      setError('Please provide a reason for the ban');
       return;
     }
     
     if (mainBanForm.isHwidBan && !selectedHWID) {
-      alert('Please select a HWID session to ban');
+      setError('Please select a HWID session to ban');
       return;
     }
 
     // Check ban duration limits
-    const gradePerms = GRADE_PERMISSIONS[userGrade.bAuthority as keyof typeof GRADE_PERMISSIONS];
     if (mainBanForm.dwDuration > 0 && mainBanForm.dwDuration > gradePerms.maxBanDuration) {
-      alert(`Your grade (${gradePerms.name}) can only ban for a maximum of ${gradePerms.maxBanDuration} hours`);
+      setError(`Your grade (${gradePerms.name}) can only ban for a maximum of ${gradePerms.maxBanDuration} hours`);
       return;
     }
 
     setBanning(true);
-    setError(null);
     
     try {
       let fullComment = mainBanForm.szComment.trim();
       if (mainBanForm.szProofs.trim()) {
         fullComment += `\n\nProofs:\n${mainBanForm.szProofs.trim()}`;
       }
+      
+      console.log('Banning player:', {
+        dwUserID: player.dwUserID,
+        dwCharID: player.dwCharID,
+        szCharName: player.szName
+      });
       
       const response = await adminService.banPlayer(player.dwUserID, {
         bBlockType: mainBanForm.bBlockType,
@@ -362,6 +379,8 @@ export default function PlayerDetailPage() {
         szCharName: player.szName
       });
       
+      console.log('Ban response:', response);
+      
       if (response.success) {
         setSuccessMessage(`Player ${player.szName} banned successfully!`);
         setShowBanForm(false);
@@ -371,6 +390,7 @@ export default function PlayerDetailPage() {
         setError(response.error || 'Failed to ban player');
       }
     } catch (err) {
+      console.error('Ban error:', err);
       setError('An error occurred while banning player');
     } finally {
       setBanning(false);

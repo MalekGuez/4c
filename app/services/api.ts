@@ -538,9 +538,18 @@ export const adminService = {
 
   // Admin ban player
   banPlayer: async (dwUserID: number, banData: any): Promise<{ success: boolean; error?: string }> => {
-    const response = await adminRequest<any>(`/admin/players/${dwUserID}/ban`, {
+    // Add dwUserID to banData
+    const requestData = {
+      ...banData,
+      dwUserID: dwUserID
+    };
+    
+    // Use dwCharID from banData for the URL (the page displays characters, so URL uses dwCharID)
+    // But the ban is applied to the account (dwUserID)
+    const dwCharID = banData.dwCharID || dwUserID;
+    const response = await adminRequest<any>(`/admin/players/${dwCharID}/ban`, {
       method: 'POST',
-      body: JSON.stringify(banData)
+      body: JSON.stringify(requestData)
     });
     
     if (response.success && response.data) {
