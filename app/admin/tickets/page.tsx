@@ -106,6 +106,10 @@ export default function AdminTicketsPage() {
     try {
       const parsedManager = JSON.parse(adminManager);
       setManager(parsedManager);
+
+      if (![1, 2, 3].includes(Number(parsedManager.bAuthority))) {
+        setFilterStatus((prev) => (prev === 'closed' ? 'all' : prev));
+      }
       
       // Check if user has access to tickets
       const gradeInfo = GRADE_PERMISSIONS[parsedManager.bAuthority as keyof typeof GRADE_PERMISSIONS];
@@ -126,6 +130,14 @@ export default function AdminTicketsPage() {
       loadManagerName(selectedTicket.operatedBy);
     }
   }, [selectedTicket]);
+
+  useEffect(() => {
+    if (!manager) return;
+
+    if (![1, 2, 3].includes(Number(manager.bAuthority)) && filterStatus === 'closed') {
+      setFilterStatus('all');
+    }
+  }, [manager, filterStatus]);
 
   const loadTickets = async () => {
     try {
@@ -422,7 +434,13 @@ export default function AdminTicketsPage() {
     }
   };
 
+  const canViewClosedTickets = manager ? [1, 2, 3].includes(Number(manager.bAuthority)) : false;
+
   const filteredTickets = tickets.filter(ticket => {
+    if (!canViewClosedTickets && ticket.status?.toLowerCase() === 'closed') {
+      return false;
+    }
+
     // Search by ID
     if (searchId.trim()) {
       if (!ticket.id.toString().includes(searchId.trim())) {
@@ -591,7 +609,9 @@ export default function AdminTicketsPage() {
                   >
                     <option value="all">All Status</option>
                     <option value="opened">Opened</option>
-                    <option value="closed">Closed</option>
+                    {canViewClosedTickets && (
+                      <option value="closed">Closed</option>
+                    )}
                   </select>
                 </div>
                 </div>
