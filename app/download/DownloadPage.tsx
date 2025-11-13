@@ -5,9 +5,9 @@ import styles from './download.module.css';
 export default function DownloadPage() {
   const handleDownload = (platform: string) => {
     if (platform === 'drive') {
-      window.open('https://drive.google.com/file/d/1_HxZwDYgaQYM8ZLQxTmT78Rp12V_0YuY/view?usp=drive_link', '_blank');
+      window.open('https://drive.google.com/file/d/1NcQjcfnwzS59ICqAXvKR4TmNjnldzUMB/view?usp=sharing', '_blank');
     } else if (platform === 'mega') {
-      window.open('https://mega.nz/file/tqoF3YDL#58_2t0gVO65wqOqKVdrQikPJ6h_r-jzOYm91jMuEOWw', '_blank');
+      window.open('https://mega.nz/file/I3AWwahJ#THbctzOr87ys8IZblUOpMhwcGsahiAPLZ42DQf1Di1k', '_blank');
     }
   };
 
