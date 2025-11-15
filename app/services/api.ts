@@ -726,6 +726,21 @@ export const adminService = {
       success: false,
       error: response.error || 'Failed to delete warning'
     };
+  },
+
+  // Get manager name by ID (admin version - uses admin token)
+  getManagerName: async (managerId: string): Promise<{ success: boolean; name?: string; error?: string }> => {
+    const response = await adminRequest<{ success: boolean; name: string }>(`${API_ENDPOINTS.MANAGERS.GET}/${managerId}`);
+    if (response.success && response.data) {
+      return {
+        success: true,
+        name: response.data.name
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to get manager name'
+    };
   }
 };
 
