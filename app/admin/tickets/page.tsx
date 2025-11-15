@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { adminService } from '@/app/services/api';
+import { adminService, managerService } from '@/app/services/api';
 import styles from './tickets.module.css';
 
 export default function AdminTicketsPage() {
@@ -158,7 +158,7 @@ export default function AdminTicketsPage() {
 
   const loadManagerName = async (managerId: string) => {
     try {
-      const response = await adminService.getManagerName(managerId);
+      const response = await managerService.getManagerName(managerId);
       if (response.success && response.name) {
         setManagerName(response.name);
       }
