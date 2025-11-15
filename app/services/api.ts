@@ -362,52 +362,6 @@ const adminRequest = async <T>(endpoint: string, options: RequestInit = {}): Pro
   }
 };
 
-// Helper function for admin requests that should not trigger logout on 401/403
-// Used for endpoints that might not accept admin tokens (like /managers/)
-const adminRequestNoRedirect = async <T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> => {
-  const adminToken = localStorage.getItem('adminToken');
-  
-  if (!adminToken) {
-    return {
-      success: false,
-      error: 'Admin token not found'
-    };
-  }
-
-  const config: RequestInit = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${adminToken}`,
-      ...options.headers,
-    },
-    ...options,
-  };
-
-  try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-    const data = await response.json();
-
-    if (!response.ok) {
-      return {
-        success: false,
-        error: data.message || data.error || 'An error occurred',
-        data: data
-      };
-    }
-
-    return {
-      success: true,
-      data: data,
-      message: data.message
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Network error occurred'
-    };
-  }
-};
-
 // Admin API functions
 export const adminService = {
   // Admin login
@@ -776,22 +730,13 @@ export const adminService = {
 
   // Get manager name by ID (admin version - uses admin token)
   getManagerName: async (managerId: string): Promise<{ success: boolean; name?: string; error?: string }> => {
-    // Try admin endpoint first (if it exists)
-    let response = await adminRequestNoRedirect<{ success: boolean; name: string }>(`/admin/managers/${managerId}`);
-    
-    // If admin endpoint doesn't exist or fails, try regular endpoint
-    // Use adminRequestNoRedirect to avoid logout on 401/403
-    if (!response.success) {
-      response = await adminRequestNoRedirect<{ success: boolean; name: string }>(`${API_ENDPOINTS.MANAGERS.GET}/${managerId}`);
-    }
-    
+    const response = await adminRequest<{ success: boolean; name: string }>(`${API_ENDPOINTS.MANAGERS.GET}/${managerId}`);
     if (response.success && response.data) {
       return {
         success: true,
         name: response.data.name
       };
     }
-    // Return failure but don't throw - this is not critical and shouldn't disconnect user
     return {
       success: false,
       error: response.error || 'Failed to get manager name'
