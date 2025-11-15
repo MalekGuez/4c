@@ -209,7 +209,21 @@ export const apiRequest = async <T = any>(
     const data = await response.json();
 
     // Handle 401 Unauthorized - token expired or invalid
+    const isAuthEndpoint = endpoint === API_ENDPOINTS.AUTH.LOGIN || 
+                          endpoint === API_ENDPOINTS.AUTH.REGISTER ||
+                          endpoint === API_ENDPOINTS.ADMIN.LOGIN;
+    
     if (response.status === 401) {
+      // For auth endpoints, 401 means invalid credentials, not expired session
+      if (isAuthEndpoint) {
+        return {
+          success: false,
+          error: data.message || data.error || 'Invalid credentials',
+          data: data
+        };
+      }
+      
+      // For other endpoints, 401 means session expired
       console.log('⚠️ Token expired or invalid - logging out');
       tokenManager.clearAllAuthData();
       if (globalLogoutCallback) {
