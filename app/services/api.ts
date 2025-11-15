@@ -286,7 +286,7 @@ export const API_ENDPOINTS = {
 
 // Manager API functions
 export const managerService = {
-  // Get manager name by ID
+  // Get manager name by ID (for regular users)
   getManagerName: async (managerId: string): Promise<{ success: boolean; name?: string; error?: string }> => {
     const response = await apiRequest<{ success: boolean; name: string }>(`${API_ENDPOINTS.MANAGERS.GET}/${managerId}`);
     if (response.success && response.data) {
@@ -303,7 +303,7 @@ export const managerService = {
 };
 
 // Helper function for authenticated admin requests
-const adminRequest = async <T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> => {
+const adminRequest = async <T>(endpoint: string, options: RequestInit = {}, skipRedirect = false): Promise<ApiResponse<T>> => {
   const adminToken = localStorage.getItem('adminToken');
   
   if (!adminToken) {
@@ -325,13 +325,19 @@ const adminRequest = async <T>(endpoint: string, options: RequestInit = {}): Pro
 
     // Handle 401 Unauthorized - admin token expired or invalid
     if (response.status === 401 || response.status === 403) {
-      console.log('⚠️ Admin token expired or invalid - redirecting to admin login');
-      localStorage.removeItem('adminToken');
-      localStorage.removeItem('adminManager');
-      
-      // Redirect to admin login
-      if (typeof window !== 'undefined') {
-        window.location.href = '/admin/login';
+      // Only redirect if skipRedirect is false (default behavior for critical requests)
+      if (!skipRedirect) {
+        console.log('⚠️ Admin token expired or invalid - redirecting to admin login');
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminManager');
+        
+        // Redirect to admin login
+        if (typeof window !== 'undefined') {
+          window.location.href = '/admin/login';
+        }
+      } else {
+        // For non-critical requests, just return error without redirecting
+        console.log('⚠️ Admin request failed (non-critical):', endpoint);
       }
       
       return {
@@ -725,6 +731,30 @@ export const adminService = {
     return {
       success: false,
       error: response.error || 'Failed to delete warning'
+    };
+  },
+
+  // Get manager name by ID (for admin - uses admin token)
+  // Uses skipRedirect=true to avoid disconnecting user if endpoint is not accessible
+  getManagerName: async (managerId: string): Promise<{ success: boolean; name?: string; error?: string }> => {
+    // Try admin endpoint first, then fallback to regular endpoint
+    let response = await adminRequest<{ success: boolean; name: string }>(`/admin/managers/${managerId}`, {}, true);
+    
+    // If admin endpoint doesn't work, try regular endpoint with skipRedirect
+    if (!response.success) {
+      response = await adminRequest<{ success: boolean; name: string }>(`${API_ENDPOINTS.MANAGERS.GET}/${managerId}`, {}, true);
+    }
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        name: response.data.name
+      };
+    }
+    // Return success: false but don't throw - this is a non-critical operation
+    return {
+      success: false,
+      error: response.error || 'Failed to get manager name'
     };
   }
 };
