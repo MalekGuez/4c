@@ -181,8 +181,8 @@ export default function AccountManagementPage() {
             </div>
           </div>
 
-          {/* Account History */}
-          <div className={styles.historySection}>
+          {/* Account History - Hidden for now, will be displayed later */}
+          {/* <div className={styles.historySection}>
             <h3 className={styles.sectionTitle}>History</h3>
             <div className={styles.historyButtons}>
               <button className={styles.historyButton}>
@@ -195,7 +195,7 @@ export default function AccountManagementPage() {
                 Ban History
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

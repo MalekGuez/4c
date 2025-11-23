@@ -25,15 +25,15 @@ export default function ConfirmEmailPage() {
           setStatus('success');
           setMessage(data.message);
           
-          // Force logout if user is logged in (to refresh verified status on next login)
           const token = localStorage.getItem('authToken');
           if (token) {
             localStorage.removeItem('authToken');
             localStorage.removeItem('userData');
           }
           
-          // Redirect to login immediately
-          window.location.href = '/login';
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 3000);
         } else {
           setStatus('error');
           setMessage(data.error || 'Email confirmation failed');
