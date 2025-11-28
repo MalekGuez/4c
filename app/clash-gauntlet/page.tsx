@@ -138,24 +138,6 @@ export default function ClashGauntletPage() {
             </p>
           </div>
 
-          <div className={styles.eventDetails}>
-            <div style={{ marginTop: "0px" }}>
-              <p>
-                <strong>🎁 Rewards:</strong>
-              </p>
-              <p style={{ marginTop: "10px" }}>
-                1️⃣ 1st: 125€<br />
-                2️⃣ 2nd: 75€<br />
-                3️⃣ 3rd: 50€<br />
-                4️⃣ 4th: 30€<br />
-                5️⃣ 5th: 20€<br />
-                6️⃣ 6th: 🐹 Capybara mount<br />
-                7️⃣ 7th: 🥋 Gon costume<br />
-                8️⃣ 8th: 🧸 Companions of your choice
-              </p>
-            </div>
-          </div>
-
           {isEventEnded && (
             <div className={styles.eventWaitingSection}>
               <div className={styles.waitingMessage}>
