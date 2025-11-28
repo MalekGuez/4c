@@ -296,6 +296,9 @@ export const API_ENDPOINTS = {
   },
   MOONSTONES: '/get-ms',
   BUY_ITEM: '/buy-item',
+  CLASH_GAUNTLET: {
+    RANKINGS: '/clash-gauntlet/rankings',
+  },
 } as const;
 
 // Manager API functions
@@ -558,14 +561,12 @@ export const adminService = {
 
   // Admin ban player
   banPlayer: async (dwUserID: number, banData: any): Promise<{ success: boolean; error?: string }> => {
-    // Add dwUserID to banData
     const requestData = {
       ...banData,
-      dwUserID: dwUserID
+      dwUserID: dwUserID,
+      bWorld: banData.bWorld !== undefined ? banData.bWorld : 1
     };
     
-    // Use dwCharID from banData for the URL (the page displays characters, so URL uses dwCharID)
-    // But the ban is applied to the account (dwUserID)
     const dwCharID = banData.dwCharID || dwUserID;
     const response = await adminRequest<any>(`/admin/players/${dwCharID}/ban`, {
       method: 'POST',
@@ -846,6 +847,38 @@ export const ticketService = {
       };
     }
     return response;
+  },
+};
+
+// Clash Gauntlet API functions
+export interface ClashGauntletRanking {
+  dwCharID: number;
+  szName: string;
+  bClass: number;
+  wWins: number;
+  wLosses?: number;
+  totalPoints: number;
+  rank: number;
+}
+
+export interface ClashGauntletRankingsResponse {
+  success: boolean;
+  rankings?: ClashGauntletRanking[];
+  error?: string;
+}
+
+export const clashGauntletService = {
+  // Get Clash Gauntlet rankings
+  getRankings: async (): Promise<ClashGauntletRankingsResponse> => {
+    const response = await apiRequest<any>(API_ENDPOINTS.CLASH_GAUNTLET.RANKINGS);
+    if (response.success && response.data) {
+      return {
+        success: true,
+        rankings: response.data.rankings || response.data.data || response.data,
+        error: response.data.error
+      };
+    }
+    return response as ClashGauntletRankingsResponse;
   },
 };
 

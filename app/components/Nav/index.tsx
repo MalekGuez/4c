@@ -64,14 +64,12 @@ export default function Nav() {
               News
             </Link>
             
-            {/* Event section hidden - event is ended
             <div className={styles.eventLinkContainer}>
-              <span className={styles.endedEventBadge}>ENDED</span>
-              <Link href="/event" className={styles.navLink}>
+              <span className={styles.endedEventBadge}>NEW</span>
+              <Link href="/clash-gauntlet" className={styles.navLink}>
                 Event
               </Link>
             </div>
-            */}
 
             <Dropdown title="Game">
               <Link href="/download" className={styles.dropdownLink}>

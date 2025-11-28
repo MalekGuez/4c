@@ -48,8 +48,17 @@ const announcements = [
     title: "Domination Week-end - Event",
     description: "Prepare yourselves for an all-out war! Throughout the entire weekend, Valorian and Derion will clash endlessly across Iberia. Every kill and assist counts toward your final ranking. Only the fiercest fighters will reach the top!<br><br>More information on Discord.",
     image: "/images/news/domination-weekend.png",
-    link: "https://discord.gg/BsccMkY7",
+    link: "https://discord.gg/BFk7QbTME5",
     date: "18. Oct. 2025"
+  },
+  {
+    id: 6,
+    category: "EVENT",
+    title: "Clash Gauntlet - 300€ Cash Prize",
+    description: "Participate in the Clash Gauntlet event and compete for a 300€ cash prize plus exclusive rewards! Win rounds to earn points and climb the rankings. <br><br>Check the event page for full details and schedule.",
+    image: "/images/news/cgthumb.png",
+    link: "/clash-gauntlet",
+    date: "29. Nov. 2025"
   },
 ];
 

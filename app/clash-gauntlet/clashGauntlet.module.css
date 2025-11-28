@@ -7,7 +7,6 @@
   position: relative;
 }
 
-
 .contentWrapper {
   width: 100%;
   padding: 0;
@@ -24,7 +23,7 @@
 .eventTitle {
   color: #790801;
   font-family: 'The Blowar', sans-serif;
-  font-size: 2.4rem;
+  font-size: 1.6rem;
   font-weight: 400;
   text-align: center;
   margin-bottom: 20px;
@@ -36,8 +35,12 @@
   color: #BDBDBD;
   font-size: 1.1rem;
   line-height: 1.6;
-  text-align: left;
+  text-align: center;
   margin-bottom: 25px;
+}
+
+.eventText p {
+  margin: 0;
 }
 
 .eventDetails {
@@ -94,30 +97,13 @@
   color: #790801;
   font-weight: bold;
   font-size: 0.95rem;
-  min-width: 50px;
+  min-width: 100px;
 }
 
 .dateValue {
   color: #BDBDBD;
   font-size: 0.95rem;
   font-weight: bold;
-}
-
-.warningInfo {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 193, 7, 0.1);
-  border: 1px solid rgba(255, 193, 7, 0.3);
-  padding: 12px 16px;
-  margin-top: 15px;
-  color: #FFC107;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.warningInfo svg {
-  flex-shrink: 0;
-  color: #FFC107;
 }
 
 .loadingContainer {
@@ -186,24 +172,6 @@
 
 .refreshButton {
   background: none;
-  border: 1px solid #790801;
-  cursor: pointer;
-  color: #790801;
-  transition: all 0.3s ease;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  border-radius: 4px;
-}
-
-.refreshButton:hover {
-  color: white;
-  background: #790801;
-}
-
-.infoIcon {
-  background: none;
   border: none;
   cursor: pointer;
   color: #BDBDBD;
@@ -212,21 +180,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 4px;
 }
 
-.infoIcon:hover {
+.refreshButton:hover {
   color: #790801;
   background: rgba(121, 8, 1, 0.1);
 }
-
-.infoIcon svg {
-  width: 16px;
-  height: 16px;
-}
-
-
 
 .rankingSection {
   padding: 30px;
@@ -276,23 +239,6 @@
   line-height: 1.6;
   margin: 0 0 24px 0;
   max-width: 500px;
-}
-
-.eventCountdown {
-  background: rgba(121, 8, 1, 0.1);
-  border: 1px solid rgba(121, 8, 1, 0.3);
-  padding: 20px 30px;
-  border-radius: 4px;
-  margin-top: 16px;
-}
-
-.eventCountdown p {
-  color: #790801;
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .rankingTable {
@@ -359,7 +305,7 @@
 .rankCell {
   font-weight: bold;
   font-size: 16px;
-  width: 60px;
+  width: 80px;
 }
 
 .playerCell {
@@ -399,7 +345,6 @@
   .pageContainer {
     padding: 100px 40px 200px 40px;
   }
-  
 }
 
 @media (max-width: 768px) {
@@ -433,17 +378,6 @@
     font-size: 0.9rem;
   }
   
-  .warningInfo {
-    padding: 10px 12px;
-    font-size: 0.85rem;
-    margin-top: 12px;
-  }
-  
-  .warningInfo svg {
-    width: 16px;
-    height: 16px;
-  }
-  
   .eventDuration {
     margin-bottom: 15px;
   }
@@ -459,14 +393,6 @@
   
   .waitingText {
     font-size: 1rem;
-  }
-  
-  .eventCountdown {
-    padding: 16px 20px;
-  }
-  
-  .eventCountdown p {
-    font-size: 0.9rem;
   }
   
   .durationTitle {
@@ -487,8 +413,6 @@
   .dateValue {
     font-size: 0.85rem;
   }
-  
-  
   
   .table {
     font-size: 12px;
@@ -513,7 +437,6 @@
     padding: 15px;
   }
   
-  
   .sectionTitle {
     font-size: 1.2rem;
   }
@@ -522,11 +445,6 @@
     flex-direction: column;
     gap: 10px;
     text-align: center;
-  }
-  
-  .infoIcon {
-    font-size: 0.9rem;
-    padding: 4px 8px;
   }
   
   .table {
@@ -555,131 +473,5 @@
   .waitingText {
     font-size: 0.9rem;
   }
-  
-  .eventCountdown {
-    padding: 12px 16px;
-  }
-  
-  .eventCountdown p {
-    font-size: 0.8rem;
-  }
 }
 
-/* Modal Styles */
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
-
-.modalContent {
-  background: rgba(0, 0, 0, 0.9);
-  border: 1px solid #BDBDBD;
-  max-width: 500px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.modalHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid rgba(189, 189, 189, 0.2);
-}
-
-.modalHeader h3 {
-  color: #790801;
-  font-family: 'The Blowar', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 400;
-  margin: 0;
-}
-
-.closeButton {
-  background: none;
-  border: none;
-  color: #BDBDBD;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.closeButton:hover {
-  color: #790801;
-  background: rgba(121, 8, 1, 0.1);
-}
-
-.modalBody {
-  padding: 24px;
-}
-
-.pointsGrid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.pointItem {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
-
-.pointItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(121, 8, 1, 0.3);
-}
-
-.pointItem span {
-  color: #BDBDBD;
-  font-size: 14px;
-}
-
-/* Modal Responsive */
-@media (max-width: 768px) {
-  .modalContent {
-    margin: 10px;
-    max-width: none;
-  }
-  
-  .modalHeader {
-    padding: 16px 20px;
-  }
-  
-  .modalHeader h3 {
-    font-size: 1.3rem;
-  }
-  
-  .modalBody {
-    padding: 20px;
-  }
-  
-  .pointItem {
-    padding: 10px 12px;
-    gap: 8px;
-  }
-  
-  .pointItem span {
-    font-size: 13px;
-  }
-}
