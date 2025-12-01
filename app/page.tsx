@@ -60,6 +60,15 @@ const announcements = [
     link: "/clash-gauntlet",
     date: "29. Nov. 2025"
   },
+  {
+    id: 7,
+    category: "NEWS",
+    title: "Security Clarification",
+    description: "False information has been circulating claiming our launcher or client contains a virus. To address these concerns, we submitted both 4Chaos.exe and TClient.exe to VirusTotal: <strong>1 detection out of 72 antivirus engines</strong> (which is not a real threat, and just a false positive). <br>The server has been open for almost 2 months with thousands of active players, and no legitimate security issues have been reported. You can verify this yourself by scanning the files or uploading them to VirusTotal. <br><strong>More information on Discord.</strong>",
+    image: "/images/news/worker.png",
+    link: "https://discord.gg/BFk7QbTME5",
+    date: "1. Dec. 2024"
+  },
 ];
 
 export default function Home() {
