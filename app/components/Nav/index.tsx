@@ -12,9 +12,33 @@ export default function Nav() {
   const { isAuthenticated, logout } = useAuthContext();
   const [isClient, setIsClient] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<string>('');
 
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const updateTimer = () => {
+      // Minuit ce soir (fin de la journée actuelle)
+      const now = new Date();
+      const midnightTonight = new Date(now);
+      midnightTonight.setHours(23, 59, 59, 999);
+      
+      if (now < midnightTonight) {
+        const diff = midnightTonight.getTime() - now.getTime();
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeRemaining(`${hours}h ${minutes}m`);
+      } else {
+        setTimeRemaining('');
+      }
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const isLoggedIn = isClient && (isAuthenticated || (typeof window !== 'undefined' && localStorage.getItem('authToken')));
@@ -65,8 +89,12 @@ export default function Nav() {
             </Link>
             
             <div className={styles.eventLinkContainer}>
-              <span className={styles.endedEventBadge}>NEW</span>
-              <Link href="/clash-gauntlet" className={styles.navLink}>
+              {timeRemaining ? (
+                <span className={styles.countdownBadge}>{timeRemaining}</span>
+              ) : (
+                <span className={styles.newBadge}>NEW</span>
+              )}
+              <Link href="/event" className={styles.navLink}>
                 Event
               </Link>
             </div>

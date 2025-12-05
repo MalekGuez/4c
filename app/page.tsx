@@ -57,7 +57,7 @@ const announcements = [
     title: "Clash Gauntlet - 300€ Cash Prize",
     description: "Participate in the Clash Gauntlet event and compete for a 300€ cash prize plus exclusive rewards! Win rounds to earn points and climb the rankings. <br><br>Check the event page for full details and schedule.",
     image: "/images/news/cgthumb.png",
-    link: "/clash-gauntlet",
+    link: "/event",
     date: "29. Nov. 2025"
   },
   {
@@ -68,6 +68,15 @@ const announcements = [
     image: "/images/news/worker.png",
     link: "https://discord.gg/BFk7QbTME5",
     date: "1. Dec. 2024"
+  },
+  {
+    id: 8,
+    category: "EVENT",
+    title: "Clash Gauntlet Event - Reworked!",
+    description: "🔁 Event reworked! All ranked modes now count. Scoring based on ranked points gained during both weekends (Dec 6-7 & 13-14).<br><br>💰 Rewards unchanged: 300€ + exclusive rewards.<br><br><strong>Check event page for more info.</strong>",
+    image: "/images/news/cgthumb.png",
+    link: "/event",
+    date: "2. Dec. 2025"
   },
 ];
 

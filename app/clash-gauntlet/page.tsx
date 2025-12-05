@@ -28,12 +28,9 @@ export default function ClashGauntletPage() {
       const response = await clashGauntletService.getRankings();
       
       if (response.success && response.rankings) {
-        // Sort by totalPoints descending, then by wins descending
+        // Sort by totalPoints descending
         const sorted = [...response.rankings].sort((a, b) => {
-          if (b.totalPoints !== a.totalPoints) {
-            return b.totalPoints - a.totalPoints;
-          }
-          return b.wWins - a.wWins;
+          return b.totalPoints - a.totalPoints;
         });
         
         // Assign ranks
@@ -65,10 +62,10 @@ export default function ClashGauntletPage() {
   }, []);
 
   // Event dates
-  const weekend1Start = new Date("2025-11-28T18:00:00+01:00"); // CET
-  const weekend1End = new Date("2025-11-30T23:59:00+01:00");
-  const weekend2Start = new Date("2025-12-05T18:00:00+01:00");
-  const weekend2End = new Date("2025-12-07T23:59:00+01:00");
+  const weekend1Start = new Date("2025-12-06T00:00:00+01:00"); // CET
+  const weekend1End = new Date("2025-12-07T23:59:00+01:00");
+  const weekend2Start = new Date("2025-12-13T00:00:00+01:00");
+  const weekend2End = new Date("2025-12-14T23:59:00+01:00");
 
   const now = new Date();
   const isWeekend1Active = now >= weekend1Start && now <= weekend1End;
@@ -105,36 +102,39 @@ export default function ClashGauntletPage() {
       <div className={styles.contentWrapper}>
         {/* Event Description */}
         <div className={styles.eventDescription}>
-          <h1 className={styles.eventTitle}>Clash Gauntlet</h1>
+          <h1 className={styles.eventTitle}>Ranked Event</h1>
           
           <div className={styles.eventText}>
+            <p style={{ marginTop: "15px", color: "#ff8c00", fontStyle: "italic" }}>
+              <strong>🔁 Event Reworked!</strong> We've improved the format while keeping all rewards exactly the same.
+            </p>
             <p style={{ marginTop: "15px" }}>
               <strong>💰 300€ Cash Prize + Exclusive Rewards</strong>
             </p>
             <p style={{ marginTop: "15px" }}>
-              <strong>🕒 Event Time Slots (points only counted during these windows):</strong>
-            </p>
-            <p style={{ marginTop: "10px" }}>
-              <strong>Weekend 1</strong><br />
-              <strong>Friday, November 28th:</strong> 18:00 – 22:00 (CET)<br />
-              <strong>Saturday, November 29th:</strong> 12:00 – 16:00 & 20:00 – 00:00 (CET)<br />
-              <strong>Sunday, November 30th:</strong> 12:00 – 16:00 & 20:00 – 00:00 (CET)
-            </p>
-            <p style={{ marginTop: "10px" }}>
-              <strong>Weekend 2</strong><br />
-              <strong>Friday, December 5th:</strong> 18:00 – 22:00 (CET)<br />
-              <strong>Saturday, December 6th:</strong> 12:00 – 16:00 & 20:00 – 00:00 (CET)<br />
-              <strong>Sunday, December 7th:</strong> 12:00 – 16:00 & 20:00 – 00:00 (CET)
+              <strong>🗓 Event Dates:</strong><br />
+              <strong>Weekend 1:</strong> December 6–7<br />
+              <strong>Weekend 2:</strong> December 13–14<br />
+              <span style={{ fontSize: "0.9rem", fontStyle: "italic" }}>(Exact time slots will be announced before each weekend)</span>
             </p>
             <p style={{ marginTop: "15px" }}>
-              <strong>🏆 Scoring System:</strong><br />
-              ✅ Win a round: +3 points<br />
-              ❌ Lose a round: +1 point
+              <strong>🎮 Format:</strong><br />
+              All ranked modes count for the event!
             </p>
             <p style={{ marginTop: "15px" }}>
-              <strong>🧾 Important:</strong><br />
+              <strong>🧮 Scoring System:</strong><br />
+              We track the total amount of ranked points you gain during both event weekends.<br />
+              Final ranking is based on total ranked points gained per account.
+            </p>
+            <p style={{ marginTop: "15px" }}>
+              <strong>📌 Important:</strong><br />
               Points are tracked per account, not per character.<br />
-              You can play on multiple characters and all points will still count towards the same account on the ranking.
+              Everything that happened before the event will NOT be counted for the final rankings.
+            </p>
+            <p style={{ marginTop: "15px" }}>
+              <strong>🎁 Rewards:</strong><br />
+              1st: 125€ | 2nd: 75€ | 3rd: 50€ | 4th: 30€ | 5th: 20€<br />
+              6th: 🐹 Capybara mount | 7th: 🥋 Gon costume | 8th: 🧸 Companions of your choice
             </p>
           </div>
 
@@ -143,7 +143,7 @@ export default function ClashGauntletPage() {
               <div className={styles.waitingMessage}>
                 <h2 className={styles.waitingTitle}>Event Ended</h2>
                 <p className={styles.waitingText}>
-                  The Clash Gauntlet event has ended. Thank you to all participants!
+                  The event has ended. Thank you to all participants!
                 </p>
               </div>
             </div>
@@ -186,8 +186,7 @@ export default function ClashGauntletPage() {
                       <th>Rank</th>
                       <th>Player</th>
                       <th>Class</th>
-                      <th>Wins</th>
-                      <th>Total Points</th>
+                      <th>Ranked Points</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -219,7 +218,6 @@ export default function ClashGauntletPage() {
                             <span>{getClassIcon(player.bClass)}</span>
                           </div>
                         </td>
-                        <td className={styles.pointsCell}>{player.wWins}</td>
                         <td className={styles.pointsCell}>{player.totalPoints}</td>
                       </tr>
                     ))}
