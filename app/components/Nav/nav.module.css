@@ -112,6 +112,40 @@
   animation: badgePulse 2s infinite;
 }
 
+.nowBadge {
+  position: absolute;
+  top: 18px;
+  right: -20px;
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 10;
+  white-space: nowrap;
+  animation: nowPulse 1.5s infinite;
+}
+
+@keyframes nowPulse {
+  0% {
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.8);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+    transform: scale(1);
+  }
+}
+
 @keyframes countdownPulse {
   0% {
     box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);

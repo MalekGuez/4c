@@ -13,6 +13,7 @@ export default function Nav() {
   const [isClient, setIsClient] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
+  const [isEventActive, setIsEventActive] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -20,18 +21,37 @@ export default function Nav() {
 
   useEffect(() => {
     const updateTimer = () => {
-      // Minuit ce soir (fin de la journée actuelle)
+      const weekend1Start = new Date('2025-12-06T00:00:00+01:00');
+      const weekend1End = new Date('2025-12-07T23:59:59+01:00');
+      const weekend2Start = new Date('2025-12-13T00:00:00+01:00');
+      const weekend2End = new Date('2025-12-14T23:59:59+01:00');
       const now = new Date();
-      const midnightTonight = new Date(now);
-      midnightTonight.setHours(23, 59, 59, 999);
       
-      if (now < midnightTonight) {
-        const diff = midnightTonight.getTime() - now.getTime();
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        setTimeRemaining(`${hours}h ${minutes}m`);
-      } else {
+      // Si l'événement est en cours (pendant un des weekends)
+      if ((now >= weekend1Start && now <= weekend1End) || (now >= weekend2Start && now <= weekend2End)) {
+        setIsEventActive(true);
         setTimeRemaining('');
+      } else {
+        setIsEventActive(false);
+        
+        // Si on est avant le premier weekend, compter jusqu'au 6 décembre
+        if (now < weekend1Start) {
+          const diff = weekend1Start.getTime() - now.getTime();
+          const hours = Math.floor(diff / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          setTimeRemaining(`${hours}h ${minutes}m`);
+        }
+        // Si on est entre les deux weekends, compter jusqu'au 13 décembre
+        else if (now > weekend1End && now < weekend2Start) {
+          const diff = weekend2Start.getTime() - now.getTime();
+          const hours = Math.floor(diff / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          setTimeRemaining(`${hours}h ${minutes}m`);
+        }
+        // Après le deuxième weekend
+        else {
+          setTimeRemaining('');
+        }
       }
     };
 
@@ -89,10 +109,12 @@ export default function Nav() {
             </Link>
             
             <div className={styles.eventLinkContainer}>
-              {timeRemaining ? (
+              {isEventActive ? (
+                <span className={styles.nowBadge}>NOW</span>
+              ) : timeRemaining ? (
                 <span className={styles.countdownBadge}>{timeRemaining}</span>
               ) : (
-                <span className={styles.newBadge}>NEW</span>
+                <span className={styles.newBadge}>SOON</span>
               )}
               <Link href="/event" className={styles.navLink}>
                 Event

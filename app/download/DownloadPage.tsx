@@ -15,7 +15,9 @@ export default function DownloadPage() {
     const driverUrls: { [key: string]: string } = {
       'dx9': 'https://www.microsoft.com/en-us/download/details.aspx?id=35',
       'vc++': 'https://aka.ms/vs/17/release/vc_redist.x64.exe',
-      'dx11': 'https://www.microsoft.com/en-us/download/details.aspx?id=17431'
+      'dx11': 'https://www.microsoft.com/en-us/download/details.aspx?id=17431',
+      'vc++2015': 'https://www.microsoft.com/en-us/download/details.aspx?id=48145',
+      'directx-runtime': 'https://www.microsoft.com/en-us/download/details.aspx?id=35'
     };
     window.open(driverUrls[driver], '_blank');
   };
@@ -102,6 +104,23 @@ export default function DownloadPage() {
                   DirectX 11
                 </button>
               </div>
+              <div className={`${styles.driverButtons} ${styles.driverButtonsSecondary}`}>
+                <button 
+                  className={styles.driverBtn}
+                  onClick={() => handleDriverDownload('vc++2015')}
+                >
+                  Visual C++ 2015
+                </button>
+                <button 
+                  className={styles.driverBtn}
+                  onClick={() => handleDriverDownload('directx-runtime')}
+                >
+                  DirectX Runtime
+                </button>
+              </div>
+              <p className={styles.driverNote}>
+                Install these drivers if the game fails to launch or crashes on startup.
+              </p>
             </div>
           </div>
 
