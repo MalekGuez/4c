@@ -9,9 +9,6 @@ const nextConfig: NextConfig = {
   },
   trailingSlash: false,
   poweredByHeader: false,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   async headers() {
     return [
       {
