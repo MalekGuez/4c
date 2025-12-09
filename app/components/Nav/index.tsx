@@ -108,6 +108,7 @@ export default function Nav() {
               News
             </Link>
             
+            {/* Event link hidden
             <div className={styles.eventLinkContainer}>
               {isEventActive ? (
                 <span className={styles.nowBadge}>NOW</span>
@@ -120,6 +121,7 @@ export default function Nav() {
                 Event
               </Link>
             </div>
+            */}
 
             <Dropdown title="Game">
               <Link href="/download" className={styles.dropdownLink}>

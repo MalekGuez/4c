@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { clashGauntletService, ClashGauntletRanking } from "../services/api";
 import styles from "./event.module.css";
 
@@ -18,6 +19,13 @@ const getClassIcon = (bClass: number): string => {
 };
 
 export default function EventPage() {
+  const router = useRouter();
+
+  // Redirect to home page immediately
+  useEffect(() => {
+    router.replace("/");
+  }, [router]);
+
   const [rankings, setRankings] = useState<ClashGauntletRanking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
