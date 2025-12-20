@@ -80,7 +80,7 @@ export default function MaintenancePage() {
           <p className={styles.followText}>Join our community for updates:</p>
           <div className={styles.socialButtons}>
             <a 
-              href="https://discord.gg/gnXrJFAf" 
+              href="https://discord.gg/4Chaos" 
               target="_blank" 
               rel="noopener noreferrer"
               className={styles.discordButton}

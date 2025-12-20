@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <div className={styles.discordBar}>
       <Link 
-        href="https://discord.gg/BFk7QbTME5" 
+        href="https://discord.gg/4Chaos" 
         target="_blank"
         rel="noopener noreferrer"
         className={styles.discordLink}

@@ -48,36 +48,36 @@ const announcements = [
     title: "Domination Week-end - Event",
     description: "Prepare yourselves for an all-out war! Throughout the entire weekend, Valorian and Derion will clash endlessly across Iberia. Every kill and assist counts toward your final ranking. Only the fiercest fighters will reach the top!<br><br>More information on Discord.",
     image: "/images/news/domination-weekend.png",
-    link: "https://discord.gg/BFk7QbTME5",
+    link: "https://discord.gg/4Chaos",
     date: "18. Oct. 2025"
   },
-  {
-    id: 6,
-    category: "EVENT",
-    title: "Clash Gauntlet - 300€ Cash Prize",
-    description: "Participate in the Clash Gauntlet event and compete for a 300€ cash prize plus exclusive rewards! Win rounds to earn points and climb the rankings. <br><br>Check the event page for full details and schedule.",
-    image: "/images/news/cgthumb.png",
-    link: "/event",
-    date: "29. Nov. 2025"
-  },
+  // {
+  //   id: 6,
+  //   category: "EVENT",
+  //   title: "Clash Gauntlet - 300€ Cash Prize",
+  //   description: "Participate in the Clash Gauntlet event and compete for a 300€ cash prize plus exclusive rewards! Win rounds to earn points and climb the rankings. <br><br>Check the event page for full details and schedule.",
+  //   image: "/images/news/cgthumb.png",
+  //   link: "/event",
+  //   date: "29. Nov. 2025"
+  // },
   {
     id: 7,
     category: "NEWS",
     title: "Security Clarification",
     description: "False information has been circulating claiming our launcher or client contains a virus. To address these concerns, we submitted both 4Chaos.exe and TClient.exe to VirusTotal: <strong>1 detection out of 72 antivirus engines</strong> (which is not a real threat, and just a false positive). <br>The server has been open for almost 2 months with thousands of active players, and no legitimate security issues have been reported. You can verify this yourself by scanning the files or uploading them to VirusTotal. <br><strong>More information on Discord.</strong>",
     image: "/images/news/worker.png",
-    link: "https://discord.gg/BFk7QbTME5",
+    link: "https://discord.gg/4Chaos",
     date: "1. Dec. 2024"
   },
-  {
-    id: 8,
-    category: "EVENT",
-    title: "Clash Gauntlet Event - Reworked!",
-    description: "🔁 Event reworked! All ranked modes now count. Scoring based on ranked points gained during both weekends (Dec 6-7 & 13-14).<br><br>💰 Rewards unchanged: 300€ + exclusive rewards.<br><br><strong>Check event page for more info.</strong>",
-    image: "/images/news/cgthumb.png",
-    link: "/event",
-    date: "2. Dec. 2025"
-  },
+  // {
+  //   id: 8,
+  //   category: "EVENT",
+  //   title: "Clash Gauntlet Event - Reworked!",
+  //   description: "🔁 Event reworked! All ranked modes now count. Scoring based on ranked points gained during both weekends (Dec 6-7 & 13-14).<br><br>💰 Rewards unchanged: 300€ + exclusive rewards.<br><br><strong>Check event page for more info.</strong>",
+  //   image: "/images/news/cgthumb.png",
+  //   link: "/event",
+  //   date: "2. Dec. 2025"
+  // },
 ];
 
 export default function Home() {
