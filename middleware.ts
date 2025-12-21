@@ -25,21 +25,12 @@ function getClientIp(request: NextRequest): string | null {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
   const isMaintenancePage = pathname === '/maintenance';
   
-  // Vérifier si l'IP du client est autorisée pendant la maintenance
-  const allowedIp = process.env.MAINTENANCE_ALLOWED_IP;
-  const clientIp = getClientIp(request);
-  const isAllowedIp = allowedIp && clientIp === allowedIp;
-  
-  // Si le mode maintenance est actif ET que l'IP n'est pas autorisée
-  if (isMaintenanceMode && !isMaintenancePage && !isAllowedIp) {
+  // Bloquer toutes les pages sauf la page de maintenance elle-même
+  // Permettre aussi l'accès aux ressources statiques (images, fonts, etc.)
+  if (!isMaintenancePage && !pathname.startsWith('/_next') && !pathname.startsWith('/api')) {
     return NextResponse.redirect(new URL('/maintenance', request.url));
-  }
-  
-  if (!isMaintenanceMode && isMaintenancePage) {
-    return NextResponse.redirect(new URL('/', request.url));
   }
   
   const response = NextResponse.next();

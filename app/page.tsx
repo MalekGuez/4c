@@ -69,6 +69,15 @@ const announcements = [
     link: "https://discord.gg/4Chaos",
     date: "1. Dec. 2024"
   },
+  {
+    id: 8,
+    category: "NEWS",
+    title: "Server Returns December 26th!",
+    description: "The server returns on December 26th with major changes! Prepare yourself for a completely reimagined experience with new features, improved mechanics, and much more. Stay tuned for more information!",
+    image: "/images/news/worker.png",
+    link: "/",
+    date: "26. Dec. 2024"
+  },
   // {
   //   id: 8,
   //   category: "EVENT",
