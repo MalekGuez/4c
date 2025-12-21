@@ -28,10 +28,10 @@ export default function MaintenancePage() {
           />
         </div>
 
-        <h1 className={styles.title}>We're Back on December 26th!</h1>
+        <h1 className={styles.title}>We're Back on December 26th at 8 PM!</h1>
         
         <p className={styles.description}>
-          The server returns on December 26th with major changes! Prepare yourself for a completely reimagined experience with new features, improved mechanics, and much more.
+          The server returns on December 26th at 8 PM with major changes! Prepare yourself for a completely reimagined experience with new features, improved mechanics, and much more.
         </p>
 
         <div className={styles.socialLinks}>
