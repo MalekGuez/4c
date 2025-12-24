@@ -25,13 +25,14 @@ function getClientIp(request: NextRequest): string | null {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  const isMaintenancePage = pathname === '/maintenance';
-  
-  // Bloquer toutes les pages sauf la page de maintenance elle-même
-  // Permettre aussi l'accès aux ressources statiques (images, fonts, etc.)
-  if (!isMaintenancePage && !pathname.startsWith('/_next') && !pathname.startsWith('/api')) {
-    return NextResponse.redirect(new URL('/maintenance', request.url));
-  }
+  // Maintenance mode disabled - site is accessible, modal will show instead
+  // const isMaintenancePage = pathname === '/maintenance';
+  // 
+  // // Bloquer toutes les pages sauf la page de maintenance elle-même
+  // // Permettre aussi l'accès aux ressources statiques (images, fonts, etc.)
+  // if (!isMaintenancePage && !pathname.startsWith('/_next') && !pathname.startsWith('/api')) {
+  //   return NextResponse.redirect(new URL('/maintenance', request.url));
+  // }
   
   const response = NextResponse.next();
   

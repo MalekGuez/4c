@@ -67,16 +67,16 @@ const announcements = [
     description: "False information has been circulating claiming our launcher or client contains a virus. To address these concerns, we submitted both 4Chaos.exe and TClient.exe to VirusTotal: <strong>1 detection out of 72 antivirus engines</strong> (which is not a real threat, and just a false positive). <br>The server has been open for almost 2 months with thousands of active players, and no legitimate security issues have been reported. You can verify this yourself by scanning the files or uploading them to VirusTotal. <br><strong>More information on Discord.</strong>",
     image: "/images/news/worker.png",
     link: "https://discord.gg/4Chaos",
-    date: "1. Dec. 2024"
+    date: "1. Dec. 2025"
   },
   {
     id: 8,
     category: "NEWS",
-    title: "Server Returns December 26th!",
-    description: "The server returns on December 26th with major changes! Prepare yourself for a completely reimagined experience with new features, improved mechanics, and much more. Stay tuned for more information!",
+    title: "Server Returns December 26th at 20:00!",
+    description: "The server returns on December 26th at 20:00 with major changes! Prepare yourself for a completely reimagined experience with new features, improved mechanics, and much more. Stay tuned for more information!",
     image: "/images/news/worker.png",
     link: "/",
-    date: "26. Dec. 2024"
+    date: "26. Dec. 2025"
   },
   // {
   //   id: 8,

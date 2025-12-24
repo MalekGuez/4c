@@ -50,10 +50,10 @@ export default function DownloadPage() {
         <div className={styles.mainContent}>
           {/* Left Side - Installer and Drivers */}
           <div className={styles.leftSide}>
-            {/* Installer Section */}
+            {/* Installer Section - Hidden during maintenance */}
             <div className={styles.installerSection}>
               <h2 className={styles.sectionTitle}>INSTALLER</h2>
-              <div className={styles.downloadButtons}>
+              <div className={styles.downloadButtons} style={{ display: 'none' }}>
                 <button 
                   className={styles.downloadBtn}
                   onClick={() => handleDownload('drive')}
@@ -79,6 +79,9 @@ export default function DownloadPage() {
                   Mega
                 </button>
               </div>
+              <p style={{ color: '#BDBDBD', fontSize: '14px', marginTop: '10px' }}>
+                Downloads are temporarily unavailable. Please check back soon!
+              </p>
             </div>
 
             {/* Required Drivers Section */}
