@@ -124,11 +124,9 @@ export default function Nav() {
             */}
 
             <Dropdown title="Game">
-              {/* Download link hidden during maintenance
               <Link href="/download" className={styles.dropdownLink}>
                 Download
               </Link>
-              */}
               <Link href="/rules" className={styles.dropdownLink}>
                 Rules
               </Link>

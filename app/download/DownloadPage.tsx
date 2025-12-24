@@ -80,7 +80,7 @@ export default function DownloadPage() {
                 </button>
               </div>
               <p style={{ color: '#BDBDBD', fontSize: '14px', marginTop: '10px' }}>
-                Downloads are temporarily unavailable. Please check back soon!
+                Downloads will be available on December 26th at 20:00!
               </p>
             </div>
 
