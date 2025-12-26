@@ -3,12 +3,8 @@ import Image from 'next/image';
 import styles from './download.module.css';
 
 export default function DownloadPage() {
-  const handleDownload = (platform: string) => {
-    if (platform === 'drive') {
-      window.open('https://drive.google.com/file/d/1EFeeOOQmXVKlzcBcGgqZ85tQ96qaqkXh/view?usp=drive_link', '_blank');
-    } else if (platform === 'mega') {
-      window.open('https://mega.nz/file/iAcHSIAK#ZenpifYZdWg7AaSEGY_U8TzERWRNdIjpHtTU5lgzd20', '_blank');
-    }
+  const handleDownload = () => {
+    window.open('https://drive.google.com/file/d/1EB5eCCSfjwpefRfjVab9q3ggRaGUrTuq/view?usp=sharing', '_blank');
   };
 
   const handleDriverDownload = (driver: string) => {
@@ -50,13 +46,13 @@ export default function DownloadPage() {
         <div className={styles.mainContent}>
           {/* Left Side - Installer and Drivers */}
           <div className={styles.leftSide}>
-            {/* Installer Section - Hidden during maintenance */}
+            {/* Installer Section */}
             <div className={styles.installerSection}>
               <h2 className={styles.sectionTitle}>INSTALLER</h2>
-              <div className={styles.downloadButtons} style={{ display: 'none' }}>
+              <div className={styles.downloadButtons}>
                 <button 
                   className={styles.downloadBtn}
-                  onClick={() => handleDownload('drive')}
+                  onClick={handleDownload}
                 >
                   <Image 
                     src="/images/icons/Drive.png" 
@@ -66,22 +62,7 @@ export default function DownloadPage() {
                   />
                   Google Drive
                 </button>
-                <button 
-                  className={styles.downloadBtn}
-                  onClick={() => handleDownload('mega')}
-                >
-                  <Image 
-                    src="/images/icons/Mega.png" 
-                    alt="Mega" 
-                    width={24} 
-                    height={24}
-                  />
-                  Mega
-                </button>
               </div>
-              <p style={{ color: '#BDBDBD', fontSize: '14px', marginTop: '10px' }}>
-                Downloads will be available on December 26th at 20:00!
-              </p>
             </div>
 
             {/* Required Drivers Section */}

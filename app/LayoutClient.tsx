@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import TokenValidator from "./components/TokenValidator";
-import MaintenanceModal from "./components/MaintenanceModal";
 import { AuthProvider } from "./contexts/AuthContext";
 
 export default function LayoutClient({
@@ -38,7 +37,6 @@ export default function LayoutClient({
         {!isMaintenancePage && <Nav />}
         {children}
         {!isMaintenancePage && <Footer />}
-        {!isMaintenancePage && <MaintenanceModal />}
       </AuthProvider>
     </>
   );

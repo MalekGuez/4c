@@ -291,11 +291,13 @@ export const API_ENDPOINTS = {
     TICKETS: '/admin/tickets',
     PLAYERS: '/admin/players',
     NEWS: '/admin/news',
+    COUPONS: '/admin/coupons',
     ESCALATE_TICKET: '/admin/tickets',
     RESPOND_TICKET: '/admin/tickets',
   },
   MOONSTONES: '/get-ms',
   BUY_ITEM: '/buy-item',
+  REDEEM_COUPON: '/redeem-coupon',
   CLASH_GAUNTLET: {
     RANKINGS: '/clash-gauntlet/rankings',
   },
@@ -771,7 +773,64 @@ export const adminService = {
       success: false,
       error: response.error || 'Failed to get manager name'
     };
-  }
+  },
+
+  // Get all coupons
+  getCoupons: async (): Promise<{ success: boolean; coupons?: any[]; error?: string }> => {
+    const response = await adminRequest<any>(API_ENDPOINTS.ADMIN.COUPONS);
+    if (response.success && response.data) {
+      return {
+        success: true,
+        coupons: response.data.coupons
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to fetch coupons'
+    };
+  },
+
+  // Create coupon
+  createCoupon: async (couponData: {
+    code: string;
+    description?: string;
+    items: Array<{ wID: number; itemCount?: number }>;
+    maxUses?: number;
+    isActive?: boolean;
+    expiryDate?: string;
+  }): Promise<{ success: boolean; couponId?: number; error?: string }> => {
+    console.log('Sending coupon data:', couponData); // Debug log
+    const response = await adminRequest<any>(API_ENDPOINTS.ADMIN.COUPONS, {
+      method: 'POST',
+      body: JSON.stringify(couponData)
+    });
+    console.log('Coupon creation response:', response); // Debug log
+    if (response.success && response.data) {
+      return {
+        success: true,
+        couponId: response.data.couponId
+      };
+    }
+    return {
+      success: false,
+      error: response.error || response.data?.error || 'Failed to create coupon'
+    };
+  },
+
+  // Get coupon redemption history
+  getCouponHistory: async (couponId: number): Promise<{ success: boolean; history?: any[]; error?: string }> => {
+    const response = await adminRequest<any>(`${API_ENDPOINTS.ADMIN.COUPONS}/${couponId}/history`);
+    if (response.success && response.data) {
+      return {
+        success: true,
+        history: response.data.history
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to fetch coupon history'
+    };
+  },
 };
 
 // Ticket API functions
@@ -879,6 +938,44 @@ export const clashGauntletService = {
       };
     }
     return response as ClashGauntletRankingsResponse;
+  },
+};
+
+// Coupon API functions
+export interface RedeemCouponRequest {
+  code: string;
+}
+
+export interface RedeemCouponResponse {
+  success: boolean;
+  message?: string;
+  items?: Array<{ itemId: number; itemCount: number }>;
+  itemId?: number; // Legacy support
+  itemCount?: number; // Legacy support
+  error?: string;
+}
+
+export const couponService = {
+  // Redeem a coupon
+  redeemCoupon: async (code: string): Promise<RedeemCouponResponse> => {
+    const response = await apiRequest<any>(API_ENDPOINTS.REDEEM_COUPON, {
+      method: 'POST',
+      body: JSON.stringify({ code: code.trim().toUpperCase() })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        message: response.data.message,
+        items: response.data.items || (response.data.itemId ? [{ itemId: response.data.itemId, itemCount: response.data.itemCount || 1 }] : []),
+        itemId: response.data.itemId, // Legacy support
+        itemCount: response.data.itemCount // Legacy support
+      };
+    }
+    return {
+      success: false,
+      error: response.error || response.data?.error || 'Failed to redeem coupon'
+    };
   },
 };
 

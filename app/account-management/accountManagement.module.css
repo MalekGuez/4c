@@ -238,6 +238,83 @@
   box-shadow: 0 8px 25px rgba(121, 8, 1, 0.4);
 }
 
+/* Coupon Section */
+.couponSection {
+  margin-bottom: 40px;
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #BDBDBD;
+}
+
+.couponForm {
+  width: 100%;
+}
+
+.couponInputGroup {
+  display: flex;
+  gap: 15px;
+  align-items: stretch;
+}
+
+.couponInput {
+  flex: 1;
+  padding: 15px 20px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #BDBDBD;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.couponInput:focus {
+  outline: none;
+  border-color: #790801;
+  box-shadow: 0 0 10px rgba(121, 8, 1, 0.4);
+}
+
+.couponInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.couponInput::placeholder {
+  color: #BDBDBD;
+  opacity: 0.6;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.couponButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  border: 2px solid #790801;
+  color: white;
+  padding: 15px 35px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(121, 8, 1, 0.3);
+  white-space: nowrap;
+  min-width: 150px;
+}
+
+.couponButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a00a02, #c52d3a);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(121, 8, 1, 0.4);
+}
+
+.couponButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* Shop Section */
 .shopSection {
   margin-bottom: 0;
@@ -427,6 +504,14 @@
     flex-direction: column;
     gap: 15px;
     align-items: flex-start;
+  }
+
+  .couponInputGroup {
+    flex-direction: column;
+  }
+
+  .couponButton {
+    width: 100%;
   }
 }
 

@@ -103,6 +103,13 @@ export default function AdminDashboardPage() {
               <p>Create, edit, and delete news announcements and updates.</p>
             </Link>
           )}
+
+          {manager && manager.bAuthority !== 5 && manager.bAuthority !== 4 && (
+            <Link href="/admin/coupons" className={styles.adminCard}>
+              <h3>Coupon Management</h3>
+              <p>Create and manage coupon codes for players to redeem items.</p>
+            </Link>
+          )}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthContext } from '../contexts/AuthContext';
-import { apiRequest, API_ENDPOINTS, MoonstonesResponse } from '../services/api';
+import { apiRequest, API_ENDPOINTS, MoonstonesResponse, couponService } from '../services/api';
 import AuthGuard from '../components/AuthGuard';
 import styles from './accountManagement.module.css';
 
@@ -17,6 +17,8 @@ export default function AccountManagementPage() {
   const [error, setError] = useState('');
   const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [isRedeeming, setIsRedeeming] = useState(false);
 
   // Handle client-side mounting
   useEffect(() => {
@@ -69,6 +71,46 @@ export default function AccountManagementPage() {
       setError('An error occurred. Please try again.');
     } finally {
       setIsResending(false);
+    }
+  };
+
+  const handleRedeemCoupon = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!couponCode.trim()) {
+      setError('Please enter a coupon code');
+      return;
+    }
+
+    setIsRedeeming(true);
+    setError('');
+    setMessage('');
+
+    try {
+      const response = await couponService.redeemCoupon(couponCode.trim());
+      
+      if (response.success) {
+        if (response.items && response.items.length > 0) {
+          const itemsList = response.items.map((item: any) => `ID ${item.itemId} × ${item.itemCount}`).join(', ');
+          setMessage(`Coupon redeemed successfully! You received: ${itemsList}`);
+        } else {
+          setMessage(response.message || 'Coupon redeemed successfully!');
+        }
+        setCouponCode('');
+        // Refresh moonstones in case the coupon gave moonstones
+        const msResponse = await apiRequest<MoonstonesResponse>(API_ENDPOINTS.MOONSTONES, {
+          method: 'GET',
+        });
+        if (msResponse.success && msResponse.data) {
+          setMoonstones(msResponse.data.moonstones);
+        }
+      } else {
+        setError(response.error || 'Failed to redeem coupon');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setIsRedeeming(false);
     }
   };
 
@@ -156,6 +198,31 @@ export default function AccountManagementPage() {
             {error}
           </div>
         )}
+
+        {/* Coupon Section */}
+        <div className={styles.couponSection}>
+          <h3 className={styles.sectionTitle}>Redeem Coupon</h3>
+          <form onSubmit={handleRedeemCoupon} className={styles.couponForm}>
+            <div className={styles.couponInputGroup}>
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                placeholder="Enter coupon code (e.g., WELCOME2024)"
+                className={styles.couponInput}
+                disabled={isRedeeming}
+                maxLength={50}
+              />
+              <button
+                type="submit"
+                className={styles.couponButton}
+                disabled={isRedeeming || !couponCode.trim()}
+              >
+                {isRedeeming ? 'Redeeming...' : 'Redeem'}
+              </button>
+            </div>
+          </form>
+        </div>
 
         {/* Two Column Layout */}
         <div className={styles.twoColumnLayout}>
