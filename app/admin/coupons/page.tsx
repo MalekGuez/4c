@@ -68,7 +68,7 @@ export default function AdminCouponsPage() {
   const addItemField = () => {
     setFormData({
       ...formData,
-      items: [...formData.items, { itemId: '', itemCount: '1' }]
+      items: [...formData.items, { wID: '', itemCount: '1' }]
     });
   };
 
@@ -387,7 +387,7 @@ export default function AdminCouponsPage() {
                     setFormData({
                       code: '',
                       description: '',
-                      items: [{ itemId: '', itemCount: '1' }],
+                      items: [{ wID: '', itemCount: '1' }],
                       maxUses: '',
                       isActive: true,
                       expiryDate: ''
