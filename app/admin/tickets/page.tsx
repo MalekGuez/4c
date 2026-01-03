@@ -437,6 +437,7 @@ export default function AdminTicketsPage() {
   const canViewClosedTickets = manager ? [1, 2, 3].includes(Number(manager.bAuthority)) : false;
 
   const filteredTickets = tickets.filter(ticket => {
+    // Filter closed tickets based on permissions
     if (!canViewClosedTickets && ticket.status?.toLowerCase() === 'closed') {
       return false;
     }
@@ -451,33 +452,27 @@ export default function AdminTicketsPage() {
     // Filter by authority level
     if (filterAuthority !== 'all') {
       const targetAuthority = parseInt(filterAuthority);
-      if (ticket.state !== targetAuthority && ticket.state !== null) {
+      // If ticket.state is null, exclude it when filtering by specific authority
+      if (ticket.state === null || ticket.state !== targetAuthority) {
         return false;
       }
     }
 
     // Filter by status
     if (filterStatus !== 'all') {
-      let ticketStatus = ticket.status;
+      // Normalize ticket status
+      let ticketStatus = ticket.status?.toLowerCase();
       
       // Map complex statuses to simplified ones
-      if (ticket.status === 'waiting' || ticket.status === 'waiting for answer') {
+      if (ticketStatus === 'waiting' || ticketStatus === 'waiting for answer') {
         ticketStatus = 'pending';
+      } else if (ticketStatus === 'open') {
+        ticketStatus = 'opened';
       }
       
-      if (ticketStatus !== filterStatus) {
-        // For closed tickets, only show if last message is older than 7 days
-        if (ticket.status === 'closed') {
-          const lastMessageDate = new Date(ticket.lastMessageDate || ticket.createdAt);
-          const sevenDaysAgo = new Date();
-          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-          
-          if (lastMessageDate > sevenDaysAgo) {
-            return false;
-          }
-        } else {
-          return false;
-        }
+      // Compare normalized status with filter
+      if (ticketStatus !== filterStatus.toLowerCase()) {
+        return false;
       }
     }
 
@@ -609,6 +604,7 @@ export default function AdminTicketsPage() {
                   >
                     <option value="all">All Status</option>
                     <option value="opened">Opened</option>
+                    <option value="pending">Pending</option>
                     {canViewClosedTickets && (
                       <option value="closed">Closed</option>
                     )}
