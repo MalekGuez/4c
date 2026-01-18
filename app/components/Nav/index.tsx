@@ -178,11 +178,9 @@ export default function Nav() {
               )}
             </Dropdown>
             
-            {/* Play Now button hidden during maintenance
             <Link href="/download" className={styles.navBtn}>
               <Image src="/images/play-now-btn.png" alt="Play Now" width={143} height={56}/>
             </Link>
-            */}
             </div>
           </Suspense>
         )}
