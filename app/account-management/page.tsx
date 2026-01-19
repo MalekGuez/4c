@@ -275,59 +275,59 @@ export default function AccountManagementPage() {
         {/* Show default view (Details + Actions) only when activeView is 'default' */}
         {activeView === 'default' && (
           <>
-            {/* Details Section - Full Width */}
-            <div className={styles.detailsSection}>
-              <h2 className={styles.sectionTitle}>Details</h2>
-              <div className={styles.userInfoSection}>
-                <div className={styles.userEmail}>
-                  <span className={styles.emailLabel}>Email:</span>
-                  <span className={styles.emailValue}>{user?.email || 'N/A'}</span>
-                </div>
-                <div className={styles.moonstonesDisplay}>
-                  <Image
-                    src="/images/icons/Moonstones.png"
-                    alt="Moonstones"
-                    width={20}
-                    height={18}
-                    className={styles.moonstonesIcon}
-                  />
-                  <span className={styles.moonstonesLabel}>Moonstones:</span>
-                  <span className={styles.moonstonesText}>
-                    {isLoading ? 'Loading...' : moonstones.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-              
-              {/* Account Status */}
-              <div className={styles.accountStatusSection}>
-                <div className={styles.statusInfo}>
-                  <span className={styles.statusLabel}>Account Status:</span>
-                  <span className={styles.statusValue}>
-                    {isEmailVerified ? 'Verified' : 'Unverified'}
-                  </span>
-                </div>
-              </div>
+        {/* Details Section - Full Width */}
+        <div className={styles.detailsSection}>
+          <h2 className={styles.sectionTitle}>Details</h2>
+          <div className={styles.userInfoSection}>
+            <div className={styles.userEmail}>
+              <span className={styles.emailLabel}>Email:</span>
+              <span className={styles.emailValue}>{user?.email || 'N/A'}</span>
             </div>
+            <div className={styles.moonstonesDisplay}>
+              <Image
+                src="/images/icons/Moonstones.png"
+                alt="Moonstones"
+                width={20}
+                height={18}
+                className={styles.moonstonesIcon}
+              />
+              <span className={styles.moonstonesLabel}>Moonstones:</span>
+              <span className={styles.moonstonesText}>
+                {isLoading ? 'Loading...' : moonstones.toLocaleString()}
+              </span>
+            </div>
+          </div>
+          
+          {/* Account Status */}
+          <div className={styles.accountStatusSection}>
+            <div className={styles.statusInfo}>
+              <span className={styles.statusLabel}>Account Status:</span>
+              <span className={styles.statusValue}>
+                {isEmailVerified ? 'Verified' : 'Unverified'}
+              </span>
+            </div>
+          </div>
+        </div>
 
             {/* Actions Section */}
-            <div className={styles.actionSection}>
-              <h3 className={styles.sectionTitle}>Actions</h3>
-              <div className={styles.actionButtons}>
-                {!isEmailVerified && (
-                  <button 
-                    className={styles.actionButton}
-                    onClick={handleResendEmail}
-                    disabled={isResending}
-                  >
-                    {isResending ? 'Sending...' : 'Resend Email Confirmation'}
-                  </button>
-                )}
-                <Link href="/change-password" className={styles.actionButton}>
-                  Change Password
-                </Link>
-                <Link href="/tickets" className={styles.actionButton}>
-                  Support
-                </Link>
+          <div className={styles.actionSection}>
+            <h3 className={styles.sectionTitle}>Actions</h3>
+            <div className={styles.actionButtons}>
+              {!isEmailVerified && (
+                <button 
+                  className={styles.actionButton}
+                  onClick={handleResendEmail}
+                  disabled={isResending}
+                >
+                  {isResending ? 'Sending...' : 'Resend Email Confirmation'}
+                </button>
+              )}
+              <Link href="/change-password" className={styles.actionButton}>
+                Change Password
+              </Link>
+              <Link href="/tickets" className={styles.actionButton}>
+                Support
+              </Link>
                 <button 
                   className={styles.actionButton}
                   onClick={() => setActiveView('coupon')}
@@ -340,8 +340,8 @@ export default function AccountManagementPage() {
                 >
                   Referral
                 </button>
-              </div>
             </div>
+          </div>
           </>
         )}
 
@@ -457,7 +457,7 @@ export default function AccountManagementPage() {
                       }}
                     >
                       Copy
-                    </button>
+              </button>
                   </div>
                 ) : (
                   <div style={{ 
@@ -483,10 +483,10 @@ export default function AccountManagementPage() {
                       }}
                     >
                       {isLoadingReferralCode ? 'Generating...' : 'Generate'}
-                    </button>
-                  </div>
+              </button>
+            </div>
                 )}
-              </div>
+        </div>
             </div>
 
             {/* Use referral code form */}

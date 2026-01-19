@@ -146,17 +146,19 @@ export default function PlayerDetailPage() {
   const loadPlayerDetails = async () => {
     try {
       setLoading(true);
-      const response = await adminService.getPlayers('', 0, 1000);
+      const charID = parseInt(playerId);
       
-      if (response.success && response.players) {
-        const foundPlayer = response.players.find(p => p.dwCharID === parseInt(playerId));
-        if (foundPlayer) {
-          setPlayer(foundPlayer);
-        } else {
-          setError('Player not found');
-        }
+      if (isNaN(charID)) {
+        setError('Invalid player ID');
+        return;
+      }
+      
+      const response = await adminService.getPlayer(charID);
+      
+      if (response.success && response.player) {
+        setPlayer(response.player);
       } else {
-        setError(response.error || 'Failed to load player');
+        setError(response.error || 'Player not found');
       }
     } catch (err) {
       setError('An error occurred while loading player details');

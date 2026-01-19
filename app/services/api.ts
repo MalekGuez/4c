@@ -464,6 +464,22 @@ export const adminService = {
     };
   },
 
+  // Get player by character ID
+  getPlayer: async (charID: number): Promise<{ success: boolean; player?: any; error?: string }> => {
+    const response = await adminRequest<any>(`${API_ENDPOINTS.ADMIN.PLAYERS}/${charID}`);
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        player: response.data.player
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to fetch player'
+    };
+  },
+
   // Get news for admin
   getNews: async (): Promise<{ success: boolean; news?: any[]; error?: string }> => {
     const response = await adminRequest<any>(API_ENDPOINTS.ADMIN.NEWS);
