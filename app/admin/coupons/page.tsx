@@ -226,10 +226,11 @@ export default function AdminCouponsPage() {
       {/* Header Bar */}
       <div className={styles.headerBar}>
         <Image
-          src="/images/titles/News.png"
+          src="/images/titles/Coupons.png"
           alt="Coupon Management"
-          width={238}
-          height={61}
+          width={330}
+          height={85}
+          quality={100}
           className={styles.titleImage}
         />
         <div className={styles.bar}>

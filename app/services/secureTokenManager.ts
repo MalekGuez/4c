@@ -83,7 +83,7 @@ export class SecureTokenManager {
   /**
    * Register and set HttpOnly cookie via API
    */
-  static async register(credentials: { email: string; password: string }): Promise<TokenResponse> {
+  static async register(credentials: { email: string; password: string; username?: string; referralCode?: string }): Promise<TokenResponse> {
     try {
       const response = await fetchWithTimeout(getApiUrl('REGISTER'), {
         method: 'POST',

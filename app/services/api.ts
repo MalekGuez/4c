@@ -292,12 +292,18 @@ export const API_ENDPOINTS = {
     PLAYERS: '/admin/players',
     NEWS: '/admin/news',
     COUPONS: '/admin/coupons',
+    REFERRALS: '/admin/referrals',
     ESCALATE_TICKET: '/admin/tickets',
     RESPOND_TICKET: '/admin/tickets',
   },
   MOONSTONES: '/get-ms',
   BUY_ITEM: '/buy-item',
   REDEEM_COUPON: '/redeem-coupon',
+  REFERRAL: {
+    GET_CODE: '/user/referral-code',
+    USE_CODE: '/use-referral-code',
+    GET_USED_CODE: '/user/used-referral-code',
+  },
   CLASH_GAUNTLET: {
     RANKINGS: '/clash-gauntlet/rankings',
   },
@@ -831,6 +837,36 @@ export const adminService = {
       error: response.error || 'Failed to fetch coupon history'
     };
   },
+
+  // Get all referrals
+  getReferrals: async (): Promise<{ success: boolean; referrals?: any[]; error?: string }> => {
+    const response = await adminRequest<any>(API_ENDPOINTS.ADMIN.REFERRALS);
+    if (response.success && response.data) {
+      return {
+        success: true,
+        referrals: response.data.referrals
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to fetch referrals'
+    };
+  },
+
+  // Get referral usage details for a specific referrer
+  getReferralUsage: async (referrerId: number): Promise<{ success: boolean; usage?: any[]; error?: string }> => {
+    const response = await adminRequest<any>(`${API_ENDPOINTS.ADMIN.REFERRALS}/${referrerId}/usage`);
+    if (response.success && response.data) {
+      return {
+        success: true,
+        usage: response.data.usage
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to fetch referral usage'
+    };
+  },
 };
 
 // Ticket API functions
@@ -975,6 +1011,84 @@ export const couponService = {
     return {
       success: false,
       error: response.error || response.data?.error || 'Failed to redeem coupon'
+    };
+  },
+};
+
+// Referral service
+export interface ReferralCodeResponse {
+  success: boolean;
+  referralCode?: string;
+  error?: string;
+}
+
+export interface UseReferralCodeResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
+export interface UsedReferralCodeResponse {
+  success: boolean;
+  referralCode?: string | null;
+  usedDate?: string;
+  error?: string;
+}
+
+export const referralService = {
+  // Get user's own referral code
+  getReferralCode: async (): Promise<ReferralCodeResponse> => {
+    const response = await apiRequest<any>(API_ENDPOINTS.REFERRAL.GET_CODE, {
+      method: 'GET'
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        referralCode: response.data.referralCode
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to get referral code'
+    };
+  },
+  
+  // Use a referral code
+  useReferralCode: async (code: string): Promise<UseReferralCodeResponse> => {
+    const response = await apiRequest<any>(API_ENDPOINTS.REFERRAL.USE_CODE, {
+      method: 'POST',
+      body: JSON.stringify({ referralCode: code.trim().toUpperCase() })
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        message: response.data.message || 'Referral code used successfully'
+      };
+    }
+    return {
+      success: false,
+      error: response.error || response.data?.error || 'Failed to use referral code'
+    };
+  },
+  
+  // Get the referral code used by the current user
+  getUsedReferralCode: async (): Promise<UsedReferralCodeResponse> => {
+    const response = await apiRequest<any>(API_ENDPOINTS.REFERRAL.GET_USED_CODE, {
+      method: 'GET'
+    });
+    
+    if (response.success && response.data) {
+      return {
+        success: true,
+        referralCode: response.data.referralCode,
+        usedDate: response.data.usedDate
+      };
+    }
+    return {
+      success: false,
+      error: response.error || 'Failed to get used referral code'
     };
   },
 };

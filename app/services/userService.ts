@@ -10,6 +10,7 @@ export interface RegisterCredentials {
   username?: string;
   password: string;
   confirmPassword?: string;
+  referralCode?: string;
 }
 
 export interface UpdateUserData {

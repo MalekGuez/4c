@@ -18,6 +18,7 @@ export default function PageRegisterForm({ onSwitchToLogin }: PageRegisterFormPr
     username: '',
     password: '',
     confirmPassword: '',
+    referralCode: '',
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>('');
@@ -67,6 +68,7 @@ export default function PageRegisterForm({ onSwitchToLogin }: PageRegisterFormPr
       email: formData.email,
       username: formData.username || undefined, // Send username only if provided
       password: formData.password,
+      referralCode: formData.referralCode.trim() || undefined, // Send referral code only if provided
     });
     
     if (result.success) {
@@ -77,6 +79,7 @@ export default function PageRegisterForm({ onSwitchToLogin }: PageRegisterFormPr
         username: '',
         password: '',
         confirmPassword: '',
+        referralCode: '',
       });
       setShowUsernameField(false);
     }
@@ -207,6 +210,31 @@ export default function PageRegisterForm({ onSwitchToLogin }: PageRegisterFormPr
               required
               disabled={isLoading}
               placeholder="Confirm your password"
+            />
+          </div>
+          
+          <div className={styles.authInputGroup}>
+            <label htmlFor="referralCode">Referral Code (Optional)</label>
+            <input
+              type="text"
+              id="referralCode"
+              name="referralCode"
+              value={formData.referralCode}
+              onChange={(e) => {
+                setFormData(prev => ({
+                  ...prev,
+                  referralCode: e.target.value.toUpperCase()
+                }));
+                if (validationErrors.length > 0) {
+                  setValidationErrors([]);
+                }
+                if (successMessage) {
+                  setSuccessMessage('');
+                }
+              }}
+              disabled={isLoading}
+              placeholder="Enter referral code (optional)"
+              maxLength={20}
             />
           </div>
           

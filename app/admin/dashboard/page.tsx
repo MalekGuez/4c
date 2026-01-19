@@ -52,10 +52,11 @@ export default function AdminDashboardPage() {
       {/* Header Bar */}
       <div className={styles.headerBar}>
         <Image
-          src="/images/titles/Account-Management.png"
+          src="/images/titles/Dashboard.png"
           alt="Admin Dashboard"
-          width={678}
-          height={72}
+          width={330}
+          height={85}
+          quality={100}
           className={styles.titleImage}
         />
         <div className={styles.bar}>
@@ -108,6 +109,13 @@ export default function AdminDashboardPage() {
             <Link href="/admin/coupons" className={styles.adminCard}>
               <h3>Coupon Management</h3>
               <p>Create and manage coupon codes for players to redeem items.</p>
+            </Link>
+          )}
+
+          {manager && manager.bAuthority !== 5 && manager.bAuthority !== 4 && (
+            <Link href="/admin/referrals" className={styles.adminCard}>
+              <h3>Referral Management</h3>
+              <p>View referral codes and track which players used which referral codes.</p>
             </Link>
           )}
         </div>

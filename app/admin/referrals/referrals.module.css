@@ -1,0 +1,342 @@
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 200px 200px 200px;
+  position: relative;
+}
+
+.headerBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 60px 0 40px 0;
+}
+
+.titleImage {
+  height: 85px;
+  width: auto;
+  object-fit: contain;
+}
+
+.bar {
+  flex: 1;
+  max-width: none;
+}
+
+.barImage {
+  width: 100%;
+  height: auto;
+}
+
+.contentWrapper {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 32px;
+}
+
+.errorMessage {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid #F44336;
+  color: #F44336;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-radius: 0;
+}
+
+.statsSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.statCard {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 20px;
+  text-align: center;
+  border-radius: 0;
+}
+
+.statValue {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #BDBDBD;
+  margin-bottom: 10px;
+}
+
+.statLabel {
+  font-size: 0.9em;
+  color: #BDBDBD;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.tableContainer {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.referralsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.referralsTable thead {
+  background: rgba(121, 8, 1, 0.3);
+}
+
+.referralsTable th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #BDBDBD;
+  border-bottom: 2px solid #BDBDBD;
+  font-size: 14px;
+}
+
+.referralsTable td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(189, 189, 189, 0.2);
+  color: #BDBDBD;
+}
+
+.referralsTable tbody tr:hover {
+  background: rgba(189, 189, 189, 0.1);
+}
+
+.referralCode {
+  background: rgba(121, 8, 1, 0.3);
+  border: 1px solid #790801;
+  color: #BDBDBD;
+  padding: 6px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  border-radius: 0;
+}
+
+.usageCount {
+  font-weight: bold;
+  color: #BDBDBD;
+  font-size: 1.1em;
+}
+
+.viewButton {
+  background: linear-gradient(135deg, #790801, #a00a02);
+  color: white;
+  border: 2px solid #790801;
+  padding: 8px 16px;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.viewButton:hover {
+  background: linear-gradient(135deg, #a00a02, #790801);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.noData {
+  text-align: center;
+  padding: 40px;
+  color: #BDBDBD;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #BDBDBD;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(189, 189, 189, 0.3);
+  border-top: 4px solid #BDBDBD;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingText {
+  color: #BDBDBD;
+  font-size: 0.9em;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modalContent {
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #BDBDBD;
+  padding: 30px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #BDBDBD;
+}
+
+.modalHeader h2 {
+  color: #BDBDBD;
+  font-family: 'TheBlowar', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.closeButton {
+  background: transparent;
+  color: #BDBDBD;
+  border: 1px solid #BDBDBD;
+  width: 32px;
+  height: 32px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 0;
+}
+
+.closeButton:hover {
+  background: #BDBDBD;
+  color: #000;
+}
+
+.modalBody {
+  color: #BDBDBD;
+}
+
+.referrerInfo {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #BDBDBD;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 0;
+}
+
+.referrerInfo p {
+  margin: 8px 0;
+  color: #BDBDBD;
+}
+
+.referrerInfo code {
+  background: rgba(121, 8, 1, 0.3);
+  border: 1px solid #790801;
+  color: #BDBDBD;
+  padding: 3px 8px;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  border-radius: 0;
+}
+
+.usageTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.usageTable thead {
+  background: rgba(121, 8, 1, 0.3);
+}
+
+.usageTable th {
+  color: #BDBDBD;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #BDBDBD;
+  font-size: 14px;
+}
+
+.usageTable td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(189, 189, 189, 0.2);
+  color: #BDBDBD;
+}
+
+.usageTable tbody tr:hover {
+  background: rgba(189, 189, 189, 0.1);
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 20px 15px;
+  }
+  
+  .titleImage {
+    width: 200px;
+    height: 51px;
+  }
+  
+  .statsSection {
+    grid-template-columns: 1fr;
+  }
+  
+  .modalContent {
+    padding: 20px;
+  }
+  
+  .referralsTable,
+  .usageTable {
+    font-size: 12px;
+  }
+  
+  .referralsTable th,
+  .referralsTable td,
+  .usageTable th,
+  .usageTable td {
+    padding: 8px;
+  }
+}
+

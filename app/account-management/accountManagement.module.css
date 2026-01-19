@@ -162,10 +162,6 @@
   margin-bottom: 40px;
 }
 
-/* Action Section */
-.actionSection {
-  margin-bottom: 0;
-}
 
 .actionButtons {
   display: flex;
@@ -240,10 +236,23 @@
 
 /* Coupon Section */
 .couponSection {
+  margin-bottom: 0;
+  padding: 0;
+  scroll-margin-top: 100px; /* Offset for navigation when scrolling */
+}
+
+/* Section title without underline for coupon/referral sections */
+.couponSection .sectionTitle {
+  margin-bottom: 20px;
+}
+
+.couponSection .sectionTitle::after {
+  display: none;
+}
+
+/* Action Section */
+.actionSection {
   margin-bottom: 40px;
-  padding: 25px;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid #BDBDBD;
 }
 
 .couponForm {

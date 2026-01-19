@@ -74,6 +74,8 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <h4 className={styles.footerTitle}>Account</h4>
             <Link href="/account-management" className={styles.footerLink}>Management</Link>
+            <Link href="/account-management?view=coupon" className={styles.footerLink}>Coupon</Link>
+            <Link href="/account-management?view=referral" className={styles.footerLink}>Referral</Link>
             <Link href="/tickets" className={styles.footerLink}>Tickets</Link>
             <Link href="/login" className={styles.footerLink}>Login</Link>
             <Link href="/register" className={styles.footerLink}>Register</Link>

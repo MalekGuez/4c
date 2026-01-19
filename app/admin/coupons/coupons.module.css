@@ -17,8 +17,8 @@
 }
 
 .titleImage {
-  width: 238px;
-  height: 61px;
+  height: 85px;
+  width: auto;
   object-fit: contain;
 }
 
@@ -548,8 +548,8 @@
   }
   
   .titleImage {
-    width: 200px;
-    height: 51px;
+    height: auto;
+    width: auto;
   }
   
   .couponsGrid {
