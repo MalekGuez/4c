@@ -4,7 +4,7 @@ import styles from './download.module.css';
 
 export default function DownloadPage() {
   const handleDownload = () => {
-    window.open('https://drive.google.com/file/d/1EB5eCCSfjwpefRfjVab9q3ggRaGUrTuq/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/1EB5eCCSfjwpefRfjVab9q3ggRaGUrTuq/view?usp=drive_link', '_blank');
   };
 
   const handleDriverDownload = (driver: string) => {
