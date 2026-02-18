@@ -7,6 +7,15 @@ import styles from "./styles/page.module.css";
 
 const announcements = [
   {
+    id: 9,
+    category: "UPDATE",
+    title: "Patch Notes – Latest Update",
+    description: "Bug fixes, Dummy Training improvements, Valentine's Cash Shop rotation, and exciting weekend events!<br><br><strong>A new game mode arrives SOON.</strong><br><br><strong>Click to read the full patch notes.</strong>",
+    image: "/images/news/valentine.png",
+    link: "/valentine-update",
+    date: "14. Feb. 2026"
+  },
+  {
     id: 1,
     category: "NEWS",
     title: "4Chaos is coming.",

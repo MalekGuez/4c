@@ -67,6 +67,7 @@ export default function Footer() {
             <Link href="/" className={styles.footerLink}>News</Link>
             <Link href="/download" className={styles.footerLink}>Download</Link>
             <Link href="/rules" className={styles.footerLink}>Rules</Link>
+            <Link href="/valentine-update" className={styles.footerLink}>Patch Notes</Link>
             <Link href="/cash-shop" className={styles.footerLink}>Cash Shop</Link>
             <Link href="/donate" className={styles.footerLink}>Donate</Link>
           </div>

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './announcement.module.css';
 
 interface AnnouncementProps {
@@ -18,8 +19,10 @@ export default function Announcement({
   link,
   date
 }: AnnouncementProps) {
-  return (
-    <a href={link} className={styles.announcement} target="_blank" rel="noopener noreferrer">
+  const isInternalLink = link.startsWith('/');
+  
+  const content = (
+    <>
       <div className={styles.content}>
         <div className={styles.category}>
           {category}
@@ -49,6 +52,20 @@ export default function Announcement({
           unoptimized={false}
         />
       </div>
+    </>
+  );
+
+  if (isInternalLink) {
+    return (
+      <Link href={link} className={styles.announcement}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <a href={link} className={styles.announcement} target="_blank" rel="noopener noreferrer">
+      {content}
     </a>
   );
 }
