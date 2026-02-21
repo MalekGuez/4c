@@ -7,6 +7,10 @@ export default function DownloadPage() {
     window.open('https://drive.google.com/file/d/14nG7HD9WMaHgVAkELWR9CaoA_p-OfvXt/view?usp=sharing', '_blank');
   };
 
+  const handleSecondaryDownload = () => {
+    window.open('https://drive.google.com/file/d/1_vVE2kJ0t7tkyfq6RB7dBOc70QsoNEsf/view?usp=sharing', '_blank');
+  };
+
   const handleDriverDownload = (driver: string) => {
     const driverUrls: { [key: string]: string } = {
       'dx9': 'https://www.microsoft.com/en-us/download/details.aspx?id=35',
@@ -61,6 +65,18 @@ export default function DownloadPage() {
                     height={24}
                   />
                   Google Drive
+                </button>
+                <button 
+                  className={styles.downloadBtn}
+                  onClick={handleSecondaryDownload}
+                >
+                  <Image 
+                    src="/images/icons/Drive.png" 
+                    alt="Google Drive" 
+                    width={24} 
+                    height={24}
+                  />
+                  Google Drive (2nd link)
                 </button>
               </div>
             </div>
