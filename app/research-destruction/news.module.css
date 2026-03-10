@@ -1,0 +1,222 @@
+/* Reuse patch-notes–style layout */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100svh;
+  position: relative;
+  padding: 100px 200px 200px 200px;
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 32px;
+  border: 1px solid #BDBDBD;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.headerBar {
+  width: 100%;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0 40px 0;
+  gap: 40px;
+}
+
+.titleImage {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.barImage {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  width: 100%;
+}
+
+.heroImageWrapper {
+  width: 100%;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.heroImage {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border: 1px solid #790801;
+}
+
+.newsContent {
+  color: #BDBDBD;
+  line-height: 1.6;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.sectionTitle {
+  font-family: 'TheBlowar', "Inter", Arial, Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  color: #790801;
+  text-align: left;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #790801;
+  padding-bottom: 15px;
+}
+
+.subsectionTitle {
+  font-family: 'TheBlowar', "Inter", Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #BDBDBD;
+  text-align: left;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  letter-spacing: 0.5px;
+}
+
+.subsectionTitle:first-of-type {
+  margin-top: 0;
+}
+
+.featureTitle {
+  font-family: 'TheBlowar', "Inter", Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #790801;
+  margin: 24px 0 12px 0;
+  letter-spacing: 0.5px;
+}
+
+.featureTitle:first-of-type {
+  margin-top: 0;
+}
+
+.patchList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.patchList li {
+  margin-bottom: 12px;
+  padding-left: 20px;
+  position: relative;
+  font-size: 16px;
+  color: #BDBDBD;
+}
+
+.patchList li::before {
+  content: "•";
+  color: #790801;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.patchList li:last-child {
+  margin-bottom: 0;
+}
+
+.nestedList {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 20px;
+}
+
+.nestedList li {
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+  font-size: 14px;
+  color: #BDBDBD;
+}
+
+.nestedList li::before {
+  content: "→";
+  color: #790801;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.highlightBlock {
+  margin: 24px 0;
+  padding: 20px;
+  background: rgba(121, 8, 1, 0.1);
+  border-left: 3px solid #790801;
+}
+
+@media (max-width: 910px) {
+  .contentWrapper {
+    margin: 0 20px;
+    padding: 30px;
+  }
+  .pageContainer {
+    padding: 100px 20px 200px 20px;
+  }
+  .headerBar {
+    padding: 30px 0 20px 0;
+    gap: 20px;
+  }
+  .titleImage {
+    width: 150px;
+    height: auto;
+  }
+  .barImage {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionTitle {
+    font-size: 24px;
+  }
+  .subsectionTitle {
+    font-size: 20px;
+  }
+  .patchList li {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentWrapper {
+    margin: 0 10px;
+    padding: 20px;
+  }
+  .pageContainer {
+    padding: 160px 10px 200px 10px;
+  }
+  .sectionTitle {
+    font-size: 20px;
+  }
+  .subsectionTitle {
+    font-size: 18px;
+  }
+  .patchList li {
+    font-size: 12px;
+  }
+}

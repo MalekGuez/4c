@@ -7,6 +7,15 @@ import styles from "./styles/page.module.css";
 
 const announcements = [
   {
+    id: 10,
+    category: "FEATURE",
+    title: "Research & Destruction — New 3v3 PvP Mode",
+    description: "A round-based tactical mode inspired by Search & Destroy. Two teams of 3, 1 HP each — every shot is lethal. Plant the bomb, defuse in 30s. First to 4 rounds wins.<br><br><strong>Click to read the full details.</strong>",
+    image: "/images/news/SnD.png",
+    link: "/research-destruction",
+    date: "24. Feb. 2026"
+  },
+  {
     id: 9,
     category: "UPDATE",
     title: "Patch Notes – Latest Update",
