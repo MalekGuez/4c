@@ -7,6 +7,15 @@ import styles from "./styles/page.module.css";
 
 const announcements = [
   {
+    id: 11,
+    category: "EVENT",
+    title: "Search & Destroy Content Event — Now Live",
+    description: "Our content creation event is here! Create Search & Destroy gameplay videos on 4Chaos and earn cash rewards: €10 per approved YouTube video, €5 per Short/TikTok. Event runs until April 4 — submissions by April 6.<br><br><strong>Click for full rules and how to submit.</strong>",
+    image: "/images/news/Content-Event.png",
+    link: "/event-search-destroy-content",
+    date: "14. Mar. 2026"
+  },
+  {
     id: 10,
     category: "FEATURE",
     title: "Research & Destruction — New 3v3 PvP Mode",
