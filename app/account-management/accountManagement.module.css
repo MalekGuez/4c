@@ -259,6 +259,24 @@
   width: 100%;
 }
 
+.couponHelperNote {
+  margin: 12px 0 0 0;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: #9e9e9e;
+  line-height: 1.45;
+}
+
+.couponHelperLink {
+  color: #790801;
+  text-decoration: underline;
+  font-style: italic;
+}
+
+.couponHelperLink:hover {
+  color: #a00d04;
+}
+
 .couponInputGroup {
   display: flex;
   gap: 15px;

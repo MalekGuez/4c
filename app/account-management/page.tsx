@@ -393,6 +393,13 @@ export default function AccountManagementPage() {
                   {isRedeeming ? 'Redeeming...' : 'Redeem'}
                 </button>
               </div>
+              <p className={styles.couponHelperNote}>
+                If you can&apos;t redeem a coupon and believe you should be eligible to claim it, please{' '}
+                <Link href="/tickets" className={styles.couponHelperLink}>
+                  open a ticket
+                </Link>
+                .
+              </p>
             </form>
           </div>
         )}
