@@ -42,10 +42,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/news`,
+      url: `${baseUrl}/rules`,
       lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.8,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/donate`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/research-destruction`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.65,
+    },
+    {
+      url: `${baseUrl}/valentine-update`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/event`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.55,
+    },
+    {
+      url: `${baseUrl}/clash-gauntlet`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.55,
     },
   ]
 }
