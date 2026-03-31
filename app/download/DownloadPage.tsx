@@ -4,11 +4,11 @@ import styles from './download.module.css';
 
 export default function DownloadPage() {
   const handleDownload = () => {
-    window.open('https://drive.google.com/file/d/14nG7HD9WMaHgVAkELWR9CaoA_p-OfvXt/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/1WvH3u9S10bQGidBFlR2Yix-QrnkJFEN3/view?usp=sharing', '_blank');
   };
 
   const handleSecondaryDownload = () => {
-    window.open('https://drive.google.com/file/d/1_vVE2kJ0t7tkyfq6RB7dBOc70QsoNEsf/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/1C90lVHqMUYp0ggTLVJ_hiL3rTni4IXqk/view?usp=sharing', '_blank');
   };
 
   const handleDriverDownload = (driver: string) => {
